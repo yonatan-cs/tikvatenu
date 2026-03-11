@@ -126,7 +126,7 @@ export default async function HomePage({ params }: Props) {
           </div>
 
           <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-            <div className="max-w-3xl stagger-children">
+            <div className="max-w-4xl stagger-children">
               {/* Logo */}
               <div className="mb-0">
                 <Image
@@ -142,9 +142,13 @@ export default async function HomePage({ params }: Props) {
 
               {/* Title */}
               <h1
-                className={`-mt-12 text-4xl md:text-5xl lg:text-[3.5rem] font-bold text-parchment leading-[1.15] tracking-tight ${displayFont}`}
+                className={`-mt-12 text-4xl md:text-5xl lg:text-[3.5rem] font-bold text-parchment leading-[1.1] tracking-tight ${displayFont} ${
+                  isHebrew ? "" : "whitespace-nowrap"
+                }`}
               >
-                {isHebrew ? "תקוותנו - צעירים למען עתיד ישראל" : "Tikvatenu - Youth for the Future of Israel"}
+                {isHebrew
+                  ? "תקוותנו - צעירים למען עתיד ישראל"
+                  : "Tikvatenu - Youth for the Future of Israel"}
               </h1>
 
               {/* Subtitle */}
