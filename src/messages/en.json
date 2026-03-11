@@ -1,0 +1,167 @@
+{
+  "metadata": {
+    "title": "Tikvatenu - Youth for the Future of Israel",
+    "description": "A Zionist youth initiative building bridges in Israeli society"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "events": "Events",
+    "magazine": "Magazine",
+    "join": "Join Us",
+    "admin": "Admin",
+    "login": "Login",
+    "logout": "Logout"
+  },
+  "home": {
+    "hero": {
+      "subtitle": "Youth for the Future of Israel",
+      "cta": "Next Event",
+      "nothingUpcoming": "No upcoming events at the moment"
+    },
+    "feed": {
+      "title": "What's New",
+      "loadMore": "Load More",
+      "empty": "No updates yet"
+    },
+    "featured": {
+      "title": "From the Magazine"
+    }
+  },
+  "about": {
+    "title": "About Tikvatenu",
+    "heroSubtitle": "Young people who believe things can be different",
+    "mission": {
+      "title": "Our Vision",
+      "description": "We believe the path to a better society runs through direct dialogue, face-to-face encounters, and mutual understanding between different groups in Israeli society."
+    },
+    "problem": {
+      "title": "The Challenge",
+      "description": "Israeli society suffers from growing polarization. Different groups live side by side yet rarely meet. Lack of familiarity breeds suspicion, alienation, and fear. Shallow public discourse replaces genuine dialogue."
+    },
+    "solution": {
+      "title": "Our Way",
+      "description": "Tikvatenu organizes face-to-face encounters between young people from diverse backgrounds. We don't argue — we talk. We don't judge — we listen. We create safe spaces for honest dialogue, where people discover how much they share with those who seemed so different."
+    },
+    "values": {
+      "title": "Our Values",
+      "dialogue": {
+        "title": "Direct Dialogue",
+        "description": "We believe in the power of face-to-face conversation. Not through screens, not through slogans — but through genuine human connection."
+      },
+      "bridge": {
+        "title": "Building Bridges",
+        "description": "We create connections between groups that rarely meet. Secular and religious, left and right, center and periphery."
+      },
+      "hope": {
+        "title": "Active Hope",
+        "description": "Hope is not just a feeling — it's an action. Every encounter, every conversation, every hand extended is a step toward a shared future."
+      },
+      "youth": {
+        "title": "Youth Empowerment",
+        "description": "Young people will shape the future. We give them the tools, the platform, and the confidence to lead change."
+      }
+    },
+    "activities": {
+      "title": "From Our Activities",
+      "description": "Events, encounters, and workshops connecting young people from across Israeli society."
+    },
+    "team": {
+      "title": "Our Team",
+      "description": "A diverse group of young people united by shared values."
+    },
+    "cta": {
+      "title": "Want to Be Part of It?",
+      "description": "Join the movement of young people building a different future for Israeli society.",
+      "button": "Join Us"
+    }
+  },
+  "events": {
+    "title": "Events",
+    "upcoming": "Upcoming Events",
+    "past": "Past Events",
+    "register": "Register",
+    "registered": "Successfully registered!",
+    "full": "Event is full",
+    "spotsLeft": "{count} spots left",
+    "when": "When",
+    "where": "Where",
+    "deadline": "Register by",
+    "summary": "Event Summary",
+    "photos": "Event Photos",
+    "registration": {
+      "title": "Registration Form",
+      "name": "Full Name",
+      "email": "Email",
+      "phone": "Phone",
+      "submit": "Submit Registration",
+      "success": "Successfully registered! A confirmation email has been sent.",
+      "error": "Registration error, please try again.",
+      "alreadyRegistered": "You are already registered for this event."
+    }
+  },
+  "magazine": {
+    "title": "Magazine",
+    "allTags": "All",
+    "thought": "Thought",
+    "press": "Press",
+    "opinion": "Opinion",
+    "spirit": "Spirit",
+    "readMore": "Read More",
+    "publishedAt": "Published on {date}"
+  },
+  "join": {
+    "title": "Join Us",
+    "subtitle": "Want to be part of the action? Join us!",
+    "form": {
+      "title": "Join Our Community",
+      "description": "Leave your details and we'll get back to you soon.",
+      "name": "Full Name",
+      "email": "Email",
+      "phone": "Phone",
+      "interests": "Interests",
+      "interestsPlaceholder": "Events, volunteering, writing...",
+      "howHeard": "How did you hear about us?",
+      "howHeardPlaceholder": "Instagram, friend, event...",
+      "message": "Anything you'd like to share?",
+      "messagePlaceholder": "Tell us about yourself or what interests you...",
+      "submit": "Submit",
+      "submitting": "Submitting...",
+      "success": "Thank you! We'll be in touch soon.",
+      "error": "Submission error, please try again."
+    },
+    "contact": {
+      "title": "Contact Us",
+      "description": "Questions, suggestions, or just want to learn more? Write to us.",
+      "name": "Name",
+      "email": "Email",
+      "subject": "Subject",
+      "subjectPlaceholder": "How can we help?",
+      "message": "Message",
+      "messagePlaceholder": "Write your message...",
+      "submit": "Send",
+      "submitting": "Sending...",
+      "success": "Message sent successfully!",
+      "error": "Sending error, please try again."
+    },
+    "social": {
+      "title": "Follow Us",
+      "instagram": "Instagram"
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "errorMessage": "Something went wrong. Try refreshing the page.",
+    "tryAgain": "Try Again",
+    "back": "Back",
+    "readMore": "Read More",
+    "viewAll": "View All",
+    "noResults": "No results found",
+    "required": "Required field"
+  },
+  "footer": {
+    "rights": "All rights reserved",
+    "tagline": "Tikvatenu - Youth for the Future of Israel"
+  }
+}

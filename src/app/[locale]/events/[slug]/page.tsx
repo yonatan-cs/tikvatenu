@@ -1,0 +1,257 @@
+import { setRequestLocale } from "next-intl/server";
+import { notFound } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
+import { Link } from "@/i18n/navigation";
+import { RegistrationForm } from "@/components/events/registration-form";
+import { Calendar, MapPin, Users, Clock, ArrowRight } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { GalleryLightbox } from "@/components/gallery/gallery-lightbox";
+import type { Event, RegistrationField, GalleryImage } from "@/lib/types/database";
+import Image from "next/image";
+import type { Metadata } from "next";
+
+type Props = {
+  params: Promise<{ locale: string; slug: string }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale, slug } = await params;
+  const supabase = await createClient();
+  const { data: event } = await supabase
+    .from("events")
+    .select("title_he, title_en, description_he, description_en, cover_image")
+    .eq("slug", slug)
+    .eq("is_published", true)
+    .single();
+
+  if (!event) return {};
+
+  const title = locale === "he" ? event.title_he : event.title_en;
+  const description = locale === "he" ? event.description_he : event.description_en;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: event.cover_image ? [event.cover_image] : [],
+    },
+  };
+}
+
+export default async function EventDetailPage({ params }: Props) {
+  const { locale, slug } = await params;
+  setRequestLocale(locale);
+  const isHebrew = locale === "he";
+
+  const supabase = await createClient();
+  const { data: event } = await supabase
+    .from("events")
+    .select("*")
+    .eq("slug", slug)
+    .eq("is_published", true)
+    .single();
+
+  if (!event) notFound();
+
+  const typedEvent = event as Event;
+
+  // Get registration count
+  const { count: regCount } = await supabase
+    .from("event_registrations")
+    .select("*", { count: "exact", head: true })
+    .eq("event_id", typedEvent.id)
+    .eq("status", "confirmed");
+
+  // Fetch event gallery images (from albums linked to this event)
+  const { data: eventAlbums } = await supabase
+    .from("gallery_albums")
+    .select("id")
+    .eq("event_id", typedEvent.id)
+    .eq("is_published", true);
+
+  let galleryImages: GalleryImage[] = [];
+  if (eventAlbums && eventAlbums.length > 0) {
+    const albumIds = eventAlbums.map((a: { id: string }) => a.id);
+    const { data: images } = await supabase
+      .from("gallery_images")
+      .select("*")
+      .in("album_id", albumIds)
+      .order("sort_order", { ascending: true });
+    galleryImages = (images || []) as GalleryImage[];
+  }
+
+  const title = isHebrew ? typedEvent.title_he : typedEvent.title_en;
+  const description = isHebrew ? typedEvent.description_he : typedEvent.description_en;
+  const body = isHebrew ? typedEvent.body_he : typedEvent.body_en;
+  const location = isHebrew ? typedEvent.location_he : typedEvent.location_en;
+  const eventDate = new Date(typedEvent.event_date);
+  const endDate = typedEvent.event_end_date ? new Date(typedEvent.event_end_date) : null;
+  const isPast = eventDate < new Date();
+  const isFull = !!(typedEvent.max_participants && regCount && regCount >= typedEvent.max_participants);
+  const deadlinePassed = !!(typedEvent.registration_deadline && new Date(typedEvent.registration_deadline) < new Date());
+
+  return (
+    <div>
+      {/* Hero with cover image */}
+      <div className="relative">
+        {typedEvent.cover_image ? (
+          <div className="relative h-64 md:h-80 lg:h-96 overflow-hidden">
+            <Image
+              src={typedEvent.cover_image}
+              alt={title}
+              fill
+              className="object-cover"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-navy/30 to-transparent" />
+          </div>
+        ) : (
+          <div className="h-48 md:h-64 bg-gradient-to-br from-navy via-navy-light to-branch" />
+        )}
+
+        {/* Back link */}
+        <div className="absolute top-4 start-4">
+          <Button asChild variant="ghost" size="sm" className="bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 hover:text-white">
+            <Link href="/events">
+              <ArrowRight className={`w-4 h-4 ${isHebrew ? "" : "rotate-180"}`} />
+              {isHebrew ? "כל האירועים" : "All Events"}
+            </Link>
+          </Button>
+        </div>
+      </div>
+
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 -mt-16 relative z-10 pb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Main content */}
+          <div className="lg:col-span-2 space-y-6">
+            <div className="bg-white rounded-2xl border border-branch/5 p-6 md:p-8 shadow-sm">
+              {/* Title & badges */}
+              <div className="flex flex-wrap items-start gap-3 mb-4">
+                {isPast && (
+                  <Badge variant="secondary">{isHebrew ? "הסתיים" : "Past Event"}</Badge>
+                )}
+                {isFull && !isPast && (
+                  <Badge variant="destructive">{isHebrew ? "מלא" : "Full"}</Badge>
+                )}
+              </div>
+
+              <h1 className={`text-2xl md:text-3xl lg:text-4xl font-bold text-navy mb-4 ${isHebrew ? "font-['Secular_One']" : "font-[family-name:var(--font-playfair)]"}`}>
+                {title}
+              </h1>
+
+              <p className="text-lg text-ink-light mb-6 leading-relaxed">{description}</p>
+
+              {/* Event info pills */}
+              <div className="flex flex-wrap gap-3 mb-8 pb-8 border-b border-branch/10">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-navy/5 text-sm text-navy">
+                  <Calendar className="w-4 h-4" />
+                  {eventDate.toLocaleDateString(isHebrew ? "he-IL" : "en-US", {
+                    weekday: "long",
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </div>
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-navy/5 text-sm text-navy">
+                  <Clock className="w-4 h-4" />
+                  {eventDate.toLocaleTimeString(isHebrew ? "he-IL" : "en-US", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                  {endDate && (
+                    <>
+                      {" - "}
+                      {endDate.toLocaleTimeString(isHebrew ? "he-IL" : "en-US", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </>
+                  )}
+                </div>
+                {location && (
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-navy/5 text-sm text-navy">
+                    <MapPin className="w-4 h-4" />
+                    {typedEvent.location_url ? (
+                      <a
+                        href={typedEvent.location_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:underline"
+                      >
+                        {location}
+                      </a>
+                    ) : (
+                      location
+                    )}
+                  </div>
+                )}
+                {typedEvent.max_participants && (
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-navy/5 text-sm text-navy">
+                    <Users className="w-4 h-4" />
+                    {regCount || 0}/{typedEvent.max_participants} {isHebrew ? "משתתפים" : "participants"}
+                  </div>
+                )}
+              </div>
+
+              {/* Body content */}
+              {body && (
+                <div
+                  className="prose prose-sm max-w-none prose-headings:text-navy prose-p:text-ink prose-strong:text-navy"
+                  dangerouslySetInnerHTML={{ __html: body }}
+                  dir={isHebrew ? "rtl" : "ltr"}
+                />
+              )}
+
+              {/* Post-event summary */}
+              {isPast && (typedEvent.summary_he || typedEvent.summary_en) && (
+                <div className="mt-8 pt-8 border-t border-branch/10">
+                  <h2 className={`text-xl font-bold text-navy mb-4 ${isHebrew ? "font-['Secular_One']" : "font-[family-name:var(--font-playfair)]"}`}>
+                    {isHebrew ? "סיכום האירוע" : "Event Summary"}
+                  </h2>
+                  <p className="text-ink-light leading-relaxed">
+                    {isHebrew ? typedEvent.summary_he : typedEvent.summary_en}
+                  </p>
+                </div>
+              )}
+
+              {/* Event gallery */}
+              {galleryImages.length > 0 && (
+                <div className="mt-8 pt-8 border-t border-branch/10">
+                  <h2 className={`text-xl font-bold text-navy mb-4 ${isHebrew ? "font-['Secular_One']" : "font-[family-name:var(--font-playfair)]"}`}>
+                    {isHebrew ? "תמונות מהאירוע" : "Event Photos"}
+                  </h2>
+                  <GalleryLightbox images={galleryImages} isHebrew={isHebrew} />
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Sidebar - Registration */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-20">
+              {!isPast ? (
+                <RegistrationForm
+                  eventId={typedEvent.id}
+                  eventTitle={title}
+                  fields={(typedEvent.registration_fields || []) as RegistrationField[]}
+                  isHebrew={isHebrew}
+                  isFull={isFull}
+                  deadlinePassed={deadlinePassed}
+                />
+              ) : (
+                <div className="bg-white rounded-2xl border border-branch/5 p-6 text-center">
+                  <p className="text-ink-muted">
+                    {isHebrew ? "האירוע הזה כבר הסתיים" : "This event has already taken place"}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
