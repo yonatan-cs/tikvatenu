@@ -143,7 +143,7 @@ export default async function HomePage({ params }: Props) {
               {/* Title */}
               <h1
                 className={`-mt-12 text-4xl md:text-5xl lg:text-[3.5rem] font-bold text-parchment leading-[1.1] tracking-tight ${displayFont} ${
-                  isHebrew ? "" : "whitespace-nowrap"
+                  isHebrew ? "" : "md:whitespace-nowrap"
                 }`}
               >
                 {isHebrew
