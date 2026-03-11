@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { LocaleSwitcher } from "./locale-switcher";
@@ -20,14 +20,7 @@ export function Header() {
   const locale = useLocale();
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const isHebrew = locale === "he";
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 12);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   function isActive(href: string) {
     if (href === "/") return pathname === "/";
@@ -36,13 +29,7 @@ export function Header() {
 
   return (
     <header
-      className={`
-        fixed top-0 inset-x-0 z-50 transition-all duration-300
-        ${scrolled
-          ? "glass border-b border-branch/10 shadow-sm shadow-navy/[0.03]"
-          : "border-b border-transparent"
-        }
-      `}
+      className="relative z-50 bg-cream border-b border-branch/10"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-20 items-center justify-between">
