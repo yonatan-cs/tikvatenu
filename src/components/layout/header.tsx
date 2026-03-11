@@ -40,14 +40,14 @@ export function Header() {
               alt="תקוותנו"
               width={200}
               height={80}
-              style={{ width: "auto", height: "3.75rem" }}
-              className="transition-transform duration-300 group-hover:scale-[1.03]"
+              style={{ width: "auto", height: "7rem" }}
+              className="translate-y-[8px] transition-transform duration-300 group-hover:scale-[1.03]"
               priority
             />
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-0.5">
+          <nav className="hidden md:flex items-center gap-1">
             {navItems.map((item) => {
               const active = isActive(item.href);
               return (
@@ -55,7 +55,7 @@ export function Header() {
                   key={item.labelKey}
                   href={item.href}
                   className={`
-                    relative px-4 py-2 rounded-lg text-sm font-medium
+                    relative px-5 py-2.5 rounded-lg text-[0.95rem] md:text-base font-medium
                     transition-all duration-200
                     ${isHebrew ? "font-[family-name:var(--font-heebo)]" : "font-[family-name:var(--font-source-sans)]"}
                     ${active

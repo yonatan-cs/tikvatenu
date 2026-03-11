@@ -106,7 +106,7 @@ export default async function EventsPage({ params }: Props) {
   return (
     <div>
       {/* Page header */}
-      <div className="relative overflow-hidden hero-pattern pt-20">
+      <div className="relative overflow-hidden hero-pattern pt-2 md:pt-4">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 md:py-20">
           <div className="max-w-2xl">
             <h1 className={`text-3xl md:text-4xl lg:text-5xl font-bold text-navy mb-4 ${displayFont}`}>

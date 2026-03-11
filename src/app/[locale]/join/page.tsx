@@ -41,7 +41,7 @@ export default async function JoinPage({ params }: Props) {
   return (
     <div>
       {/* Hero */}
-      <section className="relative overflow-hidden grain-overlay pt-20">
+      <section className="relative overflow-hidden grain-overlay pt-2 md:pt-4">
         <div className="absolute inset-0 bg-gradient-to-br from-navy-dark via-navy to-navy-light" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_30%,rgba(200,149,108,0.1),transparent_60%)]" />
 

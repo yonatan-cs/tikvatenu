@@ -87,7 +87,7 @@ export default async function HomePage({ params }: Props) {
       {nextEvent ? (
         <HeroEvent event={nextEvent as Event} isHebrew={isHebrew} />
       ) : (
-        <section className="relative overflow-hidden grain-overlay min-h-screen flex items-center pt-20">
+        <section className="relative overflow-hidden grain-overlay min-h-[85vh] flex items-start pt-2 md:pt-4">
           {/* Background layers */}
           <div className="absolute inset-0 bg-gradient-to-br from-navy-dark via-navy to-navy-light" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_20%,rgba(74,127,181,0.15),transparent_60%)]" />
@@ -125,16 +125,16 @@ export default async function HomePage({ params }: Props) {
             </svg>
           </div>
 
-          <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 md:py-32">
+          <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 md:py-16">
             <div className="max-w-3xl stagger-children">
               {/* Logo */}
-              <div className="mb-10">
+              <div className="mb-0">
                 <Image
                   src="/images/transparent_logo.png"
                   alt="תקוותנו"
                   width={400}
                   height={160}
-                  style={{ width: "auto", height: "8rem" }}
+                  style={{ width: "auto", height: "18rem" }}
                   className="brightness-0 invert opacity-95"
                   priority
                 />
@@ -142,7 +142,7 @@ export default async function HomePage({ params }: Props) {
 
               {/* Title */}
               <h1
-                className={`text-4xl md:text-5xl lg:text-[3.5rem] font-bold text-parchment leading-[1.15] tracking-tight ${displayFont}`}
+                className={`-mt-12 text-4xl md:text-5xl lg:text-[3.5rem] font-bold text-parchment leading-[1.15] tracking-tight ${displayFont}`}
               >
                 {isHebrew ? "תקוותנו - צעירים למען עתיד ישראל" : "Tikvatenu - Youth for the Future of Israel"}
               </h1>

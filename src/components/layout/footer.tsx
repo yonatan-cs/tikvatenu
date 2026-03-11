@@ -1,14 +1,42 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
+import { createClient } from "@/lib/supabase/client";
 
 export function Footer() {
   const t = useTranslations();
   const locale = useLocale();
   const isHebrew = locale === "he";
   const year = new Date().getFullYear();
+  const [instagramUrl, setInstagramUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadInstagramUrl() {
+      try {
+        const supabase = createClient();
+        const { data } = await supabase
+          .from("site_settings")
+          .select("value")
+          .eq("key", "instagram_url")
+          .single();
+
+        if (data?.value && typeof data.value === "string") {
+          setInstagramUrl(data.value);
+        }
+      } catch (error) {
+        // If fetching fails, we silently fall back to the default URL.
+        console.error("Failed to load Instagram URL from settings", error);
+      }
+    }
+
+    void loadInstagramUrl();
+  }, []);
+
+  const fallbackInstagramUrl = "https://instagram.com/tikvatenu";
+  const instagramHref = instagramUrl || fallbackInstagramUrl;
 
   return (
     <footer className="relative bg-navy text-parchment/90">
@@ -36,17 +64,20 @@ export function Footer() {
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
           {/* Logo & tagline */}
-          <div className="md:col-span-5 space-y-5">
+          <div className="md:col-span-5 space-y-0">
             <Image
               src="/images/transparent_logo.png"
               alt="תקוותנו"
               width={240}
               height={96}
-              style={{ width: "auto", height: "5rem" }}
-              className="brightness-0 invert opacity-80"
+              style={{ width: "auto", height: "10rem" }}
+              className="-mt-8 md:-mt-10 brightness-0 invert opacity-80"
             />
-            <p className="text-sm text-parchment/45 max-w-xs leading-relaxed">
+            <p className="-mt-4 md:-mt-5 text-sm text-parchment/45 max-w-xs leading-relaxed">
               {t("footer.tagline")}
+            </p>
+            <p className="text-sm text-parchment/55 max-w-md leading-relaxed whitespace-pre-line">
+              {t("footer.about")}
             </p>
           </div>
 
@@ -90,7 +121,7 @@ export function Footer() {
             </h3>
             <div className="flex gap-3">
               <a
-                href="https://instagram.com/tikvatenu"
+                href={instagramHref}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="

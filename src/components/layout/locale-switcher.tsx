@@ -19,7 +19,7 @@ export function LocaleSwitcher() {
     <button
       onClick={handleSwitch}
       className="
-        px-3 py-1.5 rounded-full text-xs font-bold tracking-wider
+        px-4 py-2 rounded-full text-sm font-bold tracking-wider
         border border-navy/15 text-navy/55
         hover:border-terracotta/40 hover:text-terracotta hover:bg-terracotta/[0.04]
         transition-all duration-200

@@ -44,7 +44,7 @@ export default async function AboutPage({ params }: Props) {
   return (
     <div>
       {/* Hero Section */}
-      <section className="relative overflow-hidden grain-overlay pt-20">
+      <section className="relative overflow-hidden grain-overlay pt-2 md:pt-4">
         <div className="absolute inset-0 bg-gradient-to-br from-navy-dark via-navy to-navy-light" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_40%,rgba(74,127,181,0.12),transparent_55%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_85%_30%,rgba(200,149,108,0.08),transparent_50%)]" />

@@ -39,16 +39,16 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="min-h-screen pt-20 flex items-center justify-center px-4">
+    <div className="min-h-screen flex justify-center px-4 pt-6">
       <div className="w-full max-w-md">
         {/* Logo */}
-        <div className="flex justify-center mb-8">
+        <div className="flex justify-center">
           <Image
-            src="/images/logo.jpg"
+            src="/images/transparent_logo.png"
             alt="תקוותנו"
-            width={160}
-            height={64}
-            className="h-14 w-auto"
+            width={1600}
+            height={640}
+            className="h-48 w-auto"
           />
         </div>
 
