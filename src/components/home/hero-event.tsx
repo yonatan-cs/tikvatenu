@@ -18,7 +18,7 @@ export function HeroEvent({ event, isHebrew }: HeroEventProps) {
     : "font-[family-name:var(--font-playfair)]";
 
   return (
-    <section className="relative overflow-hidden grain-overlay min-h-[80vh] flex items-center">
+    <section className="relative overflow-hidden grain-overlay min-h-screen flex items-center pt-20">
       {/* Background */}
       {event.cover_image ? (
         <div className="absolute inset-0">

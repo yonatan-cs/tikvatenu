@@ -37,23 +37,23 @@ export function Header() {
   return (
     <header
       className={`
-        sticky top-0 z-50 transition-all duration-300
+        fixed top-0 inset-x-0 z-50 transition-all duration-300
         ${scrolled
           ? "glass border-b border-branch/10 shadow-sm shadow-navy/[0.03]"
-          : "bg-cream/60 backdrop-blur-sm border-b border-transparent"
+          : "border-b border-transparent"
         }
       `}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-[4.25rem] items-center justify-between">
+        <div className="flex h-20 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 shrink-0 group">
             <Image
               src="/images/transparent_logo.png"
               alt="תקוותנו"
-              width={140}
-              height={56}
-              style={{ width: "auto", height: "2.75rem" }}
+              width={200}
+              height={80}
+              style={{ width: "auto", height: "3.75rem" }}
               className="transition-transform duration-300 group-hover:scale-[1.03]"
               priority
             />

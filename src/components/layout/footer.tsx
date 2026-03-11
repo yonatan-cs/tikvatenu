@@ -40,10 +40,10 @@ export function Footer() {
             <Image
               src="/images/transparent_logo.png"
               alt="תקוותנו"
-              width={160}
-              height={64}
-              style={{ width: "auto", height: "3.5rem" }}
-              className="brightness-[2] contrast-[0.6] opacity-70"
+              width={240}
+              height={96}
+              style={{ width: "auto", height: "5rem" }}
+              className="brightness-0 invert opacity-80"
             />
             <p className="text-sm text-parchment/45 max-w-xs leading-relaxed">
               {t("footer.tagline")}

@@ -16,7 +16,8 @@
   "home": {
     "hero": {
       "subtitle": "Youth for the Future of Israel",
-      "cta": "Next Event",
+      "description": "We believe in the power of young Israelis from diverse backgrounds to build bridges and promote mutual understanding in Israeli society. Our events provide a platform for open dialogue, shared learning, and a deep connection to our Jewish and Israeli identity.",
+      "cta": "Events",
       "nothingUpcoming": "No upcoming events at the moment"
     },
     "feed": {
@@ -162,6 +163,7 @@
   },
   "footer": {
     "rights": "All rights reserved",
-    "tagline": "Tikvatenu - Youth for the Future of Israel"
+    "tagline": "Tikvatenu - Youth for the Future of Israel",
+    "about": "At Tikvatenu, we believe in the power of young Israelis from diverse backgrounds to build bridges and promote mutual understanding in Israeli society. We hold events and invite every young person to join us."
   }
 }

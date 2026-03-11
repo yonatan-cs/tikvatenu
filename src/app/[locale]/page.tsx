@@ -87,7 +87,7 @@ export default async function HomePage({ params }: Props) {
       {nextEvent ? (
         <HeroEvent event={nextEvent as Event} isHebrew={isHebrew} />
       ) : (
-        <section className="relative overflow-hidden grain-overlay min-h-[85vh] flex items-center">
+        <section className="relative overflow-hidden grain-overlay min-h-screen flex items-center pt-20">
           {/* Background layers */}
           <div className="absolute inset-0 bg-gradient-to-br from-navy-dark via-navy to-navy-light" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_20%,rgba(74,127,181,0.15),transparent_60%)]" />
@@ -132,10 +132,10 @@ export default async function HomePage({ params }: Props) {
                 <Image
                   src="/images/transparent_logo.png"
                   alt="תקוותנו"
-                  width={240}
-                  height={96}
-                  style={{ width: "auto", height: "5rem" }}
-                  className="brightness-[2] contrast-[0.7] opacity-90"
+                  width={400}
+                  height={160}
+                  style={{ width: "auto", height: "8rem" }}
+                  className="brightness-0 invert opacity-95"
                   priority
                 />
               </div>
@@ -144,27 +144,27 @@ export default async function HomePage({ params }: Props) {
               <h1
                 className={`text-4xl md:text-5xl lg:text-[3.5rem] font-bold text-parchment leading-[1.15] tracking-tight ${displayFont}`}
               >
-                {isHebrew ? "בונים גשרים בחברה הישראלית" : "Building Bridges in Israeli Society"}
+                {isHebrew ? "תקוותנו - צעירים למען עתיד ישראל" : "Tikvatenu - Youth for the Future of Israel"}
               </h1>
 
               {/* Subtitle */}
               <p className="mt-7 text-lg md:text-xl text-parchment/60 max-w-2xl leading-relaxed">
-                {t("home.hero.subtitle")}
+                {t("home.hero.description")}
               </p>
 
               {/* CTAs */}
               <div className="mt-11 flex flex-wrap gap-4">
                 <Link
-                  href="/events"
+                  href="/join"
                   className="btn-shine inline-flex items-center px-8 py-3.5 rounded-full bg-terracotta text-white font-semibold text-base hover:bg-terracotta-dark transition-all duration-300 shadow-lg shadow-terracotta/25 hover:shadow-terracotta/35 hover:-translate-y-0.5"
                 >
-                  {t("home.hero.cta")}
+                  {isHebrew ? "הצטרפו אלינו" : "Join Us"}
                 </Link>
                 <Link
-                  href="/about"
+                  href="/events"
                   className="inline-flex items-center px-8 py-3.5 rounded-full border border-parchment/20 text-parchment/80 font-semibold text-base hover:bg-parchment/[0.06] hover:border-parchment/35 hover:text-parchment transition-all duration-300 hover:-translate-y-0.5"
                 >
-                  {t("nav.about")}
+                  {t("home.hero.cta")}
                 </Link>
               </div>
             </div>

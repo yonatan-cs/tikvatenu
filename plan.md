@@ -12,7 +12,7 @@
 | Phase 5: Home Page & Feed | **COMPLETE** | Hero, feed, Instagram widget, featured article |
 | Phase 6: Gallery & Past Events | **COMPLETE** | Photo albums, lightbox, past event summaries |
 | Phase 7: About + Join Us + Polish | **COMPLETE** | About page, Join forms, admin submissions, email, SEO, sitemap |
-| Phase 8: Deployment | PENDING | Vercel deploy, tikvatenu.com domain |
+| Phase 8: Deployment | **COMPLETE** | Vercel deploy, tikvatenu.com domain, GitHub repo |
 
 **Last updated**: 2026-03-11
 
@@ -361,11 +361,12 @@ next-intl with `localePrefix: 'as-needed'` - Hebrew has clean URLs (`/events`), 
 - [x] Translation files updated with all new keys (about, join, common sections)
 - [x] Build passes cleanly - all routes verified
 
-### Phase 8: Deployment
-- Deploy to Vercel
-- Configure env variables
-- Connect custom domain (tikvatenu.com)
-- Production testing
+### Phase 8: Deployment - COMPLETE
+- [x] Git repo initialized, pushed to GitHub (`yonatan-cs/tikvatenu`)
+- [x] Deployed to Vercel (auto-deploy from main branch)
+- [x] Environment variables configured (Supabase URL, anon key, site URL)
+- [x] Custom domain `tikvatenu.com` + `www.tikvatenu.com` connected via Namecheap DNS
+- [x] SSL certificate auto-provisioned
 
 ---
 

@@ -56,6 +56,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         "en": `${baseUrl}/en`,
       },
     },
+    icons: {
+      icon: "/icon.png",
+      apple: "/apple-icon.png",
+    },
     openGraph: {
       title: t("title"),
       description: t("description"),

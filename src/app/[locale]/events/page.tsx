@@ -1,8 +1,9 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { EventCard } from "@/components/events/event-card";
+import { PastEventCard } from "@/components/events/past-event-card";
 import { Calendar } from "lucide-react";
-import type { Event } from "@/lib/types/database";
+import type { Event, GalleryImage } from "@/lib/types/database";
 import type { Metadata } from "next";
 
 type Props = {
@@ -35,25 +36,23 @@ export default async function EventsPage({ params }: Props) {
     .gte("event_date", now)
     .order("event_date", { ascending: true });
 
-  // Fetch past events
+  // Fetch all past events
   const { data: pastEvents } = await supabase
     .from("events")
     .select("*")
     .eq("is_published", true)
     .lt("event_date", now)
-    .order("event_date", { ascending: false })
-    .limit(12);
+    .order("event_date", { ascending: false });
 
-  // Fetch registration counts for all events
-  const allEvents = [...(upcomingEvents || []), ...(pastEvents || [])] as Event[];
-  const eventIds = allEvents.map((e) => e.id);
+  // Fetch registration counts for upcoming events
+  const upcomingIds = (upcomingEvents || []).map((e) => e.id);
 
   let regCounts: Record<string, number> = {};
-  if (eventIds.length > 0) {
+  if (upcomingIds.length > 0) {
     const { data: counts } = await supabase
       .from("event_registrations")
       .select("event_id")
-      .in("event_id", eventIds)
+      .in("event_id", upcomingIds)
       .eq("status", "confirmed");
 
     if (counts) {
@@ -64,6 +63,42 @@ export default async function EventsPage({ params }: Props) {
     }
   }
 
+  // Fetch gallery images for past events
+  const pastEventIds = (pastEvents || []).map((e) => e.id);
+  let eventGalleryImages: Record<string, GalleryImage[]> = {};
+
+  if (pastEventIds.length > 0) {
+    const { data: albums } = await supabase
+      .from("gallery_albums")
+      .select("id, event_id")
+      .in("event_id", pastEventIds)
+      .eq("is_published", true);
+
+    if (albums && albums.length > 0) {
+      const albumIds = albums.map((a) => a.id);
+      const albumToEvent = albums.reduce<Record<string, string>>((acc, a) => {
+        if (a.event_id) acc[a.id] = a.event_id;
+        return acc;
+      }, {});
+
+      const { data: images } = await supabase
+        .from("gallery_images")
+        .select("*")
+        .in("album_id", albumIds)
+        .order("sort_order", { ascending: true });
+
+      if (images) {
+        for (const img of images) {
+          const eventId = albumToEvent[img.album_id];
+          if (eventId) {
+            if (!eventGalleryImages[eventId]) eventGalleryImages[eventId] = [];
+            eventGalleryImages[eventId].push(img as GalleryImage);
+          }
+        }
+      }
+    }
+  }
+
   const displayFont = isHebrew
     ? "font-['Secular_One']"
     : "font-[family-name:var(--font-playfair)]";
@@ -71,7 +106,7 @@ export default async function EventsPage({ params }: Props) {
   return (
     <div>
       {/* Page header */}
-      <div className="relative overflow-hidden hero-pattern">
+      <div className="relative overflow-hidden hero-pattern pt-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 md:py-20">
           <div className="max-w-2xl">
             <h1 className={`text-3xl md:text-4xl lg:text-5xl font-bold text-navy mb-4 ${displayFont}`}>
@@ -125,16 +160,16 @@ export default async function EventsPage({ params }: Props) {
             <div className="flex items-center gap-3 mb-8">
               <div className="w-1.5 h-1.5 rounded-full bg-ink-muted/40" />
               <h2 className={`text-xl md:text-2xl font-bold text-navy/70 ${displayFont}`}>
-                {t("past")}
+                {isHebrew ? "אירועים קודמים" : "Past Events"}
               </h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
               {(pastEvents as Event[]).map((event) => (
-                <EventCard
+                <PastEventCard
                   key={event.id}
                   event={event}
                   isHebrew={isHebrew}
-                  registrationCount={regCounts[event.id]}
+                  galleryImages={eventGalleryImages[event.id]}
                 />
               ))}
             </div>

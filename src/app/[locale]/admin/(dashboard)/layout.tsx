@@ -33,7 +33,7 @@ export default async function AdminLayout({ children, params }: Props) {
   }
 
   return (
-    <div className="flex min-h-[calc(100vh-4rem)]">
+    <div className="flex min-h-screen pt-20">
       <AdminSidebar locale={locale} userName={profile.full_name || user.email || "Admin"} />
       <div className="flex-1 p-6 lg:p-8 bg-cream-dark/30">
         {children}

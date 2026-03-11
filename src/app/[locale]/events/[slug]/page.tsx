@@ -6,7 +6,7 @@ import { RegistrationForm } from "@/components/events/registration-form";
 import { Calendar, MapPin, Users, Clock, ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { GalleryLightbox } from "@/components/gallery/gallery-lightbox";
+import { EventGallerySlideshow } from "@/components/events/event-gallery-slideshow";
 import type { Event, RegistrationField, GalleryImage } from "@/lib/types/database";
 import Image from "next/image";
 import type { Metadata } from "next";
@@ -94,27 +94,27 @@ export default async function EventDetailPage({ params }: Props) {
   const deadlinePassed = !!(typedEvent.registration_deadline && new Date(typedEvent.registration_deadline) < new Date());
 
   return (
-    <div>
-      {/* Hero with cover image */}
+    <div className="pt-20">
+      {/* Hero with cover image - full display like a landing page */}
       <div className="relative">
         {typedEvent.cover_image ? (
-          <div className="relative h-64 md:h-80 lg:h-96 overflow-hidden">
+          <div className="relative overflow-hidden flex justify-center bg-navy/5">
             <Image
               src={typedEvent.cover_image}
               alt={title}
-              fill
-              className="object-cover"
+              width={1200}
+              height={800}
+              className="w-full max-w-4xl h-auto object-contain"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-navy/30 to-transparent" />
           </div>
         ) : (
           <div className="h-48 md:h-64 bg-gradient-to-br from-navy via-navy-light to-branch" />
         )}
 
         {/* Back link */}
-        <div className="absolute top-4 start-4">
-          <Button asChild variant="ghost" size="sm" className="bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 hover:text-white">
+        <div className="absolute top-4 start-4 z-10">
+          <Button asChild variant="ghost" size="sm" className="bg-white/80 backdrop-blur-sm text-navy hover:bg-white/90 hover:text-navy shadow-sm">
             <Link href="/events">
               <ArrowRight className={`w-4 h-4 ${isHebrew ? "" : "rotate-180"}`} />
               {isHebrew ? "כל האירועים" : "All Events"}
@@ -123,7 +123,7 @@ export default async function EventDetailPage({ params }: Props) {
         </div>
       </div>
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 -mt-16 relative z-10 pb-16">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main content */}
           <div className="lg:col-span-2 space-y-6">
@@ -217,13 +217,13 @@ export default async function EventDetailPage({ params }: Props) {
                 </div>
               )}
 
-              {/* Event gallery */}
+              {/* Event gallery slideshow */}
               {galleryImages.length > 0 && (
                 <div className="mt-8 pt-8 border-t border-branch/10">
                   <h2 className={`text-xl font-bold text-navy mb-4 ${isHebrew ? "font-['Secular_One']" : "font-[family-name:var(--font-playfair)]"}`}>
                     {isHebrew ? "תמונות מהאירוע" : "Event Photos"}
                   </h2>
-                  <GalleryLightbox images={galleryImages} isHebrew={isHebrew} />
+                  <EventGallerySlideshow images={galleryImages} isHebrew={isHebrew} />
                 </div>
               )}
             </div>
