@@ -2,7 +2,7 @@ import { setRequestLocale } from "next-intl/server";
 import { redirect, notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { EventForm } from "@/components/admin/event-form";
-import type { Event } from "@/lib/types/database";
+import type { Event, GalleryImage } from "@/lib/types/database";
 
 type Props = {
   params: Promise<{ locale: string; id: string }>;
@@ -24,5 +24,32 @@ export default async function EditEventPage({ params }: Props) {
 
   if (!event) notFound();
 
-  return <EventForm event={event as Event} isHebrew={locale === "he"} userId={user.id} />;
+  // Fetch linked gallery album and images for past events
+  let existingGalleryImages: GalleryImage[] = [];
+  let existingAlbumId: string | undefined;
+
+  const { data: albums } = await supabase
+    .from("gallery_albums")
+    .select("id")
+    .eq("event_id", id);
+
+  if (albums && albums.length > 0) {
+    existingAlbumId = albums[0].id;
+    const { data: images } = await supabase
+      .from("gallery_images")
+      .select("*")
+      .eq("album_id", existingAlbumId)
+      .order("sort_order", { ascending: true });
+    existingGalleryImages = (images || []) as GalleryImage[];
+  }
+
+  return (
+    <EventForm
+      event={event as Event}
+      existingGalleryImages={existingGalleryImages}
+      existingAlbumId={existingAlbumId}
+      isHebrew={locale === "he"}
+      userId={user.id}
+    />
+  );
 }
