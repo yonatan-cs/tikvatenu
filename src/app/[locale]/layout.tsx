@@ -6,6 +6,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { Heebo, Playfair_Display, Source_Sans_3 } from "next/font/google";
 import { routing } from "@/i18n/routing";
+import { createClient } from "@/lib/supabase/server";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import "../globals.css";
@@ -89,7 +90,13 @@ export default async function LocaleLayout({ children, params }: Props) {
 
   setRequestLocale(locale);
 
-  const messages = await getMessages();
+  const [messages, supabase] = await Promise.all([getMessages(), createClient()]);
+  const { data: instaSetting } = await supabase
+    .from("site_settings")
+    .select("value")
+    .eq("key", "instagram_url")
+    .single();
+  const instagramUrl = (instaSetting?.value as string) || "";
   const dir = locale === "he" ? "rtl" : "ltr";
   const isHebrew = locale === "he";
 
@@ -119,7 +126,7 @@ export default async function LocaleLayout({ children, params }: Props) {
         <NextIntlClientProvider messages={messages}>
           <Header />
           <main className="flex-1">{children}</main>
-          <Footer />
+          <Footer instagramUrl={instagramUrl} />
         </NextIntlClientProvider>
       </body>
     </html>

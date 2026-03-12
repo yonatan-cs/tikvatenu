@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "@/i18n/navigation";
-import { createClient } from "@/lib/supabase/client";
+import { saveUpdate } from "@/lib/actions/admin";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -47,30 +47,20 @@ export function UpdateForm({ update, isHebrew, userId }: UpdateFormProps) {
     setSaving(true);
     setError(null);
 
-    const supabase = createClient();
-    const finalSlug = slug || slugify(titleEn || titleHe);
+    const result = await saveUpdate({
+      id: update?.id,
+      slug,
+      titleHe,
+      titleEn,
+      bodyHe,
+      bodyEn,
+      coverImage,
+      isPublished,
+      publishedAt: update?.published_at || null,
+    });
 
-    const data = {
-      slug: finalSlug,
-      title_he: titleHe,
-      title_en: titleEn,
-      body_he: bodyHe || null,
-      body_en: bodyEn || null,
-      cover_image: coverImage,
-      is_published: isPublished,
-      published_at: isPublished ? (update?.published_at || new Date().toISOString()) : null,
-      author_id: userId,
-    };
-
-    let result;
-    if (update) {
-      result = await supabase.from("updates").update(data).eq("id", update.id);
-    } else {
-      result = await supabase.from("updates").insert(data);
-    }
-
-    if (result.error) {
-      setError(result.error.message);
+    if (!result.ok) {
+      setError(result.error);
       setSaving(false);
       return;
     }

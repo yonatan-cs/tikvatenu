@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "@/i18n/navigation";
-import { createClient } from "@/lib/supabase/client";
+import { saveHomeSettings } from "@/lib/actions/admin";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -42,26 +42,15 @@ export function HomeSettingsForm({ settings, articles, isHebrew }: HomeSettingsF
     setError(null);
     setSuccess(false);
 
-    const supabase = createClient();
+    const result = await saveHomeSettings({
+      featuredArticleId,
+      instagramUrl,
+    });
 
-    const settingsToSave = [
-      { key: "featured_article_id", value: featuredArticleId === "none" ? null : featuredArticleId },
-      { key: "instagram_url", value: instagramUrl || null },
-    ];
-
-    for (const setting of settingsToSave) {
-      const { error: upsertError } = await supabase
-        .from("site_settings")
-        .upsert(
-          { key: setting.key, value: setting.value, updated_at: new Date().toISOString() },
-          { onConflict: "key" }
-        );
-
-      if (upsertError) {
-        setError(upsertError.message);
-        setSaving(false);
-        return;
-      }
+    if (!result.ok) {
+      setError(result.error);
+      setSaving(false);
+      return;
     }
 
     setSaving(false);

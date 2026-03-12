@@ -20,37 +20,25 @@ export default async function HomePage({ params }: Props) {
 
   const supabase = await createClient();
 
-  // Fetch next upcoming event
-  const { data: nextEvent } = await supabase
-    .from("events")
-    .select("*")
-    .eq("is_published", true)
-    .gte("event_date", new Date().toISOString())
-    .order("event_date", { ascending: true })
-    .limit(1)
-    .single();
+  // Fetch data in parallel
+  const [nextEventResult, updatesResult, featuredSettingResult, instaResult] = await Promise.all([
+    supabase.from("events").select("*").eq("is_published", true).gte("event_date", new Date().toISOString()).order("event_date", { ascending: true }).limit(1).single(),
+    supabase.from("updates").select("*").eq("is_published", true).order("published_at", { ascending: false }).limit(6),
+    supabase.from("site_settings").select("value").eq("key", "featured_article_id").single(),
+    supabase.from("site_settings").select("value").eq("key", "instagram_url").single(),
+  ]);
 
-  // Fetch latest updates
-  const { data: latestUpdates } = await supabase
-    .from("updates")
-    .select("*")
-    .eq("is_published", true)
-    .order("published_at", { ascending: false })
-    .limit(6);
+  const nextEvent = nextEventResult.data;
+  const latestUpdates = updatesResult.data;
+  const instagramUrl = (instaResult.data?.value as string) || "";
 
-  // Fetch featured article from settings
-  const { data: featuredSetting } = await supabase
-    .from("site_settings")
-    .select("value")
-    .eq("key", "featured_article_id")
-    .single();
-
+  // Featured article depends on the settings result
   let featuredArticle: Article | null = null;
-  if (featuredSetting?.value) {
+  if (featuredSettingResult.data?.value) {
     const { data: article } = await supabase
       .from("articles")
       .select("*")
-      .eq("id", featuredSetting.value)
+      .eq("id", featuredSettingResult.data.value)
       .eq("is_published", true)
       .single();
     featuredArticle = article as Article | null;
@@ -67,15 +55,6 @@ export default async function HomePage({ params }: Props) {
       .single();
     featuredArticle = latest as Article | null;
   }
-
-  // Get Instagram URL from settings
-  const { data: instaSetting } = await supabase
-    .from("site_settings")
-    .select("value")
-    .eq("key", "instagram_url")
-    .single();
-
-  const instagramUrl = (instaSetting?.value as string) || "";
 
   const displayFont = isHebrew
     ? "font-['Secular_One']"

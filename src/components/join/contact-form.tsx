@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 export function ContactForm({ isHebrew }: { isHebrew: boolean }) {
   const t = useTranslations("join.contact");
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const displayFont = isHebrew
     ? "font-['Secular_One']"
@@ -34,9 +35,20 @@ export function ContactForm({ isHebrew }: { isHebrew: boolean }) {
         setStatus("success");
         form.reset();
       } else {
+        try {
+          const data = await res.json();
+          setErrorMessage(data.error || null);
+        } catch {
+          setErrorMessage(null);
+        }
+        if (res.status >= 500) {
+          console.error("Contact form submission failed with status", res.status);
+        }
         setStatus("error");
       }
-    } catch {
+    } catch (err) {
+      console.error("Contact form submission error", err);
+      setErrorMessage(null);
       setStatus("error");
     }
   }
@@ -119,7 +131,7 @@ export function ContactForm({ isHebrew }: { isHebrew: boolean }) {
         </div>
 
         {status === "error" && (
-          <p className="text-sm text-error">{t("error")}</p>
+          <p className="text-sm text-error">{errorMessage || t("error")}</p>
         )}
 
         <button

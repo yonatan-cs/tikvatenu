@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { sendRegistrationEmail } from "@/lib/email";
+import type { RegistrationField } from "@/lib/types/database";
+
+function validateEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
 
 export async function POST(request: Request) {
   try {
@@ -14,12 +19,19 @@ export async function POST(request: Request) {
       );
     }
 
+    if (!validateEmail(email)) {
+      return NextResponse.json(
+        { error: "Invalid email format" },
+        { status: 400 }
+      );
+    }
+
     const supabase = await createClient();
 
     // Check event exists and is published
     const { data: event, error: eventError } = await supabase
       .from("events")
-      .select("id, title_he, title_en, event_date, location_he, location_en, max_participants, registration_deadline, is_published")
+      .select("id, title_he, title_en, event_date, location_he, location_en, max_participants, registration_deadline, registration_fields, is_published")
       .eq("id", event_id)
       .eq("is_published", true)
       .single();
@@ -29,6 +41,46 @@ export async function POST(request: Request) {
         { error: "Event not found" },
         { status: 404 }
       );
+    }
+
+    // Validate custom registration fields
+    const registrationFields = (event.registration_fields || []) as RegistrationField[];
+    if (registrationFields.length > 0) {
+      const fieldErrors: Record<string, string> = {};
+      const fields = custom_fields || {};
+
+      for (const field of registrationFields) {
+        const value = fields[field.id];
+
+        // Check required fields
+        if (field.required && (value === undefined || value === null || value === "")) {
+          fieldErrors[field.id] = `${field.label_en || field.label_he} is required`;
+          continue;
+        }
+
+        if (value === undefined || value === null || value === "") continue;
+
+        // Type-specific validation
+        if (field.type === "email" && typeof value === "string" && !validateEmail(value)) {
+          fieldErrors[field.id] = "Invalid email format";
+        } else if (field.type === "number") {
+          const num = Number(value);
+          if (isNaN(num)) {
+            fieldErrors[field.id] = "Must be a number";
+          }
+        } else if (field.type === "select" && field.options && field.options.length > 0) {
+          if (!field.options.includes(String(value))) {
+            fieldErrors[field.id] = "Invalid selection";
+          }
+        }
+      }
+
+      if (Object.keys(fieldErrors).length > 0) {
+        return NextResponse.json(
+          { error: "Validation failed", fields: fieldErrors },
+          { status: 400 }
+        );
+      }
     }
 
     // Check registration deadline

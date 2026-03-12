@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { saveEvent } from "@/lib/actions/admin";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -125,116 +126,37 @@ export function EventForm({ event, existingGalleryImages = [], existingAlbumId, 
     setSaving(true);
     setError(null);
 
-    const supabase = createClient();
-    const finalSlug = slug || slugify(titleEn || titleHe);
+    const result = await saveEvent({
+      id: event?.id,
+      slug,
+      titleHe,
+      titleEn,
+      descriptionHe,
+      descriptionEn,
+      bodyHe,
+      bodyEn,
+      coverImage,
+      locationHe,
+      locationEn,
+      locationUrl,
+      eventDate,
+      eventEndDate,
+      registrationDeadline,
+      maxParticipants,
+      registrationFields,
+      isPublished,
+      eventType,
+      summaryHe,
+      summaryEn,
+      galleryImages,
+      existingGalleryImages,
+      existingAlbumId,
+    });
 
-    const eventData = {
-      slug: finalSlug,
-      title_he: titleHe,
-      title_en: titleEn,
-      description_he: descriptionHe,
-      description_en: descriptionEn,
-      body_he: bodyHe || null,
-      body_en: bodyEn || null,
-      cover_image: coverImage,
-      location_he: locationHe || null,
-      location_en: locationEn || null,
-      location_url: locationUrl || null,
-      event_date: eventDate ? new Date(eventDate).toISOString() : new Date().toISOString(),
-      event_end_date: eventEndDate ? new Date(eventEndDate).toISOString() : null,
-      registration_deadline: eventType === "future" && registrationDeadline ? new Date(registrationDeadline).toISOString() : null,
-      max_participants: eventType === "future" && maxParticipants ? parseInt(maxParticipants) : null,
-      registration_fields: eventType === "future" ? registrationFields : [],
-      is_published: isPublished,
-      summary_he: eventType === "past" ? summaryHe || null : null,
-      summary_en: eventType === "past" ? summaryEn || null : null,
-      author_id: userId,
-    };
-
-    let eventId = event?.id;
-
-    if (event) {
-      const { error: updateError } = await supabase.from("events").update(eventData).eq("id", event.id);
-      if (updateError) {
-        setError(updateError.message);
-        setSaving(false);
-        return;
-      }
-    } else {
-      const { data: newEvent, error: insertError } = await supabase
-        .from("events")
-        .insert(eventData)
-        .select("id")
-        .single();
-      if (insertError || !newEvent) {
-        setError(insertError?.message || "Failed to create event");
-        setSaving(false);
-        return;
-      }
-      eventId = newEvent.id;
-    }
-
-    // Save gallery images for past events
-    if (eventType === "past" && eventId && galleryImages.length > 0) {
-      let albumId = existingAlbumId;
-
-      if (!albumId) {
-        // Create a new gallery album linked to this event
-        const { data: newAlbum, error: albumError } = await supabase
-          .from("gallery_albums")
-          .insert({
-            title_he: titleHe,
-            title_en: titleEn || null,
-            description_he: null,
-            description_en: null,
-            cover_image: galleryImages[0]?.image_url || null,
-            event_id: eventId,
-            is_published: true,
-            sort_order: 0,
-            author_id: userId,
-          })
-          .select("id")
-          .single();
-
-        if (albumError || !newAlbum) {
-          setError(albumError?.message || "Failed to create gallery album");
-          setSaving(false);
-          return;
-        }
-        albumId = newAlbum.id;
-      } else {
-        // Update existing album cover image
-        await supabase.from("gallery_albums").update({
-          cover_image: galleryImages[0]?.image_url || null,
-        }).eq("id", albumId);
-      }
-
-      // Sync images: delete removed, insert new
-      const currentImageIds = galleryImages
-        .filter((img) => existingGalleryImages.some((e) => e.id === img.id))
-        .map((img) => img.id);
-      const removedIds = existingGalleryImages
-        .filter((e) => !currentImageIds.includes(e.id))
-        .map((e) => e.id);
-
-      if (removedIds.length > 0) {
-        await supabase.from("gallery_images").delete().in("id", removedIds);
-      }
-
-      const newImages = galleryImages.filter(
-        (img) => !existingGalleryImages.some((e) => e.id === img.id)
-      );
-      if (newImages.length > 0) {
-        await supabase.from("gallery_images").insert(
-          newImages.map((img, idx) => ({
-            album_id: albumId,
-            image_url: img.image_url,
-            caption_he: img.caption_he,
-            caption_en: img.caption_en,
-            sort_order: existingGalleryImages.length + idx,
-          }))
-        );
-      }
+    if (!result.ok) {
+      setError(result.error);
+      setSaving(false);
+      return;
     }
 
     router.push("/admin/events");

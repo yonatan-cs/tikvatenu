@@ -1,42 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
-import { createClient } from "@/lib/supabase/client";
 
-export function Footer() {
+interface FooterProps {
+  instagramUrl?: string;
+}
+
+export function Footer({ instagramUrl }: FooterProps) {
   const t = useTranslations();
   const locale = useLocale();
   const isHebrew = locale === "he";
   const year = new Date().getFullYear();
-  const [instagramUrl, setInstagramUrl] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function loadInstagramUrl() {
-      try {
-        const supabase = createClient();
-        const { data } = await supabase
-          .from("site_settings")
-          .select("value")
-          .eq("key", "instagram_url")
-          .single();
-
-        if (data?.value && typeof data.value === "string") {
-          setInstagramUrl(data.value);
-        }
-      } catch (error) {
-        // If fetching fails, we silently fall back to the default URL.
-        console.error("Failed to load Instagram URL from settings", error);
-      }
-    }
-
-    void loadInstagramUrl();
-  }, []);
-
-  const fallbackInstagramUrl = "https://instagram.com/tikvatenu";
-  const instagramHref = instagramUrl || fallbackInstagramUrl;
+  const instagramHref = instagramUrl || "https://instagram.com/tikvatenu";
 
   return (
     <footer className="relative bg-navy text-parchment/90">

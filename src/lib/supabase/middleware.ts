@@ -28,5 +28,16 @@ export async function updateSession(
     data: { user },
   } = await supabase.auth.getUser();
 
-  return { user, response };
+  // Look up user role from profiles table
+  let role: string | null = null;
+  if (user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+    role = profile?.role || null;
+  }
+
+  return { user, role, response };
 }

@@ -1,6 +1,7 @@
 import type { Update } from "@/lib/types/database";
 import Image from "next/image";
 import { Megaphone } from "lucide-react";
+import { SafeHtml } from "@/components/shared/safe-html";
 
 interface UpdatesFeedProps {
   updates: Update[];
@@ -53,9 +54,9 @@ export function UpdatesFeed({ updates, isHebrew }: UpdatesFeedProps) {
               </h3>
 
               {body && (
-                <div
+                <SafeHtml
+                  html={body}
                   className="text-sm text-ink-muted line-clamp-3 prose prose-sm max-w-none leading-relaxed"
-                  dangerouslySetInnerHTML={{ __html: body }}
                 />
               )}
 

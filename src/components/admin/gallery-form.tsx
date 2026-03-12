@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { saveGalleryAlbum } from "@/lib/actions/admin";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -94,65 +95,24 @@ export function GalleryForm({ album, existingImages = [], events = [], isHebrew,
     setSaving(true);
     setError(null);
 
-    const supabase = createClient();
+    const result = await saveGalleryAlbum({
+      id: album?.id,
+      titleHe,
+      titleEn,
+      descriptionHe,
+      descriptionEn,
+      coverImage,
+      eventId,
+      isPublished,
+      sortOrder: album?.sort_order || 0,
+      images,
+      existingImages,
+    });
 
-    const albumData = {
-      title_he: titleHe,
-      title_en: titleEn,
-      description_he: descriptionHe || null,
-      description_en: descriptionEn || null,
-      cover_image: coverImage || images[0]?.image_url || null,
-      event_id: eventId === "none" ? null : eventId,
-      is_published: isPublished,
-      sort_order: album?.sort_order || 0,
-      author_id: userId,
-    };
-
-    let albumId = album?.id;
-
-    if (album) {
-      const { error: updateError } = await supabase.from("gallery_albums").update(albumData).eq("id", album.id);
-      if (updateError) {
-        setError(updateError.message);
-        setSaving(false);
-        return;
-      }
-    } else {
-      const { data: newAlbum, error: insertError } = await supabase
-        .from("gallery_albums")
-        .insert(albumData)
-        .select("id")
-        .single();
-      if (insertError || !newAlbum) {
-        setError(insertError?.message || "Failed to create album");
-        setSaving(false);
-        return;
-      }
-      albumId = newAlbum.id;
-    }
-
-    // Sync images
-    if (albumId) {
-      // Delete removed images
-      const currentImageIds = images.filter((img) => existingImages.some((e) => e.id === img.id)).map((img) => img.id);
-      const removedIds = existingImages.filter((e) => !currentImageIds.includes(e.id)).map((e) => e.id);
-      if (removedIds.length > 0) {
-        await supabase.from("gallery_images").delete().in("id", removedIds);
-      }
-
-      // Insert new images
-      const newImages = images.filter((img) => !existingImages.some((e) => e.id === img.id));
-      if (newImages.length > 0) {
-        await supabase.from("gallery_images").insert(
-          newImages.map((img, idx) => ({
-            album_id: albumId,
-            image_url: img.image_url,
-            caption_he: img.caption_he,
-            caption_en: img.caption_en,
-            sort_order: existingImages.length + idx,
-          }))
-        );
-      }
+    if (!result.ok) {
+      setError(result.error);
+      setSaving(false);
+      return;
     }
 
     router.push("/admin/gallery");

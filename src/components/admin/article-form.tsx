@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "@/i18n/navigation";
-import { createClient } from "@/lib/supabase/client";
+import { saveArticle } from "@/lib/actions/admin";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -73,34 +73,24 @@ export function ArticleForm({ article, isHebrew, userId }: ArticleFormProps) {
     setSaving(true);
     setError(null);
 
-    const supabase = createClient();
-    const finalSlug = slug || slugify(titleEn || titleHe);
-
-    const data = {
-      slug: finalSlug,
-      title_he: titleHe,
-      title_en: titleEn,
-      excerpt_he: excerptHe || null,
-      excerpt_en: excerptEn || null,
-      body_he: bodyHe || null,
-      body_en: bodyEn || null,
-      cover_image: coverImage,
+    const result = await saveArticle({
+      id: article?.id,
+      slug,
+      titleHe,
+      titleEn,
+      excerptHe,
+      excerptEn,
+      bodyHe,
+      bodyEn,
+      coverImage,
       category,
       tags,
-      is_published: isPublished,
-      published_at: isPublished ? (article?.published_at || new Date().toISOString()) : null,
-      author_id: userId,
-    };
+      isPublished,
+      publishedAt: article?.published_at || null,
+    });
 
-    let result;
-    if (article) {
-      result = await supabase.from("articles").update(data).eq("id", article.id);
-    } else {
-      result = await supabase.from("articles").insert(data);
-    }
-
-    if (result.error) {
-      setError(result.error.message);
+    if (!result.ok) {
+      setError(result.error);
       setSaving(false);
       return;
     }

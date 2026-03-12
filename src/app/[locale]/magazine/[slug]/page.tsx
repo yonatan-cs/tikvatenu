@@ -5,6 +5,7 @@ import { Link } from "@/i18n/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Calendar, BookOpen } from "lucide-react";
+import { SafeHtml } from "@/components/shared/safe-html";
 import type { Article } from "@/lib/types/database";
 import Image from "next/image";
 import type { Metadata } from "next";
@@ -143,9 +144,9 @@ export default async function ArticleDetailPage({ params }: Props) {
 
           {/* Body content */}
           {body && (
-            <div
+            <SafeHtml
+              html={body}
               className="prose prose-lg max-w-none prose-headings:text-navy prose-p:text-ink prose-strong:text-navy prose-a:text-branch prose-a:no-underline hover:prose-a:underline"
-              dangerouslySetInnerHTML={{ __html: body }}
               dir={isHebrew ? "rtl" : "ltr"}
             />
           )}

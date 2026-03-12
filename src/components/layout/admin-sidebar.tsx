@@ -110,11 +110,12 @@ export function AdminSidebar({ locale, userName }: Props) {
   }
 
   function isActive(href: string) {
-    const localePath = isHebrew ? href : `/en${href}`;
+    // Strip locale prefix to get the locale-agnostic path
+    const strippedPath = pathname.replace(/^\/(he|en)/, "") || "/";
     if (href === "/admin") {
-      return pathname === localePath || pathname === href;
+      return strippedPath === "/admin" || strippedPath === "/admin/";
     }
-    return pathname.startsWith(localePath) || pathname.startsWith(href);
+    return strippedPath.startsWith(href);
   }
 
   return (

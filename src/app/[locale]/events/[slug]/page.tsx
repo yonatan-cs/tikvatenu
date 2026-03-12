@@ -7,6 +7,7 @@ import { Calendar, MapPin, Users, Clock, ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EventGallerySlideshow } from "@/components/events/event-gallery-slideshow";
+import { SafeHtml } from "@/components/shared/safe-html";
 import type { Event, RegistrationField, GalleryImage } from "@/lib/types/database";
 import Image from "next/image";
 import type { Metadata } from "next";
@@ -198,9 +199,9 @@ export default async function EventDetailPage({ params }: Props) {
 
               {/* Body content */}
               {body && (
-                <div
+                <SafeHtml
+                  html={body}
                   className="prose prose-sm max-w-none prose-headings:text-navy prose-p:text-ink prose-strong:text-navy"
-                  dangerouslySetInnerHTML={{ __html: body }}
                   dir={isHebrew ? "rtl" : "ltr"}
                 />
               )}
