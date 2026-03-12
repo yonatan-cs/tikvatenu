@@ -5,7 +5,7 @@
   },
   "nav": {
     "home": "Home",
-    "about": "About",
+    "about": "Vision",
     "events": "Events",
     "magazine": "Magazine",
     "join": "Join Us",
@@ -30,46 +30,107 @@
     }
   },
   "about": {
-    "title": "About Tikvatenu",
-    "heroSubtitle": "Young people who believe things can be different",
-    "mission": {
-      "title": "Our Vision",
-      "description": "We believe the path to a better society runs through direct dialogue, face-to-face encounters, and mutual understanding between different groups in Israeli society."
+    "title": "Our Vision",
+    "heroSubtitle": "Choosing hope, building a shared future",
+    "vision": {
+      "title": "Vision",
+      "description": "In this hour of national crisis and social rift, we — young men and women with a love for Israel in our hearts — choose hope. The State of Israel grew out of the Zionist enterprise, which was built upon a youthful awakening, instilling in us the courage to demand a different path.",
+      "description2": "We must do everything in our power to build a future of hope, to come together and address the challenges before us while striving for connection and the creation of a shared vision of the future, through the meeting of ideas, honest dialogue, and the restoration of discourse in Israeli society."
     },
-    "problem": {
-      "title": "The Challenge",
-      "description": "Israeli society suffers from growing polarization. Different groups live side by side yet rarely meet. Lack of familiarity breeds suspicion, alienation, and fear. Shallow public discourse replaces genuine dialogue."
+    "belief": {
+      "title": "Zionist Faith",
+      "description": "Above all, we share a deep belief in Zionism, and the understanding that a Zionist covenant between all parts of society is the imperative of our time. We wish to breathe new life into Zionist ideals and the path of Zionist fulfillment, continuing the legacy of generations who dedicated themselves to building the land.",
+      "description2": "They established a thriving state against all odds and harnessed this people to far-reaching achievements. We see ourselves as part of a story that instills in us a sense of mission — a story we must continue."
     },
-    "solution": {
-      "title": "Our Way",
-      "description": "Tikvatenu organizes face-to-face encounters between young people from diverse backgrounds. We don't argue — we talk. We don't judge — we listen. We create safe spaces for honest dialogue, where people discover how much they share with those who seemed so different."
+    "way": {
+      "title": "The Way",
+      "description": "The emergence of a community of young men and women whose goal is to act for a shared future through values-based discourse on the challenges we face and the future we envision.",
+      "description2": "The young community will serve as a practical foundation for hope-inspiring encounters and for managing disagreement, while insisting that such disagreement be for the sake of heaven.",
+      "description3": "At Tikvatenu, we believe in the power of young Israelis from diverse backgrounds to build bridges and promote mutual understanding in Israeli society. Through our work, we create shared encounters that provide a platform for open dialogue, mutual learning and deepening, and a profound connection to our Jewish and Israeli identity."
     },
-    "values": {
-      "title": "Our Values",
-      "dialogue": {
-        "title": "Direct Dialogue",
-        "description": "We believe in the power of face-to-face conversation. Not through screens, not through slogans — but through genuine human connection."
+    "principles": {
+      "title": "Principles",
+      "hineni": {
+        "title": "Hineni!",
+        "description": "Before our eyes stands the call \"Hineni!\" (Here I am!) — answering it demands commitment and dedication."
       },
-      "bridge": {
-        "title": "Building Bridges",
-        "description": "We create connections between groups that rarely meet. Secular and religious, left and right, center and periphery."
+      "continuity": {
+        "title": "Historical Continuity",
+        "description": "We see ourselves as part of the historical continuum of the Jewish people, and from this we derive responsibility for its future and for the future of society as a whole. Our commitment to the Jewish people is our primary commitment."
       },
-      "hope": {
-        "title": "Active Hope",
-        "description": "Hope is not just a feeling — it's an action. Every encounter, every conversation, every hand extended is a step toward a shared future."
+      "tikun": {
+        "title": "Personal Repair to World Repair",
+        "description": "We believe we must serve as an example and a model for all that we call to implement, and we take upon ourselves to look inward before demanding the repair required of anything external to us."
       },
-      "youth": {
-        "title": "Youth Empowerment",
-        "description": "Young people will shape the future. We give them the tools, the platform, and the confidence to lead change."
+      "learning": {
+        "title": "The Power of Learning",
+        "description": "Our group believes in the power of study and sees learning as a value — upon joining us, one must honor the spirit of learning and take an active part in personal and group study."
+      },
+      "community": {
+        "title": "Fellowship & Community",
+        "description": "The fellowship among us is a value, and therefore we act in a communal spirit and with a sense of family that demands mutual respect, patience, and tolerance."
+      },
+      "unity": {
+        "title": "Unity of the People",
+        "description": "We see the unity of the people as a supreme value and demand of ourselves action in this spirit, with mutual responsibility and solidarity."
+      },
+      "state": {
+        "title": "Jewish & Democratic",
+        "description": "We see the State of Israel as a framework that must be both Jewish and democratic."
       }
     },
     "activities": {
-      "title": "From Our Activities",
-      "description": "Events, encounters, and workshops connecting young people from across Israeli society."
+      "title": "Main Activities",
+      "description": "Events, encounters, and workshops connecting young people from across Israeli society.",
+      "study": {
+        "title": "Learning from Sources",
+        "description": "Study from the sources in the spirit of our vision"
+      },
+      "seminars": {
+        "title": "Seminars",
+        "description": "Producing seminars on the unity of Israel, alongside getting to know the different sides of our society and healing the rifts between us, with recognition of the depth of disagreement and an effort to resolve, bridge, and bring all sides closer."
+      },
+      "social": {
+        "title": "Social Action",
+        "description": "A space for shared social action that serves as an example of an exemplary society"
+      },
+      "gatherings": {
+        "title": "Social Gatherings",
+        "description": "Social gatherings to maintain and strengthen the bonds between community members."
+      }
     },
-    "team": {
-      "title": "Our Team",
-      "description": "A diverse group of young people united by shared values."
+    "structure": {
+      "title": "Structure",
+      "steering": {
+        "title": "Steering Forum",
+        "description": "Where the vision and deeper layers of our activity are discussed."
+      },
+      "planning": {
+        "title": "Planning Forum",
+        "description": "A home for initiatives in the spirit of the community, for partnership in producing and planning our activities."
+      },
+      "communityGroup": {
+        "title": "Community",
+        "description": "All participants in our activities."
+      }
+    },
+    "quotes": {
+      "herzl": {
+        "text": "I truly believe that Zionism will not cease to be an ideal even after we obtain our land, the Land of Israel. For in Zionism, as I understand it, there is not only the aspiration to acquire a legally secured homeland for our unfortunate people, but also the aspiration for moral and spiritual perfection... Take courage, young people, we need you. Lift not only the spirit but also the muscles. Be strong and brave! And let your studies be with eagerness, with enthusiasm. We will need your strength, your knowledge. You are \"our hope\"!",
+        "author": "Theodor Herzl"
+      },
+      "sadeh": {
+        "text": "Youth, listen! Someone out there holds the scales of our lives in their hands. And the pans of the scales rise and fall, fall and rise. On one pan: the Holocaust of Israel, the revival of Israel, the war of Israel. And on the other: intrigues of commerce and politics, and the intrigues weigh heavy. Youth, remember! When the hour comes, throw yourself onto the scales, throw yourself with strength and courage. That will tip the balance. Youth, listen!",
+        "author": "Yitzhak Sadeh"
+      }
+    },
+    "intro": {
+      "description": "At Tikvatenu, we believe in the power of young Israelis from diverse backgrounds to build bridges and promote mutual understanding in Israeli society. Our events provide a platform for open dialogue, shared learning, and a deep connection to our Jewish and Israeli identity.",
+      "description2": "We hold events every few weeks or months, and invite every young person of service age and above to join us. Registration is on a first-come, first-served basis, and every participant is welcome to join our community after the event. This is a unique opportunity to be part of a meaningful journey toward building a shared and better future for all of us.",
+      "description3": "If you're interested in attending our next event or learning more about Tikvatenu, please contact us or register on our website. Together, we can shape the face of Israeli society and strengthen the bonds between us."
+    },
+    "gallery": {
+      "title": "From Our Activities"
     },
     "cta": {
       "title": "Want to Be Part of It?",

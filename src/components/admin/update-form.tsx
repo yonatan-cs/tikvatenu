@@ -1,18 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { saveUpdate } from "@/lib/actions/admin";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ImageUploader } from "./image-uploader";
 import { RichTextEditor } from "./rich-text-editor";
-import { Save, Loader2 } from "lucide-react";
+import { Save, Loader2, Send } from "lucide-react";
 import type { Update } from "@/lib/types/database";
+import { toast } from "sonner";
 
 interface UpdateFormProps {
   update?: Update;
@@ -31,7 +31,8 @@ function slugify(text: string): string {
 
 export function UpdateForm({ update, isHebrew, userId }: UpdateFormProps) {
   const router = useRouter();
-  const [saving, setSaving] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+  const [savingAction, setSavingAction] = useState<'save' | 'publish' | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const [titleHe, setTitleHe] = useState(update?.title_he || "");
@@ -39,38 +40,49 @@ export function UpdateForm({ update, isHebrew, userId }: UpdateFormProps) {
   const [bodyHe, setBodyHe] = useState(update?.body_he || "");
   const [bodyEn, setBodyEn] = useState(update?.body_en || "");
   const [coverImage, setCoverImage] = useState<string | null>(update?.cover_image || null);
-  const [isPublished, setIsPublished] = useState(update?.is_published || false);
   const [slug, setSlug] = useState(update?.slug || "");
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setSaving(true);
+  async function handleAction(publish: boolean) {
+    if (!formRef.current?.reportValidity()) return;
+
+    setSavingAction(publish ? 'publish' : 'save');
     setError(null);
 
-    const result = await saveUpdate({
-      id: update?.id,
-      slug,
-      titleHe,
-      titleEn,
-      bodyHe,
-      bodyEn,
-      coverImage,
-      isPublished,
-      publishedAt: update?.published_at || null,
-    });
+    try {
+      const result = await saveUpdate({
+        id: update?.id,
+        slug,
+        titleHe,
+        titleEn,
+        bodyHe,
+        bodyEn,
+        coverImage,
+        isPublished: publish ? true : (update?.is_published || false),
+        publishedAt: update?.published_at || null,
+      });
 
-    if (!result.ok) {
-      setError(result.error);
-      setSaving(false);
-      return;
+      if (!result.ok) {
+        setError(result.error);
+        toast.error(result.error);
+        return;
+      }
+
+      toast.success(publish
+        ? isHebrew ? "העדכון פורסם בהצלחה" : "Update published successfully"
+        : isHebrew ? "העדכון נשמר בהצלחה" : "Update saved successfully"
+      );
+      router.push("/admin/updates");
+      router.refresh();
+    } catch {
+      setError(isHebrew ? "שגיאה בשמירה" : "Error saving");
+      toast.error(isHebrew ? "שגיאה בשמירה" : "Error saving");
+    } finally {
+      setSavingAction(null);
     }
-
-    router.push("/admin/updates");
-    router.refresh();
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl">
+    <form ref={formRef} className="space-y-6 max-w-4xl">
       {/* Top bar */}
       <div className="flex items-center justify-between sticky top-0 z-10 bg-cream-dark/30 -mx-6 -mt-6 px-6 py-4 backdrop-blur-sm border-b border-branch/5">
         <h1 className={`text-xl font-bold text-navy ${isHebrew ? "font-['Secular_One']" : "font-[family-name:var(--font-playfair)]"}`}>
@@ -80,13 +92,21 @@ export function UpdateForm({ update, isHebrew, userId }: UpdateFormProps) {
           }
         </h1>
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2">
-            <Switch checked={isPublished} onCheckedChange={setIsPublished} />
-            <Label className="text-sm">{isHebrew ? "פורסם" : "Published"}</Label>
-          </div>
-          <Button type="submit" disabled={saving} variant="terracotta">
-            {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-            {saving ? (isHebrew ? "שומר..." : "Saving...") : (isHebrew ? "שמור" : "Save")}
+          <Button type="button" variant="outline" disabled={!!savingAction} onClick={() => handleAction(false)}>
+            {savingAction === 'save' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+            {savingAction === 'save'
+              ? isHebrew ? "שומר..." : "Saving..."
+              : update?.is_published
+                ? isHebrew ? "שמור" : "Save"
+                : isHebrew ? "שמור טיוטה" : "Save Draft"
+            }
+          </Button>
+          <Button type="button" variant="terracotta" disabled={!!savingAction} onClick={() => handleAction(true)}>
+            {savingAction === 'publish' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+            {savingAction === 'publish'
+              ? isHebrew ? "מפרסם..." : "Publishing..."
+              : isHebrew ? "פרסם" : "Publish"
+            }
           </Button>
         </div>
       </div>

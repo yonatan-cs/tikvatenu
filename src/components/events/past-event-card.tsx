@@ -51,6 +51,9 @@ export function PastEventCard({ event, isHebrew, galleryImages = [] }: PastEvent
           <p className="text-xl font-bold text-navy leading-tight text-center">
             {eventDate.getDate()}
           </p>
+          <p className="text-[10px] text-navy/40 font-medium text-center">
+            {String(eventDate.getFullYear()).slice(-2)}
+          </p>
         </div>
 
         <div className="absolute top-3 end-3">
@@ -87,7 +90,7 @@ export function PastEventCard({ event, isHebrew, galleryImages = [] }: PastEvent
 
         {/* Summary */}
         {summary && (
-          <p className="text-sm text-ink-muted line-clamp-3 mb-4 leading-relaxed">
+          <p className="text-sm text-ink-muted line-clamp-3 mb-4 leading-relaxed whitespace-pre-line">
             {summary}
           </p>
         )}

@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { AdminSidebar } from "@/components/layout/admin-sidebar";
+import { Toaster } from "sonner";
 
 type Props = {
   children: React.ReactNode;
@@ -33,11 +34,12 @@ export default async function AdminLayout({ children, params }: Props) {
   }
 
   return (
-    <div className="flex min-h-screen pt-20">
+    <div className="flex min-h-screen pt-4">
       <AdminSidebar locale={locale} userName={profile.full_name || user.email || "Admin"} />
       <div className="flex-1 p-6 lg:p-8 bg-cream-dark/30">
         {children}
       </div>
+      <Toaster position={locale === "he" ? "bottom-left" : "bottom-right"} dir={locale === "he" ? "rtl" : "ltr"} richColors />
     </div>
   );
 }

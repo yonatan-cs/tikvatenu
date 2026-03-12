@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Link } from "@/i18n/navigation";
 import { RegistrationForm } from "@/components/events/registration-form";
-import { Calendar, MapPin, Users, Clock, ArrowRight } from "lucide-react";
+import { Calendar, MapPin, Users, Clock, ArrowRight, Flag } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EventGallerySlideshow } from "@/components/events/event-gallery-slideshow";
@@ -95,7 +95,7 @@ export default async function EventDetailPage({ params }: Props) {
   const deadlinePassed = !!(typedEvent.registration_deadline && new Date(typedEvent.registration_deadline) < new Date());
 
   return (
-    <div className="pt-20">
+    <div className="pt-0">
       {/* Hero with cover image - full display like a landing page */}
       <div className="relative">
         {typedEvent.cover_image ? (
@@ -114,10 +114,10 @@ export default async function EventDetailPage({ params }: Props) {
         )}
 
         {/* Back link */}
-        <div className="absolute top-4 start-4 z-10">
-          <Button asChild variant="ghost" size="sm" className="bg-white/80 backdrop-blur-sm text-navy hover:bg-white/90 hover:text-navy shadow-sm">
+        <div className="absolute top-2 start-2 md:top-4 md:start-4 z-10">
+          <Button asChild variant="ghost" size="sm" className="bg-white/80 backdrop-blur-sm text-navy hover:bg-white/90 hover:text-navy shadow-sm text-xs md:text-sm px-2 py-1 md:px-3 md:py-2">
             <Link href="/events">
-              <ArrowRight className={`w-4 h-4 ${isHebrew ? "" : "rotate-180"}`} />
+              <ArrowRight className={`w-3.5 h-3.5 md:w-4 md:h-4 ${isHebrew ? "" : "rotate-180"}`} />
               {isHebrew ? "כל האירועים" : "All Events"}
             </Link>
           </Button>
@@ -143,35 +143,75 @@ export default async function EventDetailPage({ params }: Props) {
                 {title}
               </h1>
 
-              <p className="text-lg text-ink-light mb-6 leading-relaxed">{description}</p>
+              <p className="text-lg text-ink-light mb-6 leading-relaxed whitespace-pre-line">{description}</p>
 
               {/* Event info pills */}
-              <div className="flex flex-wrap gap-3 mb-8 pb-8 border-b border-branch/10">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-navy/5 text-sm text-navy">
-                  <Calendar className="w-4 h-4" />
-                  {eventDate.toLocaleDateString(isHebrew ? "he-IL" : "en-US", {
-                    weekday: "long",
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                  })}
-                </div>
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-navy/5 text-sm text-navy">
-                  <Clock className="w-4 h-4" />
-                  {eventDate.toLocaleTimeString(isHebrew ? "he-IL" : "en-US", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                  {endDate && (
-                    <>
-                      {" - "}
-                      {endDate.toLocaleTimeString(isHebrew ? "he-IL" : "en-US", {
+              <div className="flex flex-wrap items-start gap-3 mb-8 pb-8 border-b border-branch/10">
+                {endDate && endDate.toDateString() !== eventDate.toDateString() ? (
+                  /* Multi-day event: single unified stacked block */
+                  <div className="inline-flex flex-col gap-1.5 px-4 py-3 rounded-2xl bg-navy/5 text-sm text-navy">
+                    <span className="text-xs font-medium text-navy/50">
+                      {eventDate.getFullYear()}
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <Calendar className="w-4 h-4 shrink-0 text-navy/50" />
+                      <span>
+                        {eventDate.toLocaleDateString(isHebrew ? "he-IL" : "en-US", {
+                          day: "numeric",
+                          month: "long",
+                        })}
+                        {", "}
+                        {eventDate.toLocaleTimeString(isHebrew ? "he-IL" : "en-US", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Flag className="w-4 h-4 shrink-0 text-navy/50" />
+                      <span>
+                        {endDate.toLocaleDateString(isHebrew ? "he-IL" : "en-US", {
+                          day: "numeric",
+                          month: "long",
+                        })}
+                        {", "}
+                        {endDate.toLocaleTimeString(isHebrew ? "he-IL" : "en-US", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  /* Same-day event: date pill + time range pill */
+                  <>
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-navy/5 text-sm text-navy">
+                      <Calendar className="w-4 h-4" />
+                      {eventDate.toLocaleDateString(isHebrew ? "he-IL" : "en-US", {
+                        weekday: "long",
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                      })}
+                    </div>
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-navy/5 text-sm text-navy">
+                      <Clock className="w-4 h-4" />
+                      {eventDate.toLocaleTimeString(isHebrew ? "he-IL" : "en-US", {
                         hour: "2-digit",
                         minute: "2-digit",
                       })}
-                    </>
-                  )}
-                </div>
+                      {endDate && (
+                        <>
+                          {" - "}
+                          {endDate.toLocaleTimeString(isHebrew ? "he-IL" : "en-US", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </>
+                      )}
+                    </div>
+                  </>
+                )}
                 {location && (
                   <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-navy/5 text-sm text-navy">
                     <MapPin className="w-4 h-4" />
@@ -201,21 +241,9 @@ export default async function EventDetailPage({ params }: Props) {
               {body && (
                 <SafeHtml
                   html={body}
-                  className="prose prose-sm max-w-none prose-headings:text-navy prose-p:text-ink prose-strong:text-navy"
+                  className="prose max-w-none prose-headings:text-navy prose-p:text-ink prose-strong:text-navy [&_p:empty]:min-h-[1em]"
                   dir={isHebrew ? "rtl" : "ltr"}
                 />
-              )}
-
-              {/* Post-event summary */}
-              {isPast && (typedEvent.summary_he || typedEvent.summary_en) && (
-                <div className="mt-8 pt-8 border-t border-branch/10">
-                  <h2 className={`text-xl font-bold text-navy mb-4 ${isHebrew ? "font-['Secular_One']" : "font-[family-name:var(--font-playfair)]"}`}>
-                    {isHebrew ? "סיכום האירוע" : "Event Summary"}
-                  </h2>
-                  <p className="text-ink-light leading-relaxed">
-                    {isHebrew ? typedEvent.summary_he : typedEvent.summary_en}
-                  </p>
-                </div>
               )}
 
               {/* Event gallery slideshow */}

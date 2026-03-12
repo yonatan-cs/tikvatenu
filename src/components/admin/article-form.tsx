@@ -1,20 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { saveArticle } from "@/lib/actions/admin";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ImageUploader } from "./image-uploader";
 import { RichTextEditor } from "./rich-text-editor";
-import { Save, Loader2, X } from "lucide-react";
+import { Save, Loader2, X, Send } from "lucide-react";
 import type { Article } from "@/lib/types/database";
+import { toast } from "sonner";
 
 interface ArticleFormProps {
   article?: Article;
@@ -40,7 +40,8 @@ function slugify(text: string): string {
 
 export function ArticleForm({ article, isHebrew, userId }: ArticleFormProps) {
   const router = useRouter();
-  const [saving, setSaving] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+  const [savingAction, setSavingAction] = useState<'save' | 'publish' | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const [titleHe, setTitleHe] = useState(article?.title_he || "");
@@ -53,7 +54,6 @@ export function ArticleForm({ article, isHebrew, userId }: ArticleFormProps) {
   const [category, setCategory] = useState<string>(article?.category || "thought");
   const [tags, setTags] = useState<string[]>(article?.tags || []);
   const [tagInput, setTagInput] = useState("");
-  const [isPublished, setIsPublished] = useState(article?.is_published || false);
   const [slug, setSlug] = useState(article?.slug || "");
 
   function addTag() {
@@ -68,39 +68,51 @@ export function ArticleForm({ article, isHebrew, userId }: ArticleFormProps) {
     setTags(tags.filter((t) => t !== tag));
   }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setSaving(true);
+  async function handleAction(publish: boolean) {
+    if (!formRef.current?.reportValidity()) return;
+
+    setSavingAction(publish ? 'publish' : 'save');
     setError(null);
 
-    const result = await saveArticle({
-      id: article?.id,
-      slug,
-      titleHe,
-      titleEn,
-      excerptHe,
-      excerptEn,
-      bodyHe,
-      bodyEn,
-      coverImage,
-      category,
-      tags,
-      isPublished,
-      publishedAt: article?.published_at || null,
-    });
+    try {
+      const result = await saveArticle({
+        id: article?.id,
+        slug,
+        titleHe,
+        titleEn,
+        excerptHe,
+        excerptEn,
+        bodyHe,
+        bodyEn,
+        coverImage,
+        category,
+        tags,
+        isPublished: publish ? true : (article?.is_published || false),
+        publishedAt: article?.published_at || null,
+      });
 
-    if (!result.ok) {
-      setError(result.error);
-      setSaving(false);
-      return;
+      if (!result.ok) {
+        setError(result.error);
+        toast.error(result.error);
+        return;
+      }
+
+      toast.success(publish
+        ? isHebrew ? "המאמר פורסם בהצלחה" : "Article published successfully"
+        : isHebrew ? "המאמר נשמר בהצלחה" : "Article saved successfully"
+      );
+      router.push("/admin/magazine");
+      router.refresh();
+    } catch {
+      setError(isHebrew ? "שגיאה בשמירה" : "Error saving");
+      toast.error(isHebrew ? "שגיאה בשמירה" : "Error saving");
+    } finally {
+      setSavingAction(null);
     }
-
-    router.push("/admin/magazine");
-    router.refresh();
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl">
+    <form ref={formRef} className="space-y-6 max-w-4xl">
       {/* Top bar */}
       <div className="flex items-center justify-between sticky top-0 z-10 bg-cream-dark/30 -mx-6 -mt-6 px-6 py-4 backdrop-blur-sm border-b border-branch/5">
         <h1 className={`text-xl font-bold text-navy ${isHebrew ? "font-['Secular_One']" : "font-[family-name:var(--font-playfair)]"}`}>
@@ -110,13 +122,21 @@ export function ArticleForm({ article, isHebrew, userId }: ArticleFormProps) {
           }
         </h1>
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2">
-            <Switch checked={isPublished} onCheckedChange={setIsPublished} />
-            <Label className="text-sm">{isHebrew ? "פורסם" : "Published"}</Label>
-          </div>
-          <Button type="submit" disabled={saving} variant="terracotta">
-            {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-            {saving ? (isHebrew ? "שומר..." : "Saving...") : (isHebrew ? "שמור" : "Save")}
+          <Button type="button" variant="outline" disabled={!!savingAction} onClick={() => handleAction(false)}>
+            {savingAction === 'save' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+            {savingAction === 'save'
+              ? isHebrew ? "שומר..." : "Saving..."
+              : article?.is_published
+                ? isHebrew ? "שמור" : "Save"
+                : isHebrew ? "שמור טיוטה" : "Save Draft"
+            }
+          </Button>
+          <Button type="button" variant="terracotta" disabled={!!savingAction} onClick={() => handleAction(true)}>
+            {savingAction === 'publish' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+            {savingAction === 'publish'
+              ? isHebrew ? "מפרסם..." : "Publishing..."
+              : isHebrew ? "פרסם" : "Publish"
+            }
           </Button>
         </div>
       </div>

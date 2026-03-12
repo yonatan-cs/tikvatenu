@@ -52,6 +52,9 @@ export function EventCard({ event, isHebrew, registrationCount }: EventCardProps
           <p className="text-xl font-bold text-navy leading-tight text-center">
             {eventDate.getDate()}
           </p>
+          <p className="text-[10px] text-navy/40 font-medium text-center">
+            {String(eventDate.getFullYear()).slice(-2)}
+          </p>
         </div>
 
         {/* Status badges */}
@@ -74,7 +77,7 @@ export function EventCard({ event, isHebrew, registrationCount }: EventCardProps
         <h3 className={`text-lg font-bold text-navy mb-2 group-hover:text-branch transition-colors duration-300 leading-snug ${displayFont}`}>
           {title}
         </h3>
-        <p className="text-sm text-ink-muted line-clamp-2 mb-4 leading-relaxed">{description}</p>
+        <p className="text-sm text-ink-muted line-clamp-2 mb-4 leading-relaxed whitespace-pre-line">{description}</p>
 
         <div className="flex flex-wrap items-center gap-3 text-xs text-ink-muted/80">
           <span className="inline-flex items-center gap-1.5">
@@ -83,6 +86,7 @@ export function EventCard({ event, isHebrew, registrationCount }: EventCardProps
               weekday: "short",
               day: "numeric",
               month: "short",
+              year: "numeric",
               hour: "2-digit",
               minute: "2-digit",
             })}

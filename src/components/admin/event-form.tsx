@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { saveEvent } from "@/lib/actions/admin";
@@ -8,15 +8,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ImageUploader } from "./image-uploader";
 import { RichTextEditor } from "./rich-text-editor";
 import { RegistrationFieldBuilder } from "./registration-field-builder";
-import { Save, Loader2, Upload, X, CalendarCheck, History } from "lucide-react";
+import { Save, Loader2, Upload, X, CalendarCheck, History, Send } from "lucide-react";
 import type { Event, RegistrationField, GalleryImage } from "@/lib/types/database";
 import Image from "next/image";
+import { toast } from "sonner";
 
 type EventType = "future" | "past";
 
@@ -44,7 +44,8 @@ function deriveEventType(event?: Event): EventType {
 
 export function EventForm({ event, existingGalleryImages = [], existingAlbumId, isHebrew, userId }: EventFormProps) {
   const router = useRouter();
-  const [saving, setSaving] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+  const [savingAction, setSavingAction] = useState<'save' | 'publish' | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   // Event type
@@ -68,12 +69,7 @@ export function EventForm({ event, existingGalleryImages = [], existingAlbumId, 
   const [registrationFields, setRegistrationFields] = useState<RegistrationField[]>(
     event?.registration_fields || []
   );
-  const [isPublished, setIsPublished] = useState(event?.is_published || false);
   const [slug, setSlug] = useState(event?.slug || "");
-
-  // Past event fields
-  const [summaryHe, setSummaryHe] = useState(event?.summary_he || "");
-  const [summaryEn, setSummaryEn] = useState(event?.summary_en || "");
 
   // Gallery images for past events
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>(existingGalleryImages);
@@ -121,52 +117,64 @@ export function EventForm({ event, existingGalleryImages = [], existingAlbumId, 
     setGalleryImages(galleryImages.filter((img) => img.id !== imageId));
   }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setSaving(true);
+  async function handleAction(publish: boolean) {
+    if (!formRef.current?.reportValidity()) return;
+
+    setSavingAction(publish ? 'publish' : 'save');
     setError(null);
 
-    const result = await saveEvent({
-      id: event?.id,
-      slug,
-      titleHe,
-      titleEn,
-      descriptionHe,
-      descriptionEn,
-      bodyHe,
-      bodyEn,
-      coverImage,
-      locationHe,
-      locationEn,
-      locationUrl,
-      eventDate,
-      eventEndDate,
-      registrationDeadline,
-      maxParticipants,
-      registrationFields,
-      isPublished,
-      eventType,
-      summaryHe,
-      summaryEn,
-      galleryImages,
-      existingGalleryImages,
-      existingAlbumId,
-    });
+    try {
+      const result = await saveEvent({
+        id: event?.id,
+        slug,
+        titleHe,
+        titleEn,
+        descriptionHe,
+        descriptionEn,
+        bodyHe,
+        bodyEn,
+        coverImage,
+        locationHe,
+        locationEn,
+        locationUrl,
+        eventDate,
+        eventEndDate,
+        registrationDeadline,
+        maxParticipants,
+        registrationFields,
+        isPublished: publish ? true : (event?.is_published || false),
+        eventType,
+        summaryHe: "",
+        summaryEn: "",
+        galleryImages,
+        existingGalleryImages,
+        existingAlbumId,
+      });
 
-    if (!result.ok) {
-      setError(result.error);
-      setSaving(false);
-      return;
+      if (!result.ok) {
+        setError(result.error);
+        toast.error(result.error);
+        return;
+      }
+
+      toast.success(publish
+        ? isHebrew ? "האירוע פורסם בהצלחה" : "Event published successfully"
+        : isHebrew ? "האירוע נשמר בהצלחה" : "Event saved successfully"
+      );
+      router.push("/admin/events");
+      router.refresh();
+    } catch {
+      setError(isHebrew ? "שגיאה בשמירה" : "Error saving");
+      toast.error(isHebrew ? "שגיאה בשמירה" : "Error saving");
+    } finally {
+      setSavingAction(null);
     }
-
-    router.push("/admin/events");
-    router.refresh();
   }
 
   const isPast = eventType === "past";
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl">
+    <form ref={formRef} className="space-y-6 max-w-4xl">
       {/* Top bar */}
       <div className="flex items-center justify-between sticky top-0 z-10 bg-cream-dark/30 -mx-6 -mt-6 px-6 py-4 backdrop-blur-sm border-b border-branch/5">
         <h1 className={`text-xl font-bold text-navy ${isHebrew ? "font-['Secular_One']" : "font-[family-name:var(--font-playfair)]"}`}>
@@ -176,15 +184,20 @@ export function EventForm({ event, existingGalleryImages = [], existingAlbumId, 
           }
         </h1>
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2">
-            <Switch checked={isPublished} onCheckedChange={setIsPublished} />
-            <Label className="text-sm">{isHebrew ? "פורסם" : "Published"}</Label>
-          </div>
-          <Button type="submit" disabled={saving} variant="terracotta">
-            {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-            {saving
+          <Button type="button" variant="outline" disabled={!!savingAction} onClick={() => handleAction(false)}>
+            {savingAction === 'save' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+            {savingAction === 'save'
               ? isHebrew ? "שומר..." : "Saving..."
-              : isHebrew ? "שמור" : "Save"
+              : event?.is_published
+                ? isHebrew ? "שמור" : "Save"
+                : isHebrew ? "שמור טיוטה" : "Save Draft"
+            }
+          </Button>
+          <Button type="button" variant="terracotta" disabled={!!savingAction} onClick={() => handleAction(true)}>
+            {savingAction === 'publish' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+            {savingAction === 'publish'
+              ? isHebrew ? "מפרסם..." : "Publishing..."
+              : isHebrew ? "פרסם" : "Publish"
             }
           </Button>
         </div>
@@ -467,51 +480,6 @@ export function EventForm({ event, existingGalleryImages = [], existingAlbumId, 
                 isHebrew={isHebrew}
               />
             </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Event Summary - Only for past events */}
-      {isPast && (
-        <Card>
-          <CardHeader>
-            <CardTitle className={isHebrew ? "font-['Secular_One']" : ""}>
-              {isHebrew ? "סיכום האירוע" : "Event Summary"}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Tabs defaultValue="he" className="w-full">
-              <TabsList>
-                <TabsTrigger value="he">עברית</TabsTrigger>
-                <TabsTrigger value="en">English</TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="he" className="space-y-4">
-                <div>
-                  <Label className="mb-1.5">{isHebrew ? "סיכום" : "Summary"} (עברית)</Label>
-                  <Textarea
-                    value={summaryHe}
-                    onChange={(e) => setSummaryHe(e.target.value)}
-                    dir="rtl"
-                    placeholder="סיכום קצר של האירוע..."
-                    rows={5}
-                  />
-                </div>
-              </TabsContent>
-
-              <TabsContent value="en" className="space-y-4">
-                <div>
-                  <Label className="mb-1.5">Summary (English)</Label>
-                  <Textarea
-                    value={summaryEn}
-                    onChange={(e) => setSummaryEn(e.target.value)}
-                    dir="ltr"
-                    placeholder="Short event summary..."
-                    rows={5}
-                  />
-                </div>
-              </TabsContent>
-            </Tabs>
           </CardContent>
         </Card>
       )}
