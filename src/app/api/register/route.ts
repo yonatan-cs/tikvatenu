@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { sendRegistrationEmail } from "@/lib/email";
+import { sendRegistrationEmail, sendAdminEventNotification } from "@/lib/email";
 import type { RegistrationField } from "@/lib/types/database";
 
 function validateEmail(email: string): boolean {
@@ -141,7 +141,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // Send confirmation email (non-blocking)
+    // Send emails (non-blocking)
     sendRegistrationEmail({
       to: email,
       participantName: full_name,
@@ -149,7 +149,14 @@ export async function POST(request: Request) {
       eventDate: event.event_date,
       eventLocation: event.location_he || event.location_en,
       status,
-    });
+    }).catch(() => {});
+    sendAdminEventNotification({
+      participantName: full_name,
+      participantEmail: email,
+      participantPhone: phone || null,
+      eventTitle: event.title_he || event.title_en,
+      status,
+    }).catch(() => {});
 
     return NextResponse.json({ registration, status });
   } catch {

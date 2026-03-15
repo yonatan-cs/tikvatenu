@@ -28,6 +28,7 @@ export function ContactForm({ isHebrew }: { isHebrew: boolean }) {
           email: formData.get("email"),
           subject: formData.get("subject"),
           message: formData.get("message"),
+          terms_accepted: formData.get("terms_accepted") === "on",
         }),
       });
 
@@ -128,6 +129,23 @@ export function ContactForm({ isHebrew }: { isHebrew: boolean }) {
             placeholder={t("messagePlaceholder")}
             className="w-full rounded-lg border border-branch/20 bg-cream/50 px-4 py-2.5 text-sm text-ink placeholder:text-ink-muted/50 focus:border-branch focus:ring-1 focus:ring-branch outline-none transition-colors resize-none"
           />
+        </div>
+
+        <div className="flex items-start gap-3">
+          <input
+            id="contact-terms"
+            name="terms_accepted"
+            type="checkbox"
+            required
+            className="mt-0.5 h-4 w-4 rounded border-branch/30 text-navy focus:ring-navy accent-navy cursor-pointer"
+          />
+          <label htmlFor="contact-terms" className="text-xs text-ink-muted leading-relaxed cursor-pointer">
+            {isHebrew ? (
+              <>אני מאשר/ת את <a href="/he/terms" target="_blank" className="underline text-navy hover:text-terracotta transition-colors">תקנון האתר</a> ו<a href="/he/privacy" target="_blank" className="underline text-navy hover:text-terracotta transition-colors">מדיניות הפרטיות</a></>
+            ) : (
+              <>I agree to the <a href="/en/terms" target="_blank" className="underline text-navy hover:text-terracotta transition-colors">Terms of Service</a> and <a href="/en/privacy" target="_blank" className="underline text-navy hover:text-terracotta transition-colors">Privacy Policy</a></>
+            )}
+          </label>
         </div>
 
         {status === "error" && (

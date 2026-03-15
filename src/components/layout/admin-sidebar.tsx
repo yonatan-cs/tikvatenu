@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { createClient } from "@/lib/supabase/client";
@@ -104,6 +104,11 @@ export function AdminSidebar({ locale, userName }: Props) {
   const isHebrew = locale === "he";
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [mobileOpen]);
+
   async function handleLogout() {
     const supabase = createClient();
     await supabase.auth.signOut();
@@ -191,7 +196,7 @@ export function AdminSidebar({ locale, userName }: Props) {
 
       {/* Mobile hamburger button */}
       <button
-        className="md:hidden fixed top-4 start-4 z-50 p-2 bg-white rounded-lg shadow-md border border-branch/10"
+        className="md:hidden fixed top-4 start-4 z-50 w-11 h-11 flex items-center justify-center bg-white rounded-lg shadow-md border border-branch/10"
         onClick={() => setMobileOpen(true)}
         aria-label={isHebrew ? "פתח תפריט" : "Open menu"}
       >

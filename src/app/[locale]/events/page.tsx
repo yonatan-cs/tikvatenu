@@ -1,5 +1,7 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
+
+export const revalidate = 60;
 import { EventCard } from "@/components/events/event-card";
 import { PastEventCard } from "@/components/events/past-event-card";
 import { Calendar } from "lucide-react";
@@ -24,7 +26,7 @@ export default async function EventsPage({ params }: Props) {
   const t = await getTranslations("events");
   const isHebrew = locale === "he";
 
-  const supabase = await createClient();
+  const supabase = createPublicClient();
 
   const now = new Date().toISOString();
 

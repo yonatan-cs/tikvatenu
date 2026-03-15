@@ -84,6 +84,14 @@ export function Footer({ instagramUrl }: FooterProps) {
                   {t(item.key)}
                 </Link>
               ))}
+              <div className="mt-3 pt-3 border-t border-parchment/[0.07] flex flex-col gap-2">
+                <Link href="/terms" className="text-xs text-parchment/35 hover:text-parchment/60 transition-colors duration-200">
+                  {isHebrew ? "תקנון תנאי שימוש" : "Terms of Service"}
+                </Link>
+                <Link href="/privacy" className="text-xs text-parchment/35 hover:text-parchment/60 transition-colors duration-200">
+                  {isHebrew ? "מדיניות פרטיות" : "Privacy Policy"}
+                </Link>
+              </div>
             </nav>
           </div>
 

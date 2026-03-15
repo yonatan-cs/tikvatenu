@@ -1,5 +1,5 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { HeroEvent } from "@/components/home/hero-event";
@@ -7,6 +7,8 @@ import { UpdatesFeed } from "@/components/home/updates-feed";
 import { FeaturedArticle } from "@/components/home/featured-article";
 import { InstagramWidget } from "@/components/home/instagram-widget";
 import type { Event, Article, Update } from "@/lib/types/database";
+
+export const revalidate = 60;
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -18,7 +20,7 @@ export default async function HomePage({ params }: Props) {
   const t = await getTranslations();
   const isHebrew = locale === "he";
 
-  const supabase = await createClient();
+  const supabase = createPublicClient();
 
   // Fetch data in parallel
   const [nextEventResult, updatesResult, featuredSettingResult, instaResult] = await Promise.all([

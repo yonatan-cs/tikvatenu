@@ -1,10 +1,13 @@
 import type { JSX } from "react";
 import { setRequestLocale, getTranslations } from "next-intl/server";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
+
+export const revalidate = 300;
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import type { Metadata } from "next";
 import type { GalleryImage } from "@/lib/types/database";
+import { RandomPhotoGrid } from "@/components/about/random-photo-grid";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -26,7 +29,7 @@ export default async function AboutPage({ params }: Props) {
   const t = await getTranslations("about");
   const isHebrew = locale === "he";
 
-  const supabase = await createClient();
+  const supabase = createPublicClient();
 
   const { data: galleryImages } = await supabase
     .from("gallery_images")
@@ -34,10 +37,7 @@ export default async function AboutPage({ params }: Props) {
     .eq("gallery_albums.is_published", true)
     .limit(30);
 
-  const allPhotos = (galleryImages || []) as (GalleryImage & { gallery_albums: { is_published: boolean } })[];
-  // Shuffle and pick 6 random photos
-  const shuffled = [...allPhotos].sort(() => Math.random() - 0.5);
-  const photos = shuffled.slice(0, 6);
+  const photos = (galleryImages || []) as (GalleryImage & { gallery_albums: { is_published: boolean } })[];
 
   const displayFont = isHebrew
     ? "font-['Secular_One']"
@@ -338,23 +338,7 @@ export default async function AboutPage({ params }: Props) {
               <div className="mt-3 mx-auto h-[2px] w-12 rounded-full bg-terracotta/50" />
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
-              {photos.map((photo) => (
-                <div
-                  key={photo.id}
-                  className="relative aspect-[4/3] rounded-2xl overflow-hidden group shadow-sm"
-                >
-                  <Image
-                    src={photo.image_url}
-                    alt={isHebrew ? (photo.caption_he || "") : (photo.caption_en || "")}
-                    fill
-                    className="object-cover group-hover:scale-[1.04] transition-transform duration-700"
-                    sizes="(max-width: 768px) 50vw, 33vw"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-navy/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
-                </div>
-              ))}
-            </div>
+            <RandomPhotoGrid photos={photos} isHebrew={isHebrew} />
 
             <div className="text-center mt-10">
               <Link
