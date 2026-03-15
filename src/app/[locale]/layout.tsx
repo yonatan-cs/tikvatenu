@@ -49,6 +49,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       template: `%s | ${t("title")}`,
     },
     description: t("description"),
+    keywords: t.raw("keywords") as string[],
     metadataBase: new URL(baseUrl),
     alternates: {
       canonical: locale === "he" ? baseUrl : `${baseUrl}/en`,
