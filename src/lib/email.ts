@@ -4,7 +4,7 @@ const resend = process.env.RESEND_API_KEY && process.env.RESEND_API_KEY !== "re_
   ? new Resend(process.env.RESEND_API_KEY)
   : null;
 
-const ADMIN_EMAIL = "info@tikvatenu.com";
+const ADMIN_EMAIL = "tikvatenu.il@gmail.com";
 const FROM_ADDRESS = "תקוותנו <noreply@tikvatenu.com>";
 
 interface RegistrationEmailParams {
@@ -157,7 +157,7 @@ export async function sendJoinConfirmationEmail({
   `;
 
   try {
-    await resend.emails.send({ from: FROM_ADDRESS, to, subject, html });
+    await resend.emails.send({ from: FROM_ADDRESS, replyTo: ADMIN_EMAIL, to, subject, html });
   } catch (error) {
     console.error("Failed to send join confirmation email:", error);
   }

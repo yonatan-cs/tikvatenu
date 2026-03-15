@@ -9,6 +9,7 @@ import { routing } from "@/i18n/routing";
 import { createClient } from "@/lib/supabase/server";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { Analytics } from "@vercel/analytics/next";
 import "../globals.css";
 
 const heebo = Heebo({
@@ -129,6 +130,7 @@ export default async function LocaleLayout({ children, params }: Props) {
           <main className="flex-1">{children}</main>
           <Footer instagramUrl={instagramUrl} />
         </NextIntlClientProvider>
+        <Analytics />
       </body>
     </html>
   );
