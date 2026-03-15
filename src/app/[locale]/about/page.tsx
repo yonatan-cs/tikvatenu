@@ -32,10 +32,12 @@ export default async function AboutPage({ params }: Props) {
     .from("gallery_images")
     .select("*, gallery_albums!inner(is_published)")
     .eq("gallery_albums.is_published", true)
-    .order("created_at", { ascending: false })
-    .limit(6);
+    .limit(30);
 
-  const photos = (galleryImages || []) as (GalleryImage & { gallery_albums: { is_published: boolean } })[];
+  const allPhotos = (galleryImages || []) as (GalleryImage & { gallery_albums: { is_published: boolean } })[];
+  // Shuffle and pick 6 random photos
+  const shuffled = [...allPhotos].sort(() => Math.random() - 0.5);
+  const photos = shuffled.slice(0, 6);
 
   const displayFont = isHebrew
     ? "font-['Secular_One']"

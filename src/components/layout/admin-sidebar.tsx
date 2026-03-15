@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { createClient } from "@/lib/supabase/client";
@@ -101,6 +102,7 @@ export function AdminSidebar({ locale, userName }: Props) {
   const pathname = usePathname();
   const router = useRouter();
   const isHebrew = locale === "he";
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   async function handleLogout() {
     const supabase = createClient();
@@ -110,7 +112,6 @@ export function AdminSidebar({ locale, userName }: Props) {
   }
 
   function isActive(href: string) {
-    // Strip locale prefix to get the locale-agnostic path
     const strippedPath = pathname.replace(/^\/(he|en)/, "") || "/";
     if (href === "/admin") {
       return strippedPath === "/admin" || strippedPath === "/admin/";
@@ -118,8 +119,8 @@ export function AdminSidebar({ locale, userName }: Props) {
     return strippedPath.startsWith(href);
   }
 
-  return (
-    <aside className="w-64 bg-white border-e border-branch/10 flex flex-col shrink-0">
+  const sidebarContent = (
+    <>
       {/* User info */}
       <div className="p-4 border-b border-branch/10">
         <p className="text-sm font-medium text-navy truncate">{userName}</p>
@@ -134,6 +135,7 @@ export function AdminSidebar({ locale, userName }: Props) {
           <Link
             key={item.href}
             href={item.href}
+            onClick={() => setMobileOpen(false)}
             className={`
               flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium
               transition-colors duration-200
@@ -177,6 +179,55 @@ export function AdminSidebar({ locale, userName }: Props) {
           {isHebrew ? "יציאה" : "Logout"}
         </button>
       </div>
-    </aside>
+    </>
+  );
+
+  return (
+    <>
+      {/* Desktop sidebar */}
+      <aside className="hidden md:flex w-64 bg-white border-e border-branch/10 flex-col shrink-0">
+        {sidebarContent}
+      </aside>
+
+      {/* Mobile hamburger button */}
+      <button
+        className="md:hidden fixed top-4 start-4 z-50 p-2 bg-white rounded-lg shadow-md border border-branch/10"
+        onClick={() => setMobileOpen(true)}
+        aria-label={isHebrew ? "פתח תפריט" : "Open menu"}
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+      </button>
+
+      {/* Mobile overlay */}
+      {mobileOpen && (
+        <div className="md:hidden fixed inset-0 z-40">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/30"
+            onClick={() => setMobileOpen(false)}
+          />
+          {/* Sidebar panel */}
+          <aside className="absolute start-0 top-0 h-full w-64 bg-white flex flex-col shadow-xl">
+            <div className="flex items-center justify-end p-3 border-b border-branch/10">
+              <button
+                onClick={() => setMobileOpen(false)}
+                className="p-1.5 rounded-lg text-ink-light hover:text-navy hover:bg-navy/5 transition-colors"
+                aria-label={isHebrew ? "סגור תפריט" : "Close menu"}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+            {sidebarContent}
+          </aside>
+        </div>
+      )}
+    </>
   );
 }

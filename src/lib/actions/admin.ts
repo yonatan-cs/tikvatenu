@@ -96,7 +96,9 @@ export async function saveEvent(data: {
   let eventId = data.id;
 
   if (data.id) {
-    const { error: updateError } = await supabase.from("events").update(eventData).eq("id", data.id);
+    // Exclude slug from updates to prevent unique constraint violations
+    const { slug: _slug, ...updateFields } = eventData;
+    const { error: updateError } = await supabase.from("events").update(updateFields).eq("id", data.id);
     if (updateError) return { ok: false, error: updateError.message };
   } else {
     const { data: newEvent, error: insertError } = await supabase

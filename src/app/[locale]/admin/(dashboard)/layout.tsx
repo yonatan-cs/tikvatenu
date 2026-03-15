@@ -36,7 +36,7 @@ export default async function AdminLayout({ children, params }: Props) {
   return (
     <div className="flex min-h-screen pt-4">
       <AdminSidebar locale={locale} userName={profile.full_name || user.email || "Admin"} />
-      <div className="flex-1 p-6 lg:p-8 bg-cream-dark/30">
+      <div className="flex-1 p-6 pt-14 md:pt-6 lg:p-8 bg-cream-dark/30">
         {children}
       </div>
       <Toaster position={locale === "he" ? "bottom-left" : "bottom-right"} dir={locale === "he" ? "rtl" : "ltr"} richColors />
