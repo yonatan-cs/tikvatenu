@@ -75,6 +75,7 @@ export function Footer({ instagramUrl }: FooterProps) {
                 { href: "/events", key: "nav.events" },
                 { href: "/magazine", key: "nav.magazine" },
                 { href: "/join", key: "nav.join" },
+                { href: "/yehonatan", key: "nav.deutsch" },
               ].map((item) => (
                 <Link
                   key={item.key}
