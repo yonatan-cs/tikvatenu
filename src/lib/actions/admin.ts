@@ -182,6 +182,7 @@ export async function saveArticle(data: {
   bodyHe: string;
   bodyEn: string;
   coverImage: string | null;
+  pdfUrl: string | null;
   category: string;
   tags: string[];
   isPublished: boolean;
@@ -202,6 +203,7 @@ export async function saveArticle(data: {
     body_he: data.bodyHe || null,
     body_en: data.bodyEn || null,
     cover_image: data.coverImage,
+    pdf_url: data.pdfUrl || null,
     category: data.category,
     tags: data.tags,
     is_published: data.isPublished,

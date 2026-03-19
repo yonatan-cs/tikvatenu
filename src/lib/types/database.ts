@@ -56,6 +56,7 @@ export interface Article {
   body_he: string | null;
   body_en: string | null;
   cover_image: string | null;
+  pdf_url: string | null;
   category: "thought" | "press" | "opinion" | "spirit";
   tags: string[];
   is_published: boolean;

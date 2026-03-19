@@ -13,6 +13,7 @@ const navItems = [
   { href: "/events", labelKey: "events" },
   { href: "/magazine", labelKey: "magazine" },
   { href: "/join", labelKey: "join" },
+  { href: "/yehonatan", labelKey: "deutsch" },
 ] as const;
 
 export function Header() {

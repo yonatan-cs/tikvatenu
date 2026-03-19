@@ -10,6 +10,7 @@
     "events": "Events",
     "magazine": "Magazine",
     "join": "Join Us",
+    "deutsch": "Yonatan Deutsch",
     "admin": "Admin",
     "login": "Login",
     "logout": "Logout"
@@ -222,6 +223,31 @@
     "viewAll": "View All",
     "noResults": "No results found",
     "required": "Required field"
+  },
+  "deutsch": {
+    "title": "In Memory of Yonatan Deutsch HY\"D",
+    "subtitle": "He was and remains \"our hope\"",
+    "intro": "Yonatan Deutsch was an inseparable part of Tikvatenu from the day it was founded. Working with Deutsch was like a dream. He always jumped first into every task, immersed himself in the small details — all with the modesty and smile that characterized him. He was a Zionist in every fiber of his being. Deutsch was murdered in a terror attack in the Jordan Valley last August, two months after his discharge from Maglan and one month before his wedding to his fiancée Emuna. Deutsch had great dreams for the future of the people and the state. He was and remains \"our hope.\"",
+    "quotesTitle": "Some of his quotes on \"Why I Fight\"",
+    "quote1": {
+      "text": "It's hard to believe a week has passed since I woke up on Saturday morning to phone calls and messages about missiles to the south. I didn't understand then what I was heading toward; I don't think it was possible to understand. Driving with my commander at crazy speed on Highway 6, we started receiving updates about an abnormal event in the Gaza envelope. Terrorists in the villages, on the roads, inside homes. I have to say the penny still hadn't dropped, but it caused us to press harder on the gas. Getting to the unit as fast as possible, we ran in a sprint to grab the equipment and went down with whoever had managed to arrive to save the envelope, literally... We arrive at the kibbutz and during the searches we encounter terrorists. After battles that weren't simple, the kibbutz is liberated and we can breathe with relief... There were around 20 terrorists when we arrived. When we finished, none remained. We start taking people out of the safe room. I don't think there's a better feeling in the world. Telling the family that sat in the safe room with children and babies for 10 hours in mortal fear — 'My name is Yonatan, I'm an IDF soldier, I came to take you out' — I don't think there's a more moral or Zionist act than that, and it's something I'm certain I'll never forget. From there we continue defending the kibbutz, but our minds are already on the next stage — the stage of response. All we do is intensive training for whatever is required. It's not hard to find the drive for what's coming. This time it's not for some vague strategic achievement, but to ensure the terrible organization that sent murderers to kill children in their beds no longer exists…",
+      "source": "Yonatan in a letter to his family after the fighting on October 7th"
+    },
+    "quote2": {
+      "text": "A note to myself — in no way is this a farewell letter, only a letter to clarify to myself the values that lead me into this battle. I was privileged to be a soldier of the Jewish people. There is no greater privilege — a dream of 2,000 years, and I, the humble one, am privileged to fulfill it. I was privileged with a loving, values-driven, and moral family that pushes from behind and gives the strength to continue — a family I know will in any circumstance continue the historical ideal of building the people of Israel in its land. I was privileged with an amazing partner in life. One who always knows how to say the right word, knows how to embrace when it's hard and to be there for me always. One who shows me how you don't need a lot of talk and a lot of publicity — just always do the right thing. If everyone were like her, we'd have a perfect world. From all these privileges, I go into battle as a proud Hebrew soldier, privileged to fulfill the values of a people 3,500 years old. I hope I am worthy of the mission and I'm certain I will carry it out in the best way I can.",
+      "source": "A letter to himself before the battle"
+    },
+    "quote3": {
+      "text": "We are mission-focused like never before in our lives. They're going to hear from us! They're going to regret the day they crawled out of their tunnels and tried to break the Jewish people. They simply didn't understand who they were dealing with. A people of 3,500 years does not break. It doesn't have the privilege of breaking. So to you, my dear family, I want to say — continue to be strong there behind us. We're going to make sure that an event like this one never happens again. When you are strong, we are strong. Challenging days lie ahead, this is going to be challenging and long, very long. But we are ready for every challenge and will meet every mission in the best way possible. I love you and I'm waiting to come home soon. Yonatan.",
+      "source": "Yonatan in a letter to his family before entering the Gaza Strip"
+    },
+    "quote4": {
+      "text": "Land is not acquired in war. War is the easy part. Land in general — in life, the big events — those are the easy part. What ultimately acquires land, acquires a state, acquires a people, is one more home and one more family — that's what ultimately acquires land. I feel I have an enormous privilege, together with Emuna, to truly join — and this isn't part of the war we're waging now. This IS the war. This is what will ultimately cause us to live in this land and build a successful state and a people that will be a light unto the nations. In this context, I want to note that our joy is not complete — my team is currently moving to Rafah, I need to arrive in two days, the work is far from over.",
+      "source": "Yonatan Deutsch at his engagement party with his beloved Emuna"
+    },
+    "letterTitle": "A Letter to His Brother Roee Before His Enlistment",
+    "letter": "To young Roee — enlistment is a fundamental event in a person's life, a significant component of identity. From now on, when they ask you the most Israeli question there is, \"Where did you serve?\", you'll have an answer: \"I'm from the paratroopers.\"\n\nThe coming period will be challenging, sometimes confusing and frustrating. Training in the army is truly not fun, especially during wartime. But I'm certain you're capable and it's small for you. Those before you did it, those after you will do it.\n\nWhat I wish for you is to succeed in rising above the difficulty. There are two types of people — one who survives the course and one who conquers the course. You'll see with your own eyes in your team who is who. I wish you to always be on the side that conquers, not the side that merely survives. I'm certain you can!",
+    "screenshotsTitle": "From the Activities at Tikvatenu"
   },
   "footer": {
     "rights": "All rights reserved",

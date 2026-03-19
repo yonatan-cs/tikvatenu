@@ -11,6 +11,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ImageUploader } from "./image-uploader";
+import { PdfUploader } from "./pdf-uploader";
 import { RichTextEditor } from "./rich-text-editor";
 import { Save, Loader2, X, Send } from "lucide-react";
 import type { Article } from "@/lib/types/database";
@@ -51,6 +52,7 @@ export function ArticleForm({ article, isHebrew, userId }: ArticleFormProps) {
   const [bodyHe, setBodyHe] = useState(article?.body_he || "");
   const [bodyEn, setBodyEn] = useState(article?.body_en || "");
   const [coverImage, setCoverImage] = useState<string | null>(article?.cover_image || null);
+  const [pdfUrl, setPdfUrl] = useState<string | null>(article?.pdf_url || null);
   const [category, setCategory] = useState<string>(article?.category || "thought");
   const [tags, setTags] = useState<string[]>(article?.tags || []);
   const [tagInput, setTagInput] = useState("");
@@ -85,6 +87,7 @@ export function ArticleForm({ article, isHebrew, userId }: ArticleFormProps) {
         bodyHe,
         bodyEn,
         coverImage,
+        pdfUrl,
         category,
         tags,
         isPublished: publish ? true : (article?.is_published || false),
@@ -152,6 +155,21 @@ export function ArticleForm({ article, isHebrew, userId }: ArticleFormProps) {
         </CardHeader>
         <CardContent>
           <ImageUploader bucket="article-images" value={coverImage} onChange={setCoverImage} isHebrew={isHebrew} />
+        </CardContent>
+      </Card>
+
+      {/* PDF Upload */}
+      <Card>
+        <CardHeader>
+          <CardTitle className={isHebrew ? "font-['Secular_One']" : ""}>{isHebrew ? "קובץ PDF (אופציונלי)" : "PDF File (Optional)"}</CardTitle>
+          <p className="text-sm text-ink-muted">
+            {isHebrew
+              ? "העלו חוברת או מסמך — יוצג מוטמע בעמוד המאמר"
+              : "Upload a booklet or document — displayed embedded in the article page"}
+          </p>
+        </CardHeader>
+        <CardContent>
+          <PdfUploader value={pdfUrl} onChange={setPdfUrl} isHebrew={isHebrew} />
         </CardContent>
       </Card>
 
