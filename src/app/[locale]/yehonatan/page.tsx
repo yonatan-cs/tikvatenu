@@ -38,7 +38,7 @@ export default async function DeutschPage({ params }: Props) {
 
         {/* Cover sticker — large, embedded in background */}
         <div
-          className="absolute inset-y-0 pointer-events-none"
+          className="hidden md:block absolute inset-y-0 pointer-events-none"
           style={{ right: "55%", width: "40%" }}
           aria-hidden
         >
