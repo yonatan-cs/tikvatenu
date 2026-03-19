@@ -36,21 +36,6 @@ export default async function DeutschPage({ params }: Props) {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_40%,rgba(74,127,181,0.10),transparent_55%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_85%_30%,rgba(200,149,108,0.07),transparent_50%)]" />
 
-        {/* Cover sticker — large, embedded in background */}
-        <div
-          className="hidden md:block absolute inset-y-0 pointer-events-none"
-          style={{ right: "55%", width: "40%" }}
-          aria-hidden
-        >
-          <Image
-            src="/images/yehonatan/cover.png"
-            alt=""
-            fill
-            className="object-contain object-center opacity-85"
-            sizes="52vw"
-            priority
-          />
-        </div>
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 md:py-36">
           <div className="max-w-3xl stagger-children">
@@ -81,48 +66,28 @@ export default async function DeutschPage({ params }: Props) {
         </div>
       </section>
 
-      {/* Introduction */}
+      {/* Bio + photo side by side */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 md:py-20">
-        <div className="max-w-3xl mx-auto">
-          <p className="text-lg md:text-xl text-ink-light leading-relaxed text-center">
-            {t("intro")}
-          </p>
-        </div>
-      </section>
-
-      {/* Botanical divider */}
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="botanical-divider" />
-      </div>
-
-      {/* Photos section */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 md:py-20">
-        <div className="text-center mb-10">
-          <h2 className={`text-2xl md:text-3xl font-bold text-navy ${displayFont}`}>
-            {t("screenshotsTitle")}
-          </h2>
-          <div className="mt-3 mx-auto h-[2px] w-12 rounded-full bg-terracotta/50" />
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[
-            { src: "/images/yehonatan/shabbat-group.jpg", alt: isHebrew ? "החבר׳ה" : "The group" },
-            { src: "/images/yehonatan/map1.jpg", alt: isHebrew ? "תכנון עם מפה" : "Planning with a map" },
-            { src: "/images/yehonatan/map2.jpg", alt: isHebrew ? "תכנון עם מפה" : "Planning with a map" },
-            { src: "/images/yehonatan/video-call.jpg", alt: isHebrew ? "שיחת וידאו" : "Video call" },
-            { src: "/images/yehonatan/meeting.jpg", alt: isHebrew ? "ישיבת תכנון" : "Planning meeting" },
-            { src: "/images/yehonatan/two-friends.jpg", alt: isHebrew ? "חברים" : "Friends" },
-          ].map((photo) => (
-            <div key={photo.src} className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-navy/[0.04]">
+        <div className="flex flex-col md:flex-row gap-10 md:gap-16 items-center">
+          {/* Photo */}
+          <div className="w-full md:w-80 shrink-0">
+            <div className="relative aspect-[3/4] rounded-2xl overflow-hidden shadow-lg">
               <Image
-                src={photo.src}
-                alt={photo.alt}
+                src="/images/yehonatan/soldier.jpg"
+                alt={isHebrew ? "יהונתן דויטש" : "Yehonatan Deutsch"}
                 fill
-                className="object-cover"
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                className="object-cover object-top"
+                sizes="(max-width: 768px) 100vw, 320px"
+                priority
               />
             </div>
-          ))}
+          </div>
+          {/* Text */}
+          <div className="flex-1">
+            <p className="text-lg md:text-xl text-ink-light leading-relaxed">
+              {t("intro")}
+            </p>
+          </div>
         </div>
       </section>
 
@@ -185,6 +150,54 @@ export default async function DeutschPage({ params }: Props) {
           </div>
         </div>
       </section>
+
+      {/* Botanical divider */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="botanical-divider" />
+      </div>
+
+      {/* Photos gallery */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 md:py-20">
+        <div className="text-center mb-10">
+          <h2 className={`text-2xl md:text-3xl font-bold text-navy ${displayFont}`}>
+            {t("screenshotsTitle")}
+          </h2>
+          <div className="mt-3 mx-auto h-[2px] w-12 rounded-full bg-terracotta/50" />
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {[
+            { src: "/images/yehonatan/shabbat-group.jpg", alt: isHebrew ? "החבר׳ה" : "The group" },
+            { src: "/images/yehonatan/map1.jpg", alt: isHebrew ? "תכנון עם מפה" : "Planning with a map" },
+            { src: "/images/yehonatan/map2.jpg", alt: isHebrew ? "תכנון עם מפה" : "Planning with a map" },
+            { src: "/images/yehonatan/video-call.jpg", alt: isHebrew ? "שיחת וידאו" : "Video call" },
+            { src: "/images/yehonatan/meeting.jpg", alt: isHebrew ? "ישיבת תכנון" : "Planning meeting" },
+            { src: "/images/yehonatan/two-friends.jpg", alt: isHebrew ? "חברים" : "Friends" },
+          ].map((photo) => (
+            <div key={photo.src} className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-navy/[0.04]">
+              <Image
+                src={photo.src}
+                alt={photo.alt}
+                fill
+                className="object-cover"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Sticker */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 flex justify-center">
+        <Image
+          src="/images/yehonatan/cover.jpg"
+          alt={isHebrew ? "לזכרו של יהונתן דויטש הי״ד" : "In memory of Yehonatan Deutsch HY\"D"}
+          width={900}
+          height={900}
+          className="w-full max-w-4xl rounded-2xl"
+          style={{ height: "auto" }}
+        />
+      </div>
 
       {/* Memorial closing */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-16">
