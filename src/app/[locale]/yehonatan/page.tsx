@@ -95,6 +95,42 @@ export default async function DeutschPage({ params }: Props) {
         <div className="botanical-divider" />
       </div>
 
+      {/* Photos section */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 md:py-20">
+        <div className="text-center mb-10">
+          <h2 className={`text-2xl md:text-3xl font-bold text-navy ${displayFont}`}>
+            {t("screenshotsTitle")}
+          </h2>
+          <div className="mt-3 mx-auto h-[2px] w-12 rounded-full bg-terracotta/50" />
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {[
+            { src: "/images/yehonatan/shabbat-group.jpg", alt: isHebrew ? "החבר׳ה" : "The group" },
+            { src: "/images/yehonatan/map1.jpg", alt: isHebrew ? "תכנון עם מפה" : "Planning with a map" },
+            { src: "/images/yehonatan/map2.jpg", alt: isHebrew ? "תכנון עם מפה" : "Planning with a map" },
+            { src: "/images/yehonatan/video-call.jpg", alt: isHebrew ? "שיחת וידאו" : "Video call" },
+            { src: "/images/yehonatan/meeting.jpg", alt: isHebrew ? "ישיבת תכנון" : "Planning meeting" },
+            { src: "/images/yehonatan/two-friends.jpg", alt: isHebrew ? "חברים" : "Friends" },
+          ].map((photo) => (
+            <div key={photo.src} className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-navy/[0.04]">
+              <Image
+                src={photo.src}
+                alt={photo.alt}
+                fill
+                className="object-cover"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Botanical divider */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="botanical-divider" />
+      </div>
+
       {/* Quotes Section */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 md:py-20">
         <div className="text-center mb-12">
@@ -105,33 +141,10 @@ export default async function DeutschPage({ params }: Props) {
         </div>
 
         <div className="space-y-8">
-          {/* Quote 1 */}
-          <QuoteCard
-            text={t("quote1.text")}
-            source={t("quote1.source")}
-            accentColor="terracotta"
-          />
-
-          {/* Quote 2 */}
-          <QuoteCard
-            text={t("quote2.text")}
-            source={t("quote2.source")}
-            accentColor="sky"
-          />
-
-          {/* Quote 3 */}
-          <QuoteCard
-            text={t("quote3.text")}
-            source={t("quote3.source")}
-            accentColor="branch"
-          />
-
-          {/* Quote 4 */}
-          <QuoteCard
-            text={t("quote4.text")}
-            source={t("quote4.source")}
-            accentColor="terracotta"
-          />
+          <QuoteCard text={t("quote1.text")} source={t("quote1.source")} accentColor="terracotta" />
+          <QuoteCard text={t("quote2.text")} source={t("quote2.source")} accentColor="sky" />
+          <QuoteCard text={t("quote3.text")} source={t("quote3.source")} accentColor="branch" />
+          <QuoteCard text={t("quote4.text")} source={t("quote4.source")} accentColor="terracotta" />
         </div>
       </section>
 
@@ -170,37 +183,6 @@ export default async function DeutschPage({ params }: Props) {
               </div>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Screenshots section */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 md:py-20">
-        <div className="text-center mb-10">
-          <h2 className={`text-2xl md:text-3xl font-bold text-navy ${displayFont}`}>
-            {t("screenshotsTitle")}
-          </h2>
-          <div className="mt-3 mx-auto h-[2px] w-12 rounded-full bg-terracotta/50" />
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[
-            { src: "/images/yehonatan/shabbat-group.jpg", alt: isHebrew ? "החבר׳ה" : "The group" },
-            { src: "/images/yehonatan/map1.jpg", alt: isHebrew ? "תכנון עם מפה" : "Planning with a map" },
-            { src: "/images/yehonatan/map2.jpg", alt: isHebrew ? "תכנון עם מפה" : "Planning with a map" },
-            { src: "/images/yehonatan/video-call.jpg", alt: isHebrew ? "שיחת וידאו" : "Video call" },
-            { src: "/images/yehonatan/meeting.jpg", alt: isHebrew ? "ישיבת תכנון" : "Planning meeting" },
-            { src: "/images/yehonatan/two-friends.jpg", alt: isHebrew ? "חברים" : "Friends" },
-          ].map((photo) => (
-            <div key={photo.src} className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-navy/[0.04]">
-              <Image
-                src={photo.src}
-                alt={photo.alt}
-                fill
-                className="object-cover"
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-              />
-            </div>
-          ))}
         </div>
       </section>
 
