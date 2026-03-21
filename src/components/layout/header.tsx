@@ -44,6 +44,7 @@ export function Header() {
               style={{ width: "auto", height: "7rem" }}
               className="translate-y-[8px] transition-transform duration-300 group-hover:scale-[1.03]"
               priority
+              unoptimized
             />
           </Link>
 

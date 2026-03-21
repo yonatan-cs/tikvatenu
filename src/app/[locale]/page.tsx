@@ -118,6 +118,7 @@ export default async function HomePage({ params }: Props) {
                   style={{ width: "auto", height: "18rem" }}
                   className="brightness-0 invert opacity-95"
                   priority
+                  unoptimized
                 />
               </div>
 

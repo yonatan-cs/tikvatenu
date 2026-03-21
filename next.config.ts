@@ -13,6 +13,10 @@ const nextConfig: NextConfig = {
         pathname: "/storage/v1/object/public/**",
       },
     ],
+    formats: ["image/webp"],
+    deviceSizes: [640, 828, 1080, 1200, 1920],
+    imageSizes: [40, 64, 128, 384],
+    minimumCacheTTL: 2592000,
   },
 };
 

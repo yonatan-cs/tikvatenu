@@ -26,6 +26,7 @@ export function HeroEvent({ event, isHebrew }: HeroEventProps) {
             src={event.cover_image}
             alt={title}
             fill
+            sizes="100vw"
             className="object-cover"
             priority
           />

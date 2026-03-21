@@ -50,6 +50,7 @@ export function Footer({ instagramUrl }: FooterProps) {
               height={96}
               style={{ width: "auto", height: "10rem" }}
               className="-mt-8 md:-mt-10 brightness-0 invert opacity-80"
+              unoptimized
             />
             <p className="-mt-4 md:-mt-5 text-sm text-parchment/45 max-w-xs leading-relaxed">
               {t("footer.tagline")}
