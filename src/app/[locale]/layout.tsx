@@ -9,6 +9,7 @@ import { routing } from "@/i18n/routing";
 import { createClient } from "@/lib/supabase/server";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { AccessibilityMenu } from "@/components/layout/accessibility-menu";
 import { Analytics } from "@vercel/analytics/next";
 import "../globals.css";
 
@@ -129,6 +130,7 @@ export default async function LocaleLayout({ children, params }: Props) {
           <Header />
           <main className="flex-1">{children}</main>
           <Footer instagramUrl={instagramUrl} />
+          <AccessibilityMenu />
         </NextIntlClientProvider>
         <Analytics />
       </body>

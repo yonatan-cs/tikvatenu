@@ -111,6 +111,32 @@ body {
   opacity: 0.5;
 }
 
+/* ─── Accessibility Classes ────────────────── */
+
+.a11y-large-text {
+  font-size: 120% !important;
+}
+
+.a11y-high-contrast {
+  filter: contrast(1.5) !important;
+}
+
+.a11y-highlight-links a {
+  text-decoration: underline !important;
+  font-weight: bold !important;
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.a11y-no-animations *,
+.a11y-no-animations *::before,
+.a11y-no-animations *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
 /* ─── Keyframes ────────────────────────────── */
 
 @keyframes fadeInUp {
