@@ -35,11 +35,23 @@ function slugify(text: string): string {
     .slice(0, 80);
 }
 
+async function generateUniqueSlug(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  baseText: string
+): Promise<string> {
+  const base = slugify(baseText);
+  const { data } = await supabase.from("events").select("slug").like("slug", `${base}%`);
+  const existingSlugs = new Set((data || []).map((r: { slug: string }) => r.slug));
+  if (!existingSlugs.has(base)) return base;
+  let counter = 2;
+  while (existingSlugs.has(`${base}-${counter}`)) counter++;
+  return `${base}-${counter}`;
+}
+
 // --- saveEvent ---
 
 export async function saveEvent(data: {
   id?: string;
-  slug: string;
   titleHe: string;
   titleEn: string;
   descriptionHe: string;
@@ -69,10 +81,8 @@ export async function saveEvent(data: {
   const supabase = auth.supabase!;
 
   const isPast = data.eventType === "past";
-  const finalSlug = data.slug || slugify(data.titleEn || data.titleHe);
 
-  const eventData = {
-    slug: finalSlug,
+  const baseEventData = {
     title_he: data.titleHe,
     title_en: data.titleEn,
     description_he: data.descriptionHe,
@@ -98,14 +108,13 @@ export async function saveEvent(data: {
   let eventId = data.id;
 
   if (data.id) {
-    // Exclude slug from updates to prevent unique constraint violations
-    const { slug: _slug, ...updateFields } = eventData;
-    const { error: updateError } = await supabase.from("events").update(updateFields).eq("id", data.id);
+    const { error: updateError } = await supabase.from("events").update(baseEventData).eq("id", data.id);
     if (updateError) return { ok: false, error: updateError.message };
   } else {
+    const slug = await generateUniqueSlug(supabase, data.titleEn || data.titleHe);
     const { data: newEvent, error: insertError } = await supabase
       .from("events")
-      .insert(eventData)
+      .insert({ ...baseEventData, slug })
       .select("id")
       .single();
     if (insertError || !newEvent) return { ok: false, error: insertError?.message || "Failed to create event" };

@@ -28,15 +28,6 @@ interface EventFormProps {
   userId: string;
 }
 
-function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/[^\w\s-]/g, "")
-    .replace(/[\s_]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .slice(0, 80);
-}
-
 function deriveEventType(event?: Event): EventType {
   if (!event) return "future";
   return new Date(event.event_date) < new Date() ? "past" : "future";
@@ -70,8 +61,6 @@ export function EventForm({ event, existingGalleryImages = [], existingAlbumId, 
   const [registrationFields, setRegistrationFields] = useState<RegistrationField[]>(
     event?.registration_fields || []
   );
-  const [slug, setSlug] = useState(event?.slug || "");
-
   // Gallery images for past events
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>(existingGalleryImages);
   const [uploading, setUploading] = useState(false);
@@ -127,7 +116,6 @@ export function EventForm({ event, existingGalleryImages = [], existingAlbumId, 
     try {
       const result = await saveEvent({
         id: event?.id,
-        slug,
         titleHe,
         titleEn,
         descriptionHe,
@@ -179,7 +167,6 @@ export function EventForm({ event, existingGalleryImages = [], existingAlbumId, 
     try {
       const result = await saveEvent({
         id: event?.id,
-        slug,
         titleHe,
         titleEn,
         descriptionHe,
@@ -496,15 +483,6 @@ export function EventForm({ event, existingGalleryImages = [], existingAlbumId, 
             />
           </div>
 
-          <div>
-            <Label className="mb-1.5">Slug</Label>
-            <Input
-              value={slug}
-              onChange={(e) => setSlug(e.target.value)}
-              dir="ltr"
-              placeholder={isHebrew ? "ייווצר אוטומטית מהכותרת" : "Auto-generated from title"}
-            />
-          </div>
         </CardContent>
       </Card>
 

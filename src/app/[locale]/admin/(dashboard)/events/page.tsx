@@ -64,54 +64,60 @@ export default async function AdminEventsPage({ params }: Props) {
             return (
               <div
                 key={event.id}
-                className="flex items-center gap-4 bg-white rounded-xl border border-branch/5 p-4 hover:shadow-sm transition-shadow"
+                className="bg-white rounded-xl border border-branch/5 p-4 hover:shadow-sm transition-shadow"
               >
-                {/* Date badge */}
-                <div className="shrink-0 w-14 h-14 rounded-lg bg-navy/5 flex flex-col items-center justify-center">
-                  <span className="text-xs text-navy/60 font-medium">
-                    {eventDate.toLocaleDateString(locale, { month: "short" })}
-                  </span>
-                  <span className="text-lg font-bold text-navy leading-tight">
-                    {eventDate.getDate()}
-                  </span>
-                </div>
-
-                {/* Content */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-0.5">
-                    <h3 className="font-semibold text-navy truncate">{title}</h3>
-                    {!event.is_published && (
-                      <Badge variant="outline">{isHebrew ? "טיוטה" : "Draft"}</Badge>
-                    )}
-                    {isPast && (
-                      <Badge variant="secondary">{isHebrew ? "עבר" : "Past"}</Badge>
-                    )}
+                <div className="flex items-start gap-4">
+                  {/* Date badge */}
+                  <div className="shrink-0 w-14 h-14 rounded-lg bg-navy/5 flex flex-col items-center justify-center">
+                    <span className="text-xs text-navy/60 font-medium">
+                      {eventDate.toLocaleDateString(locale, { month: "short" })}
+                    </span>
+                    <span className="text-lg font-bold text-navy leading-tight">
+                      {eventDate.getDate()}
+                    </span>
                   </div>
-                  <p className="text-sm text-ink-muted truncate">
-                    {isHebrew ? event.description_he : event.description_en}
-                  </p>
-                </div>
 
-                {/* Actions */}
-                <div className="flex items-center gap-2 shrink-0">
-                  <Button asChild variant="ghost" size="sm">
-                    <Link href={`/admin/events/${event.id}/registrations`}>
-                      <Users className="w-4 h-4" />
-                      <span className="hidden sm:inline">{isHebrew ? "נרשמים" : "Registrations"}</span>
-                    </Link>
-                  </Button>
-                  <Button asChild variant="ghost" size="icon">
-                    <Link href={`/admin/events/${event.id}`}>
-                      <Pencil className="w-4 h-4" />
-                    </Link>
-                  </Button>
-                  {event.is_published && (
-                    <Button asChild variant="ghost" size="icon">
-                      <Link href={`/events/${event.slug}`}>
-                        <ExternalLink className="w-4 h-4" />
-                      </Link>
-                    </Button>
-                  )}
+                  {/* Content + Actions */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2 mb-0.5 flex-wrap">
+                          <h3 className="font-semibold text-navy truncate">{title}</h3>
+                          {!event.is_published && (
+                            <Badge variant="outline">{isHebrew ? "טיוטה" : "Draft"}</Badge>
+                          )}
+                          {isPast && (
+                            <Badge variant="secondary">{isHebrew ? "עבר" : "Past"}</Badge>
+                          )}
+                        </div>
+                        <p className="text-sm text-ink-muted line-clamp-2">
+                          {isHebrew ? event.description_he : event.description_en}
+                        </p>
+                      </div>
+
+                      {/* Actions — always visible, never pushed off-screen */}
+                      <div className="flex items-center gap-1 shrink-0">
+                        <Button asChild variant="ghost" size="sm">
+                          <Link href={`/admin/events/${event.id}/registrations`}>
+                            <Users className="w-4 h-4" />
+                            <span className="hidden sm:inline">{isHebrew ? "נרשמים" : "Registrations"}</span>
+                          </Link>
+                        </Button>
+                        <Button asChild variant="ghost" size="icon">
+                          <Link href={`/admin/events/${event.id}`}>
+                            <Pencil className="w-4 h-4" />
+                          </Link>
+                        </Button>
+                        {event.is_published && (
+                          <Button asChild variant="ghost" size="icon">
+                            <Link href={`/events/${event.slug}`}>
+                              <ExternalLink className="w-4 h-4" />
+                            </Link>
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             );
