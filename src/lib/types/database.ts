@@ -22,6 +22,7 @@ export interface Event {
   location_he: string | null;
   location_en: string | null;
   location_url: string | null;
+  payment_link: string | null;
   event_date: string;
   event_end_date: string | null;
   registration_deadline: string | null;

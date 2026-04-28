@@ -3,6 +3,7 @@ import { Calendar, MapPin, Camera } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import type { Event, GalleryImage } from "@/lib/types/database";
 import Image from "next/image";
+import { loc } from "@/lib/utils/loc";
 
 interface PastEventCardProps {
   event: Event;
@@ -11,9 +12,9 @@ interface PastEventCardProps {
 }
 
 export function PastEventCard({ event, isHebrew, galleryImages = [] }: PastEventCardProps) {
-  const title = isHebrew ? event.title_he : event.title_en;
-  const summary = isHebrew ? event.summary_he : event.summary_en;
-  const location = isHebrew ? event.location_he : event.location_en;
+  const title = loc(event.title_he, event.title_en, isHebrew);
+  const summary = loc(event.summary_he, event.summary_en, isHebrew);
+  const location = loc(event.location_he, event.location_en, isHebrew);
   const eventDate = new Date(event.event_date);
   const displayFont = isHebrew
     ? "font-['Secular_One']"

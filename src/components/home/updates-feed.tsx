@@ -2,6 +2,7 @@ import type { Update } from "@/lib/types/database";
 import Image from "next/image";
 import { Megaphone } from "lucide-react";
 import { SafeHtml } from "@/components/shared/safe-html";
+import { loc } from "@/lib/utils/loc";
 
 interface UpdatesFeedProps {
   updates: Update[];
@@ -16,8 +17,8 @@ export function UpdatesFeed({ updates, isHebrew }: UpdatesFeedProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
       {updates.map((update, i) => {
-        const title = isHebrew ? update.title_he : update.title_en;
-        const body = isHebrew ? update.body_he : update.body_en;
+        const title = loc(update.title_he, update.title_en, isHebrew);
+        const body = loc(update.body_he, update.body_en, isHebrew);
 
         return (
           <div

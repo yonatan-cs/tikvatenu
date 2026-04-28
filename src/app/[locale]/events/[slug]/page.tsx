@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Link } from "@/i18n/navigation";
 import { RegistrationForm } from "@/components/events/registration-form";
+import { loc } from "@/lib/utils/loc";
 import { Calendar, MapPin, Users, Clock, ArrowRight, Flag } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -28,8 +29,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!event) return {};
 
-  const title = locale === "he" ? event.title_he : event.title_en;
-  const description = locale === "he" ? event.description_he : event.description_en;
+  const isHeLocale = locale === "he";
+  const title = loc(event.title_he, event.title_en, isHeLocale);
+  const description = loc(event.description_he, event.description_en, isHeLocale);
 
   return {
     title,
@@ -84,10 +86,10 @@ export default async function EventDetailPage({ params }: Props) {
     galleryImages = (images || []) as GalleryImage[];
   }
 
-  const title = isHebrew ? typedEvent.title_he : typedEvent.title_en;
-  const description = isHebrew ? typedEvent.description_he : typedEvent.description_en;
-  const body = isHebrew ? typedEvent.body_he : typedEvent.body_en;
-  const location = isHebrew ? typedEvent.location_he : typedEvent.location_en;
+  const title = loc(typedEvent.title_he, typedEvent.title_en, isHebrew);
+  const description = loc(typedEvent.description_he, typedEvent.description_en, isHebrew);
+  const body = loc(typedEvent.body_he, typedEvent.body_en, isHebrew);
+  const location = loc(typedEvent.location_he, typedEvent.location_en, isHebrew);
   const eventDate = new Date(typedEvent.event_date);
   const endDate = typedEvent.event_end_date ? new Date(typedEvent.event_end_date) : null;
   const isPast = eventDate < new Date();

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Link } from "@/i18n/navigation";
 import { Badge } from "@/components/ui/badge";
+import { loc } from "@/lib/utils/loc";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Calendar, BookOpen } from "lucide-react";
 import { SafeHtml } from "@/components/shared/safe-html";
@@ -33,8 +34,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!article) return {};
 
-  const title = locale === "he" ? article.title_he : article.title_en;
-  const description = locale === "he" ? article.excerpt_he : article.excerpt_en;
+  const isHeLocale = locale === "he";
+  const title = loc(article.title_he, article.title_en, isHeLocale);
+  const description = loc(article.excerpt_he, article.excerpt_en, isHeLocale);
 
   return {
     title,
@@ -63,9 +65,9 @@ export default async function ArticleDetailPage({ params }: Props) {
   if (!article) notFound();
 
   const typedArticle = article as Article;
-  const title = isHebrew ? typedArticle.title_he : typedArticle.title_en;
-  const excerpt = isHebrew ? typedArticle.excerpt_he : typedArticle.excerpt_en;
-  const body = isHebrew ? typedArticle.body_he : typedArticle.body_en;
+  const title = loc(typedArticle.title_he, typedArticle.title_en, isHebrew);
+  const excerpt = loc(typedArticle.excerpt_he, typedArticle.excerpt_en, isHebrew);
+  const body = loc(typedArticle.body_he, typedArticle.body_en, isHebrew);
   const cat = categoryConfig[typedArticle.category] || categoryConfig.thought;
 
   return (

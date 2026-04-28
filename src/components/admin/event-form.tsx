@@ -62,6 +62,7 @@ export function EventForm({ event, existingGalleryImages = [], existingAlbumId, 
   const [locationHe, setLocationHe] = useState(event?.location_he || "");
   const [locationEn, setLocationEn] = useState(event?.location_en || "");
   const [locationUrl, setLocationUrl] = useState(event?.location_url || "");
+  const [paymentLink, setPaymentLink] = useState(event?.payment_link || "");
   const [eventDate, setEventDate] = useState(event?.event_date?.slice(0, 16) || "");
   const [eventEndDate, setEventEndDate] = useState(event?.event_end_date?.slice(0, 16) || "");
   const [registrationDeadline, setRegistrationDeadline] = useState(event?.registration_deadline?.slice(0, 16) || "");
@@ -137,6 +138,7 @@ export function EventForm({ event, existingGalleryImages = [], existingAlbumId, 
         locationHe,
         locationEn,
         locationUrl,
+        paymentLink,
         eventDate,
         eventEndDate,
         registrationDeadline,
@@ -171,6 +173,52 @@ export function EventForm({ event, existingGalleryImages = [], existingAlbumId, 
     }
   }
 
+  async function handleUnpublish() {
+    setSavingAction('save');
+    setError(null);
+    try {
+      const result = await saveEvent({
+        id: event?.id,
+        slug,
+        titleHe,
+        titleEn,
+        descriptionHe,
+        descriptionEn,
+        bodyHe,
+        bodyEn,
+        coverImage,
+        locationHe,
+        locationEn,
+        locationUrl,
+        paymentLink,
+        eventDate,
+        eventEndDate,
+        registrationDeadline,
+        maxParticipants,
+        registrationFields,
+        isPublished: false,
+        eventType,
+        summaryHe: "",
+        summaryEn: "",
+        galleryImages,
+        existingGalleryImages,
+        existingAlbumId,
+      });
+      if (!result.ok) {
+        setError(result.error);
+        toast.error(result.error);
+        return;
+      }
+      toast.success(isHebrew ? "האירוע הוחזר לטיוטה" : "Event moved back to draft");
+      router.push("/admin/events");
+      router.refresh();
+    } catch {
+      setError(isHebrew ? "שגיאה בשמירה" : "Error saving");
+    } finally {
+      setSavingAction(null);
+    }
+  }
+
   const isPast = eventType === "past";
 
   return (
@@ -184,6 +232,12 @@ export function EventForm({ event, existingGalleryImages = [], existingAlbumId, 
           }
         </h1>
         <div className="flex items-center gap-3">
+          {event?.is_published && (
+            <Button type="button" variant="outline" disabled={!!savingAction} onClick={handleUnpublish}>
+              {savingAction === 'save' ? <Loader2 className="w-4 h-4 animate-spin" /> : <History className="w-4 h-4" />}
+              {isHebrew ? "החזר לטיוטה" : "Revert to Draft"}
+            </Button>
+          )}
           <Button type="button" variant="outline" disabled={!!savingAction} onClick={() => handleAction(false)}>
             {savingAction === 'save' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
             {savingAction === 'save'
@@ -428,6 +482,17 @@ export function EventForm({ event, existingGalleryImages = [], existingAlbumId, 
               onChange={(e) => setLocationUrl(e.target.value)}
               dir="ltr"
               placeholder="https://maps.google.com/..."
+            />
+          </div>
+
+          <div>
+            <Label className="mb-1.5">{isHebrew ? "קישור לתשלום" : "Payment Link"}</Label>
+            <Input
+              type="url"
+              value={paymentLink}
+              onChange={(e) => setPaymentLink(e.target.value)}
+              dir="ltr"
+              placeholder={isHebrew ? "קישור לביט / PayBox" : "Bit / PayBox link"}
             />
           </div>
 

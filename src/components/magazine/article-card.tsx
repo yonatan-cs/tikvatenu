@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import type { Article } from "@/lib/types/database";
 import Image from "next/image";
 import { BookOpen } from "lucide-react";
+import { loc } from "@/lib/utils/loc";
 
 interface ArticleCardProps {
   article: Article;
@@ -17,8 +18,8 @@ const categoryConfig: Record<string, { he: string; en: string; variant: "default
 };
 
 export function ArticleCard({ article, isHebrew }: ArticleCardProps) {
-  const title = isHebrew ? article.title_he : article.title_en;
-  const excerpt = isHebrew ? article.excerpt_he : article.excerpt_en;
+  const title = loc(article.title_he, article.title_en, isHebrew);
+  const excerpt = loc(article.excerpt_he, article.excerpt_en, isHebrew);
   const cat = categoryConfig[article.category] || categoryConfig.thought;
   const displayFont = isHebrew
     ? "font-['Secular_One']"

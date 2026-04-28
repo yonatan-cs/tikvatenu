@@ -2,6 +2,7 @@ import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { Calendar, MapPin, Clock } from "lucide-react";
 import type { Event } from "@/lib/types/database";
+import { loc } from "@/lib/utils/loc";
 
 interface HeroEventProps {
   event: Event;
@@ -9,9 +10,9 @@ interface HeroEventProps {
 }
 
 export function HeroEvent({ event, isHebrew }: HeroEventProps) {
-  const title = isHebrew ? event.title_he : event.title_en;
-  const description = isHebrew ? event.description_he : event.description_en;
-  const location = isHebrew ? event.location_he : event.location_en;
+  const title = loc(event.title_he, event.title_en, isHebrew);
+  const description = loc(event.description_he, event.description_en, isHebrew);
+  const location = loc(event.location_he, event.location_en, isHebrew);
   const eventDate = new Date(event.event_date);
   const displayFont = isHebrew
     ? "font-['Secular_One']"

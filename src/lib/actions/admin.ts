@@ -50,6 +50,7 @@ export async function saveEvent(data: {
   locationHe: string;
   locationEn: string;
   locationUrl: string;
+  paymentLink: string;
   eventDate: string;
   eventEndDate: string;
   registrationDeadline: string;
@@ -82,6 +83,7 @@ export async function saveEvent(data: {
     location_he: data.locationHe || null,
     location_en: data.locationEn || null,
     location_url: data.locationUrl || null,
+    payment_link: data.paymentLink || null,
     event_date: data.eventDate ? new Date(data.eventDate).toISOString() : new Date().toISOString(),
     event_end_date: data.eventEndDate ? new Date(data.eventEndDate).toISOString() : null,
     registration_deadline: !isPast && data.registrationDeadline ? new Date(data.registrationDeadline).toISOString() : null,

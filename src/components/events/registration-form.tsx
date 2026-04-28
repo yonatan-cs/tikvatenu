@@ -163,6 +163,26 @@ export function RegistrationForm({
           {/* Custom fields from JSONB */}
           {fields.map((field) => {
             const label = isHebrew ? field.label_he : field.label_en;
+            const selectedValue = customFields[field.id] || "";
+            const isOtherSelected = selectedValue === "אחר";
+
+            if (field.type === "checkbox") {
+              return (
+                <div key={field.id} className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id={`field-${field.id}`}
+                    checked={selectedValue === "true"}
+                    onChange={(e) => updateCustomField(field.id, e.target.checked.toString())}
+                    className="rounded border-branch/20"
+                    required={field.required}
+                  />
+                  <label htmlFor={`field-${field.id}`} className="text-sm text-ink-light cursor-pointer">
+                    {label} {field.required && <span className="text-terracotta">*</span>}
+                  </label>
+                </div>
+              );
+            }
 
             return (
               <div key={field.id}>
@@ -171,36 +191,36 @@ export function RegistrationForm({
                 </Label>
 
                 {field.type === "select" ? (
-                  <Select
-                    value={customFields[field.id] || ""}
-                    onValueChange={(val) => updateCustomField(field.id, val)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder={isHebrew ? "בחרו אפשרות" : "Select option"} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {field.options?.map((opt) => (
-                        <SelectItem key={opt} value={opt}>
-                          {opt}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                ) : field.type === "checkbox" ? (
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={customFields[field.id] === "true"}
-                      onChange={(e) => updateCustomField(field.id, e.target.checked.toString())}
-                      className="rounded border-branch/20"
-                      required={field.required}
-                    />
-                    <span className="text-sm text-ink-light">{label}</span>
-                  </div>
+                  <>
+                    <Select
+                      value={selectedValue}
+                      onValueChange={(val) => updateCustomField(field.id, val)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder={isHebrew ? "בחרו אפשרות" : "Select option"} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {field.options?.map((opt) => (
+                          <SelectItem key={opt} value={opt}>
+                            {opt}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {isOtherSelected && (
+                      <Input
+                        className="mt-2"
+                        placeholder={isHebrew ? "פרטו כאן..." : "Please specify..."}
+                        value={customFields[`${field.id}__other`] || ""}
+                        onChange={(e) => updateCustomField(`${field.id}__other`, e.target.value)}
+                        required={field.required}
+                      />
+                    )}
+                  </>
                 ) : (
                   <Input
                     type={field.type === "number" ? "number" : field.type === "email" ? "email" : field.type === "phone" ? "tel" : "text"}
-                    value={customFields[field.id] || ""}
+                    value={selectedValue}
                     onChange={(e) => updateCustomField(field.id, e.target.value)}
                     required={field.required}
                   />

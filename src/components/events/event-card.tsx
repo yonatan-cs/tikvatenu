@@ -3,6 +3,7 @@ import { Calendar, MapPin, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import type { Event } from "@/lib/types/database";
 import Image from "next/image";
+import { loc } from "@/lib/utils/loc";
 
 interface EventCardProps {
   event: Event;
@@ -11,9 +12,9 @@ interface EventCardProps {
 }
 
 export function EventCard({ event, isHebrew, registrationCount }: EventCardProps) {
-  const title = isHebrew ? event.title_he : event.title_en;
-  const description = isHebrew ? event.description_he : event.description_en;
-  const location = isHebrew ? event.location_he : event.location_en;
+  const title = loc(event.title_he, event.title_en, isHebrew);
+  const description = loc(event.description_he, event.description_en, isHebrew);
+  const location = loc(event.location_he, event.location_en, isHebrew);
   const eventDate = new Date(event.event_date);
   const isPast = eventDate < new Date();
   const isFull = event.max_participants && registrationCount && registrationCount >= event.max_participants;
