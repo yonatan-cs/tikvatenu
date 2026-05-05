@@ -1,15 +1,11 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-
 export default function ErrorPage({
   reset,
 }: {
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  const t = useTranslations("common");
-
   return (
     <div className="min-h-[60vh] flex flex-col items-center justify-center px-4">
       <div className="w-16 h-16 mb-6 rounded-full bg-error/10 flex items-center justify-center">
@@ -19,13 +15,13 @@ export default function ErrorPage({
           <line x1="12" y1="16" x2="12.01" y2="16" />
         </svg>
       </div>
-      <h2 className="text-xl font-bold text-navy mb-2">{t("error")}</h2>
-      <p className="text-ink-muted mb-6">{t("errorMessage")}</p>
+      <h2 className="text-xl font-bold text-navy mb-2">אירעה שגיאה</h2>
+      <p className="text-ink-muted mb-6">משהו השתבש. אנא נסו שוב.</p>
       <button
         onClick={reset}
         className="px-6 py-3 rounded-full bg-navy text-parchment font-medium hover:bg-navy-light transition-colors"
       >
-        {t("tryAgain")}
+        נסו שוב
       </button>
     </div>
   );

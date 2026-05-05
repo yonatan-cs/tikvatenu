@@ -271,6 +271,10 @@ export default async function EventDetailPage({ params }: Props) {
                   isHebrew={isHebrew}
                   isFull={isFull}
                   deadlinePassed={deadlinePassed}
+                  eventDate={typedEvent.event_date}
+                  eventEndDate={typedEvent.event_end_date}
+                  eventLocation={location || null}
+                  eventDescription={description || null}
                 />
               ) : (
                 <div className="bg-white rounded-2xl border border-branch/5 p-6 text-center">

@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle2, Loader2, AlertCircle } from "lucide-react";
+import { CheckCircle2, Loader2, AlertCircle, CalendarPlus } from "lucide-react";
 import type { RegistrationField } from "@/lib/types/database";
 
 interface RegistrationFormProps {
@@ -16,7 +16,27 @@ interface RegistrationFormProps {
   isHebrew: boolean;
   isFull: boolean;
   deadlinePassed: boolean;
+  eventDate: string;
+  eventEndDate?: string | null;
+  eventLocation?: string | null;
+  eventDescription?: string | null;
 }
+
+function toCalDate(date: Date): string {
+  return date.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+}
+
+function buildGoogleUrl(title: string, start: Date, end: Date, location?: string | null, description?: string | null): string {
+  const params = new URLSearchParams({
+    action: "TEMPLATE",
+    text: title,
+    dates: `${toCalDate(start)}/${toCalDate(end)}`,
+    ...(location ? { location } : {}),
+    ...(description ? { details: description } : {}),
+  });
+  return `https://calendar.google.com/calendar/render?${params}`;
+}
+
 
 export function RegistrationForm({
   eventId,
@@ -25,6 +45,10 @@ export function RegistrationForm({
   isHebrew,
   isFull,
   deadlinePassed,
+  eventDate,
+  eventEndDate,
+  eventLocation,
+  eventDescription,
 }: RegistrationFormProps) {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -101,6 +125,10 @@ export function RegistrationForm({
   }
 
   if (success) {
+    const start = new Date(eventDate);
+    const end = eventEndDate ? new Date(eventEndDate) : new Date(start.getTime() + 60 * 60 * 1000);
+    const googleUrl = buildGoogleUrl(eventTitle, start, end, eventLocation, eventDescription);
+
     return (
       <Card className="border-green/20 bg-green/5">
         <CardContent className="py-8 text-center">
@@ -108,12 +136,26 @@ export function RegistrationForm({
           <h3 className={`text-xl font-bold text-navy mb-2 ${isHebrew ? "font-['Secular_One']" : "font-[family-name:var(--font-playfair)]"}`}>
             {isHebrew ? "נרשמת בהצלחה!" : "Registration Successful!"}
           </h3>
-          <p className="text-sm text-ink-muted">
+          <p className="text-sm text-ink-muted mb-6">
             {isHebrew
               ? `נרשמת בהצלחה ל${eventTitle}. נשלח אליך אישור למייל.`
               : `You've been registered for ${eventTitle}. A confirmation email will be sent.`
             }
           </p>
+          <div className="space-y-2">
+            <p className="text-xs font-medium text-ink-muted uppercase tracking-wide mb-3">
+              {isHebrew ? "הוסיפו ליומן" : "Add to Calendar"}
+            </p>
+            <a
+              href={googleUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 w-full rounded-lg border border-branch/20 bg-white px-4 py-2.5 text-sm font-medium text-navy hover:bg-navy/5 transition-colors"
+            >
+              <CalendarPlus className="w-4 h-4" />
+              Google Calendar
+            </a>
+          </div>
         </CardContent>
       </Card>
     );

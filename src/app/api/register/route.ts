@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { sendRegistrationEmail, sendAdminEventNotification } from "@/lib/email";
 import type { RegistrationField } from "@/lib/types/database";
 
@@ -27,6 +27,7 @@ export async function POST(request: Request) {
     }
 
     const supabase = await createClient();
+    const adminSupabase = createAdminClient();
 
     // Check event exists and is published
     const { data: event, error: eventError } = await supabase
@@ -121,7 +122,7 @@ export async function POST(request: Request) {
     }
 
     // Insert registration
-    const { data: registration, error: insertError } = await supabase
+    const { data: registration, error: insertError } = await adminSupabase
       .from("event_registrations")
       .insert({
         event_id,
