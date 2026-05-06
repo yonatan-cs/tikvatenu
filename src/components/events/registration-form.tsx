@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle2, Loader2, AlertCircle, CalendarPlus } from "lucide-react";
+import { CheckCircle2, Loader2, AlertCircle, CalendarPlus, CreditCard } from "lucide-react";
 import type { RegistrationField } from "@/lib/types/database";
 
 interface RegistrationFormProps {
@@ -20,6 +20,7 @@ interface RegistrationFormProps {
   eventEndDate?: string | null;
   eventLocation?: string | null;
   eventDescription?: string | null;
+  paymentLink?: string | null;
 }
 
 function toCalDate(date: Date): string {
@@ -49,6 +50,7 @@ export function RegistrationForm({
   eventEndDate,
   eventLocation,
   eventDescription,
+  paymentLink,
 }: RegistrationFormProps) {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -270,6 +272,23 @@ export function RegistrationForm({
               </div>
             );
           })}
+
+          {paymentLink && (
+            <div className="bg-branch/5 border border-branch/20 rounded-lg p-3 text-sm">
+              <p className="font-medium text-navy mb-1.5">
+                {isHebrew ? "תשלום" : "Payment"}
+              </p>
+              <a
+                href={paymentLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-terracotta hover:underline"
+              >
+                <CreditCard className="w-4 h-4" />
+                {isHebrew ? "לחצו לתשלום בביט / PayBox" : "Pay via Bit / PayBox"}
+              </a>
+            </div>
+          )}
 
           {error && (
             <div className="bg-error/5 border border-error/20 rounded-lg p-3 text-sm text-error">

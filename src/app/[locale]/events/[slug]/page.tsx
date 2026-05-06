@@ -275,6 +275,7 @@ export default async function EventDetailPage({ params }: Props) {
                   eventEndDate={typedEvent.event_end_date}
                   eventLocation={location || null}
                   eventDescription={description || null}
+                  paymentLink={typedEvent.payment_link || null}
                 />
               ) : (
                 <div className="bg-white rounded-2xl border border-branch/5 p-6 text-center">

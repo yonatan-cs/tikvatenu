@@ -160,7 +160,8 @@ export async function POST(request: Request) {
     }).catch(() => {});
 
     return NextResponse.json({ registration, status });
-  } catch {
+  } catch (err) {
+    console.error("[register] unexpected error:", err);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
