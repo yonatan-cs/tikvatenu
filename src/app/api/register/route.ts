@@ -163,7 +163,7 @@ export async function POST(request: Request) {
   } catch (err) {
     console.error("[register] unexpected error:", err);
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: err instanceof Error ? err.message : "Internal server error" },
       { status: 500 }
     );
   }
