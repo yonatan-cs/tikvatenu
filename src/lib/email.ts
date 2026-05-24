@@ -202,6 +202,92 @@ export async function sendAdminJoinNotification({
   }
 }
 
+interface FeedbackEmailParams {
+  to: string;
+  participantName: string;
+  eventTitle: string;
+  feedbackUrl: string;
+  customIntro: string | null;
+}
+
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+export async function sendFeedbackEmail({
+  to,
+  participantName,
+  eventTitle,
+  feedbackUrl,
+  customIntro,
+}: FeedbackEmailParams) {
+  if (!resend) {
+    console.log("Resend not configured, skipping feedback email to:", to);
+    return { ok: false, error: "Resend not configured" };
+  }
+
+  const subject = `נשמח לשמוע ממך - ${eventTitle}`;
+  const introBlock = customIntro && customIntro.trim()
+    ? `<div style="background: white; border: 1px solid #e8e4de; border-radius: 12px; padding: 16px; margin: 0 0 20px; color: #4a4a4a; line-height: 1.7; white-space: pre-line;">${escapeHtml(customIntro)}</div>`
+    : "";
+
+  const html = `
+    <div dir="rtl" style="font-family: 'Heebo', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+      <div style="background: linear-gradient(135deg, #1e3a5f, #2a4d7a); padding: 30px; border-radius: 16px 16px 0 0; text-align: center;">
+        <h1 style="color: #f0ede8; margin: 0; font-size: 24px;">תקוותנו</h1>
+        <p style="color: #f0ede8; opacity: 0.7; margin: 8px 0 0; font-size: 14px;">צעירים למען עתיד ישראל</p>
+      </div>
+
+      <div style="background: #faf7f2; padding: 30px; border: 1px solid #e8e4de; border-top: none; border-radius: 0 0 16px 16px;">
+        <h2 style="color: #1e3a5f; margin: 0 0 16px; font-size: 20px;">נשמח לקבל את המשוב שלך</h2>
+
+        <p style="color: #4a4a4a; line-height: 1.7; margin: 0 0 16px;">
+          שלום ${escapeHtml(participantName)},<br>
+          תודה שהשתתפת ב-<strong>${escapeHtml(eventTitle)}</strong>!
+        </p>
+
+        ${introBlock}
+
+        <p style="color: #4a4a4a; line-height: 1.7; margin: 0 0 24px;">
+          המשוב שלך חשוב לנו - הוא עוזר לנו ללמוד, להשתפר ולגדול. ניקח כמה דקות?
+        </p>
+
+        <div style="text-align: center; margin: 24px 0;">
+          <a href="${feedbackUrl}" style="display: inline-block; background: #c97b5b; color: white; padding: 14px 32px; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 16px;">
+            למילוי המשוב
+          </a>
+        </div>
+
+        <p style="color: #7a7a7a; font-size: 12px; margin: 16px 0 0; text-align: center; word-break: break-all;">
+          או העתיקו את הקישור: <br>
+          <a href="${feedbackUrl}" style="color: #c97b5b;">${feedbackUrl}</a>
+        </p>
+
+        <p style="color: #7a7a7a; font-size: 13px; margin: 24px 0 0; text-align: center;">
+          תקוותנו - צעירים למען עתיד ישראל
+        </p>
+      </div>
+    </div>
+  `;
+
+  try {
+    const result = await resend.emails.send({ from: FROM_ADDRESS, replyTo: ADMIN_EMAIL, to, subject, html });
+    if (result.error) {
+      console.error("Failed to send feedback email:", result.error);
+      return { ok: false, error: result.error.message };
+    }
+    return { ok: true };
+  } catch (error) {
+    console.error("Failed to send feedback email:", error);
+    return { ok: false, error: error instanceof Error ? error.message : "Unknown error" };
+  }
+}
+
 export async function sendAdminContactNotification({
   name,
   email,

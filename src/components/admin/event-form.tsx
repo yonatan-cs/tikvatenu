@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ImageUploader } from "./image-uploader";
 import { RichTextEditor } from "./rich-text-editor";
@@ -69,6 +70,7 @@ export function EventForm({ event, existingGalleryImages = [], existingAlbumId, 
   );
   const [feedbackIntroHe, setFeedbackIntroHe] = useState(event?.feedback_intro_he || "");
   const [feedbackIntroEn, setFeedbackIntroEn] = useState(event?.feedback_intro_en || "");
+  const [feedbackAutoSend, setFeedbackAutoSend] = useState<boolean>(event?.feedback_auto_send ?? false);
   // Gallery images for past events
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>(existingGalleryImages);
   const [uploading, setUploading] = useState(false);
@@ -143,6 +145,7 @@ export function EventForm({ event, existingGalleryImages = [], existingAlbumId, 
         feedbackFields,
         feedbackIntroHe,
         feedbackIntroEn,
+        feedbackAutoSend,
         isPublished: publish ? true : (event?.is_published || false),
         eventType,
         summaryHe: "",
@@ -197,6 +200,7 @@ export function EventForm({ event, existingGalleryImages = [], existingAlbumId, 
         feedbackFields,
         feedbackIntroHe,
         feedbackIntroEn,
+        feedbackAutoSend,
         isPublished: false,
         eventType,
         summaryHe: "",
@@ -554,6 +558,23 @@ export function EventForm({ event, existingGalleryImages = [], existingAlbumId, 
           </p>
         </CardHeader>
         <CardContent className="space-y-5">
+          <div className="flex items-start gap-3 p-3 rounded-lg bg-cream/40 border border-branch/10">
+            <Switch
+              checked={feedbackAutoSend}
+              onCheckedChange={setFeedbackAutoSend}
+              className="mt-0.5"
+            />
+            <div>
+              <Label className="text-sm cursor-pointer" onClick={() => setFeedbackAutoSend(!feedbackAutoSend)}>
+                {isHebrew ? "שלח קישור משוב אוטומטית במייל" : "Send feedback link automatically by email"}
+              </Label>
+              <p className="text-xs text-ink-muted mt-1">
+                {isHebrew
+                  ? "נשלח אוטומטית עד 24 שעות אחרי תאריך האירוע לכל הנרשמים."
+                  : "Sends automatically within 24 hours after event date to all registrants."}
+              </p>
+            </div>
+          </div>
           <div>
             <Label className="mb-2 block">
               {isHebrew ? "טקסט פתיחה (אופציונלי)" : "Intro text (optional)"}

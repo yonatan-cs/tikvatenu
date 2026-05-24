@@ -31,6 +31,7 @@ export interface Event {
   feedback_fields: RegistrationField[];
   feedback_intro_he: string | null;
   feedback_intro_en: string | null;
+  feedback_auto_send: boolean;
   is_published: boolean;
   summary_he: string | null;
   summary_en: string | null;
@@ -48,6 +49,8 @@ export interface EventRegistration {
   custom_fields: Record<string, string | number | boolean>;
   status: "confirmed" | "cancelled" | "waitlist";
   created_at: string;
+  feedback_email_sent_at: string | null;
+  feedback_wa_marked_at: string | null;
 }
 
 export interface EventFeedback {

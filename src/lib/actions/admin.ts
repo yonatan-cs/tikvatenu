@@ -1,6 +1,7 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { dispatchFeedbackEmails, type DispatchResult } from "@/lib/feedback-dispatch";
 import type { RegistrationField, GalleryImage } from "@/lib/types/database";
 
 type ActionResult = { ok: true; id?: string } | { ok: false; error: string };
@@ -71,6 +72,7 @@ export async function saveEvent(data: {
   feedbackFields: RegistrationField[];
   feedbackIntroHe: string;
   feedbackIntroEn: string;
+  feedbackAutoSend: boolean;
   isPublished: boolean;
   eventType: "future" | "past";
   summaryHe: string;
@@ -105,6 +107,7 @@ export async function saveEvent(data: {
     feedback_fields: data.feedbackFields || [],
     feedback_intro_he: data.feedbackIntroHe?.trim() || null,
     feedback_intro_en: data.feedbackIntroEn?.trim() || null,
+    feedback_auto_send: data.feedbackAutoSend,
     is_published: data.isPublished,
     summary_he: isPast ? data.summaryHe || null : null,
     summary_en: isPast ? data.summaryEn || null : null,
@@ -185,6 +188,40 @@ export async function saveEvent(data: {
   }
 
   return { ok: true, id: eventId };
+}
+
+// --- sendFeedbackEmailsForEvent ---
+
+export async function sendFeedbackEmailsForEvent(eventId: string): Promise<
+  | { ok: true; result: DispatchResult }
+  | { ok: false; error: string }
+> {
+  const auth = await verifyAdmin();
+  if (auth.error) return { ok: false, error: auth.error };
+
+  const adminSupabase = createAdminClient();
+  const result = await dispatchFeedbackEmails(adminSupabase, { eventId });
+  return { ok: true, result };
+}
+
+// --- markFeedbackWaSent ---
+
+export async function markFeedbackWaSent(registrationIds: string[]): Promise<
+  | { ok: true; count: number }
+  | { ok: false; error: string }
+> {
+  const auth = await verifyAdmin();
+  if (auth.error) return { ok: false, error: auth.error };
+  if (registrationIds.length === 0) return { ok: true, count: 0 };
+
+  const adminSupabase = createAdminClient();
+  const { error } = await adminSupabase
+    .from("event_registrations")
+    .update({ feedback_wa_marked_at: new Date().toISOString() })
+    .in("id", registrationIds);
+
+  if (error) return { ok: false, error: error.message };
+  return { ok: true, count: registrationIds.length };
 }
 
 // --- saveArticle ---
