@@ -71,11 +71,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       alternateLocale: locale === "he" ? "en_US" : "he_IL",
       type: "website",
       siteName: "תקוותנו - Tikvatenu",
+      images: [
+        {
+          url: "/images/logo.jpg",
+          width: 828,
+          height: 460,
+          alt: "תקוותנו",
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: t("title"),
       description: t("description"),
+      images: ["/images/logo.jpg"],
     },
     robots: {
       index: true,
