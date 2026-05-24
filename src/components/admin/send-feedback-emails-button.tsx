@@ -49,7 +49,7 @@ export function SendFeedbackEmailsButton({ eventId, unsentCount, isHebrew }: Pro
   return (
     <Button onClick={handleSend} variant="outline" size="sm" disabled={sending || unsentCount === 0}>
       {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Mail className="w-4 h-4" />}
-      {isHebrew ? `שלח מייל ל-${unsentCount}` : `Email ${unsentCount}`}
+      {isHebrew ? `שלח מייל לנרשמים (${unsentCount})` : `Email registrants (${unsentCount})`}
     </Button>
   );
 }
