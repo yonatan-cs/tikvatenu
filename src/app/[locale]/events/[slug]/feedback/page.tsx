@@ -90,7 +90,7 @@ export default async function FeedbackPage({ params }: Props) {
             }
             isHebrew={isHebrew}
             startOpen
-            intro={isHebrew ? typedEvent.feedback_intro_he : typedEvent.feedback_intro_en}
+            intro={isHebrew ? typedEvent.feedback_intro_he : (typedEvent.feedback_intro_en || typedEvent.feedback_intro_he)}
           />
         )}
       </div>

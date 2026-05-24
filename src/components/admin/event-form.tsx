@@ -555,30 +555,33 @@ export function EventForm({ event, existingGalleryImages = [], existingAlbumId, 
         </CardHeader>
         <CardContent className="space-y-5">
           <div>
-            <Label className="mb-1.5">
-              {isHebrew ? "טקסט פתיחה (אופציונלי) — עברית" : "Intro text (optional) — Hebrew"}
+            <Label className="mb-2 block">
+              {isHebrew ? "טקסט פתיחה (אופציונלי)" : "Intro text (optional)"}
             </Label>
-            <Textarea
-              value={feedbackIntroHe}
-              onChange={(e) => setFeedbackIntroHe(e.target.value)}
-              dir="rtl"
-              rows={5}
-              placeholder={isHebrew
-                ? "טקסט שיופיע מעל השאלות. ריק = טקסט ברירת מחדל."
-                : "Text shown above questions. Empty = default."}
-            />
-          </div>
-          <div>
-            <Label className="mb-1.5">
-              {isHebrew ? "טקסט פתיחה (אופציונלי) — אנגלית" : "Intro text (optional) — English"}
-            </Label>
-            <Textarea
-              value={feedbackIntroEn}
-              onChange={(e) => setFeedbackIntroEn(e.target.value)}
-              dir="ltr"
-              rows={5}
-              placeholder="Text shown above questions. Empty = default."
-            />
+            <Tabs defaultValue="he" className="w-full">
+              <TabsList>
+                <TabsTrigger value="he">עברית</TabsTrigger>
+                <TabsTrigger value="en">English</TabsTrigger>
+              </TabsList>
+              <TabsContent value="he">
+                <Textarea
+                  value={feedbackIntroHe}
+                  onChange={(e) => setFeedbackIntroHe(e.target.value)}
+                  dir="rtl"
+                  rows={6}
+                  placeholder="טקסט שיופיע מעל השאלות. ריק = טקסט ברירת מחדל."
+                />
+              </TabsContent>
+              <TabsContent value="en">
+                <Textarea
+                  value={feedbackIntroEn}
+                  onChange={(e) => setFeedbackIntroEn(e.target.value)}
+                  dir="ltr"
+                  rows={6}
+                  placeholder="Empty = falls back to Hebrew text."
+                />
+              </TabsContent>
+            </Tabs>
           </div>
           <RegistrationFieldBuilder
             fields={feedbackFields}
