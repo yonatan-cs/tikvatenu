@@ -13,6 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ImageUploader } from "./image-uploader";
 import { RichTextEditor } from "./rich-text-editor";
 import { RegistrationFieldBuilder } from "./registration-field-builder";
+import { DEFAULT_FEEDBACK_FIELDS } from "@/lib/constants/default-feedback-fields";
 import { Save, Loader2, Upload, X, CalendarCheck, History, Send } from "lucide-react";
 import type { Event, RegistrationField, GalleryImage } from "@/lib/types/database";
 import Image from "next/image";
@@ -60,6 +61,11 @@ export function EventForm({ event, existingGalleryImages = [], existingAlbumId, 
   const [maxParticipants, setMaxParticipants] = useState(event?.max_participants?.toString() || "");
   const [registrationFields, setRegistrationFields] = useState<RegistrationField[]>(
     event?.registration_fields || []
+  );
+  const [feedbackFields, setFeedbackFields] = useState<RegistrationField[]>(
+    event?.feedback_fields && event.feedback_fields.length > 0
+      ? event.feedback_fields
+      : DEFAULT_FEEDBACK_FIELDS
   );
   // Gallery images for past events
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>(existingGalleryImages);
@@ -132,6 +138,7 @@ export function EventForm({ event, existingGalleryImages = [], existingAlbumId, 
         registrationDeadline,
         maxParticipants,
         registrationFields,
+        feedbackFields,
         isPublished: publish ? true : (event?.is_published || false),
         eventType,
         summaryHe: "",
@@ -183,6 +190,7 @@ export function EventForm({ event, existingGalleryImages = [], existingAlbumId, 
         registrationDeadline,
         maxParticipants,
         registrationFields,
+        feedbackFields,
         isPublished: false,
         eventType,
         summaryHe: "",
@@ -526,6 +534,35 @@ export function EventForm({ event, existingGalleryImages = [], existingAlbumId, 
           </CardContent>
         </Card>
       )}
+
+      {/* Feedback form (available for all events) */}
+      <Card>
+        <CardHeader>
+          <CardTitle className={isHebrew ? "font-['Secular_One']" : ""}>
+            {isHebrew ? "טופס משוב" : "Feedback Form"}
+          </CardTitle>
+          <p className="text-xs text-ink-muted mt-1">
+            {isHebrew
+              ? "טופס המשוב יוצג למשתתפים אחרי שהאירוע יסתיים. ניתן לערוך את השאלות, להוסיף ולמחוק לפי האירוע הספציפי."
+              : "Feedback form is shown to participants after the event ends. Customize questions per event."}
+          </p>
+        </CardHeader>
+        <CardContent>
+          <RegistrationFieldBuilder
+            fields={feedbackFields}
+            onChange={setFeedbackFields}
+            isHebrew={isHebrew}
+            title={{ he: "שאלות משוב", en: "Feedback Questions" }}
+            defaultFields={[
+              { he: "שם בישראל", en: "Name", type: "text" },
+            ]}
+            defaultFieldsHint={{
+              he: "שם הוא שדה ברירת מחדל. הוסיפו ושנו שאלות לפי הצורך.",
+              en: "Name is a default field. Add and edit questions as needed.",
+            }}
+          />
+        </CardContent>
+      </Card>
 
       {/* Event Photos - Only for past events */}
       {isPast && (

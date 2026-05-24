@@ -1,4 +1,4 @@
-export type RegistrationFieldType = "text" | "email" | "phone" | "number" | "select" | "checkbox";
+export type RegistrationFieldType = "text" | "email" | "phone" | "number" | "select" | "checkbox" | "rating" | "textarea";
 
 export interface RegistrationField {
   id: string;
@@ -28,6 +28,7 @@ export interface Event {
   registration_deadline: string | null;
   max_participants: number | null;
   registration_fields: RegistrationField[];
+  feedback_fields: RegistrationField[];
   is_published: boolean;
   summary_he: string | null;
   summary_en: string | null;
@@ -44,6 +45,14 @@ export interface EventRegistration {
   phone: string | null;
   custom_fields: Record<string, string | number | boolean>;
   status: "confirmed" | "cancelled" | "waitlist";
+  created_at: string;
+}
+
+export interface EventFeedback {
+  id: string;
+  event_id: string;
+  respondent_name: string;
+  responses: Record<string, string | number | boolean>;
   created_at: string;
 }
 

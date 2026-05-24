@@ -1,0 +1,75 @@
+import type { RegistrationField } from "@/lib/types/database";
+
+export const DEFAULT_FEEDBACK_FIELDS: RegistrationField[] = [
+  {
+    id: "insight",
+    label_he: "דבר ראשון - עם איזו תובנה/מחשבה/הרהור יצאת מהאירוע?",
+    label_en: "First — what insight/thought did you leave the event with?",
+    type: "textarea",
+    required: true,
+  },
+  {
+    id: "how_heard",
+    label_he: "כדי שנמשיך לגדול נשמח לדעת מה הביא אתכם.ן לתיקון שלנו?",
+    label_en: "What brought you to our event?",
+    type: "select",
+    required: true,
+    options: ["אינסטגרם", "חבר/ה מאירוע קודם", "חבר שהשתתף והמליץ", "פרסום בווצאפ", "אחר"],
+  },
+  {
+    id: "continue",
+    label_he: "האם את/ה מעוניין/ת להמשיך בתקוותנו?",
+    label_en: "Are you interested in continuing with Tikvatenu?",
+    type: "select",
+    required: true,
+    options: [
+      "כן",
+      "לא",
+      "כן ואפילו לעזור ולקחת חלק מעבר להשתתפות בשבתות",
+      "אחר",
+    ],
+  },
+  {
+    id: "flyer_accuracy",
+    label_he: "האם לדעתך הפלייר שיקף את תוכן האירוע? (1 = לא שיקף, 5 = תאם את הציפיות)",
+    label_en: "Did the flyer reflect the event content? (1 = no, 5 = matched expectations)",
+    type: "rating",
+    required: true,
+  },
+  {
+    id: "favorite_slot",
+    label_he: "לאיזה משבצת הכי התחברת?",
+    label_en: "Which session did you connect with most?",
+    type: "select",
+    required: true,
+    options: [],
+  },
+  {
+    id: "hit_goal",
+    label_he: "האם תוכן האירוע הצליח לקלוע למטרה? העמקה סביב השאלה האם נצליח להגיע לרגע שבו אנו נושאים את עינינו לעתיד משותף?",
+    label_en: "Did the content hit the goal of looking toward a shared future?",
+    type: "textarea",
+    required: true,
+  },
+  {
+    id: "logistics",
+    label_he: "הארות בפן הלוגיסטי - אוכל, ניווט למיקום, שירותים, מרחבי למידה, מיקום האירוע ועוד...",
+    label_en: "Logistical feedback — food, navigation, facilities, learning spaces, venue...",
+    type: "textarea",
+    required: true,
+  },
+  {
+    id: "direction",
+    label_he: "מה את.ה חושב.ת שהכיוון שהיית רוצה ש'תקוותנו' תלך אליו? כיצד לדעתך אנחנו צריכים לגדול ולהתפתח?",
+    label_en: "What direction should Tikvatenu take? How should we grow?",
+    type: "textarea",
+    required: true,
+  },
+  {
+    id: "extra",
+    label_he: "עוד משהו שתרצו להוסיף?",
+    label_en: "Anything else you'd like to add?",
+    type: "textarea",
+    required: false,
+  },
+];

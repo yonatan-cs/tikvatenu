@@ -4,9 +4,9 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle2, Loader2, AlertCircle, CalendarPlus, CreditCard } from "lucide-react";
+import { DynamicFields } from "./dynamic-fields";
 import type { RegistrationField } from "@/lib/types/database";
 
 interface RegistrationFormProps {
@@ -205,73 +205,12 @@ export function RegistrationForm({
           </div>
 
           {/* Custom fields from JSONB */}
-          {fields.map((field) => {
-            const label = isHebrew ? field.label_he : field.label_en;
-            const selectedValue = customFields[field.id] || "";
-            const isOtherSelected = selectedValue === "אחר";
-
-            if (field.type === "checkbox") {
-              return (
-                <div key={field.id} className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id={`field-${field.id}`}
-                    checked={selectedValue === "true"}
-                    onChange={(e) => updateCustomField(field.id, e.target.checked.toString())}
-                    className="rounded border-branch/20"
-                    required={field.required}
-                  />
-                  <label htmlFor={`field-${field.id}`} className="text-sm text-ink-light cursor-pointer">
-                    {label} {field.required && <span className="text-terracotta">*</span>}
-                  </label>
-                </div>
-              );
-            }
-
-            return (
-              <div key={field.id}>
-                <Label className="mb-1.5">
-                  {label} {field.required && "*"}
-                </Label>
-
-                {field.type === "select" ? (
-                  <>
-                    <Select
-                      value={selectedValue}
-                      onValueChange={(val) => updateCustomField(field.id, val)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder={isHebrew ? "בחרו אפשרות" : "Select option"} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {field.options?.map((opt) => (
-                          <SelectItem key={opt} value={opt}>
-                            {opt}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    {isOtherSelected && (
-                      <Input
-                        className="mt-2"
-                        placeholder={isHebrew ? "פרטו כאן..." : "Please specify..."}
-                        value={customFields[`${field.id}__other`] || ""}
-                        onChange={(e) => updateCustomField(`${field.id}__other`, e.target.value)}
-                        required={field.required}
-                      />
-                    )}
-                  </>
-                ) : (
-                  <Input
-                    type={field.type === "number" ? "number" : field.type === "email" ? "email" : field.type === "phone" ? "tel" : "text"}
-                    value={selectedValue}
-                    onChange={(e) => updateCustomField(field.id, e.target.value)}
-                    required={field.required}
-                  />
-                )}
-              </div>
-            );
-          })}
+          <DynamicFields
+            fields={fields}
+            values={customFields}
+            onChange={updateCustomField}
+            isHebrew={isHebrew}
+          />
 
           {paymentLink && (
             <div className="bg-branch/5 border border-branch/20 rounded-lg p-3 text-sm">

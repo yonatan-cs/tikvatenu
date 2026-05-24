@@ -5,8 +5,9 @@ import { createClient } from "@/lib/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Download, Search } from "lucide-react";
+import { Download, Search, List, BarChart2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { ResponseCharts } from "./response-charts";
 import type { EventRegistration, RegistrationField } from "@/lib/types/database";
 
 interface RegistrationsTableProps {
@@ -30,6 +31,21 @@ export function RegistrationsTable({
 }: RegistrationsTableProps) {
   const [registrations, setRegistrations] = useState(initialRegistrations);
   const [searchQuery, setSearchQuery] = useState("");
+  const [view, setView] = useState<"table" | "charts">("table");
+
+  const statusField: RegistrationField = {
+    id: "__status",
+    label_he: "סטטוס",
+    label_en: "Status",
+    type: "select",
+    required: false,
+    options: ["confirmed", "waitlist", "cancelled"],
+  };
+  const chartFields = [statusField, ...customFields];
+  const chartResponses = registrations.map((r) => ({
+    ...r.custom_fields,
+    __status: r.status,
+  }));
 
   const filtered = registrations.filter((r) => {
     if (!searchQuery) return true;
@@ -90,7 +106,45 @@ export function RegistrationsTable({
   }
 
   return (
-    <div className="bg-white rounded-xl border border-branch/5 overflow-hidden">
+    <div className="space-y-4">
+      {/* View toggle */}
+      <div className="flex items-center justify-between gap-2">
+        <div className="inline-flex rounded-lg border border-branch/10 p-0.5 bg-white">
+          <button
+            type="button"
+            onClick={() => setView("table")}
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors cursor-pointer ${
+              view === "table" ? "bg-navy/5 text-navy" : "text-ink-muted hover:text-navy"
+            }`}
+          >
+            <List className="w-4 h-4" />
+            {isHebrew ? "רשימה" : "List"}
+          </button>
+          <button
+            type="button"
+            onClick={() => setView("charts")}
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors cursor-pointer ${
+              view === "charts" ? "bg-navy/5 text-navy" : "text-ink-muted hover:text-navy"
+            }`}
+          >
+            <BarChart2 className="w-4 h-4" />
+            {isHebrew ? "גרפים" : "Charts"}
+          </button>
+        </div>
+        <Button onClick={exportCSV} variant="outline" size="sm">
+          <Download className="w-4 h-4" />
+          {isHebrew ? "ייצוא CSV" : "Export CSV"}
+        </Button>
+      </div>
+
+      {view === "charts" ? (
+        <ResponseCharts
+          responses={chartResponses}
+          fields={chartFields}
+          isHebrew={isHebrew}
+        />
+      ) : (
+      <div className="bg-white rounded-xl border border-branch/5 overflow-hidden">
       {/* Toolbar */}
       <div className="flex items-center justify-between gap-4 p-4 border-b border-branch/5">
         <div className="relative flex-1 max-w-sm">
@@ -102,10 +156,6 @@ export function RegistrationsTable({
             className="ps-9 h-9"
           />
         </div>
-        <Button onClick={exportCSV} variant="outline" size="sm">
-          <Download className="w-4 h-4" />
-          {isHebrew ? "ייצוא CSV" : "Export CSV"}
-        </Button>
       </div>
 
       {/* Table */}
@@ -181,6 +231,8 @@ export function RegistrationsTable({
             </tbody>
           </table>
         </div>
+      )}
+      </div>
       )}
     </div>
   );

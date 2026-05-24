@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Users, Download } from "lucide-react";
 import { RegistrationsTable } from "@/components/admin/registrations-table";
+import { EventAdminTabs } from "@/components/admin/event-admin-tabs";
 import type { Event, EventRegistration, RegistrationField } from "@/lib/types/database";
 
 type Props = {
@@ -59,6 +60,8 @@ export default async function RegistrationsPage({ params }: Props) {
           </h1>
         </div>
       </div>
+
+      <EventAdminTabs eventId={typedEvent.id} isHebrew={isHebrew} />
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4 mb-6">

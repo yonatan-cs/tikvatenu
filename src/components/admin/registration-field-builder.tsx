@@ -30,6 +30,9 @@ interface RegistrationFieldBuilderProps {
   fields: RegistrationField[];
   onChange: (fields: RegistrationField[]) => void;
   isHebrew: boolean;
+  title?: { he: string; en: string };
+  defaultFields?: Array<{ he: string; en: string; type: RegistrationFieldType }>;
+  defaultFieldsHint?: { he: string; en: string };
 }
 
 const fieldTypeLabels: Record<RegistrationFieldType, { he: string; en: string }> = {
@@ -39,6 +42,8 @@ const fieldTypeLabels: Record<RegistrationFieldType, { he: string; en: string }>
   number: { he: "מספר", en: "Number" },
   select: { he: "בחירה", en: "Select" },
   checkbox: { he: "תיבת סימון", en: "Checkbox" },
+  rating: { he: "דירוג 1-5", en: "Rating 1-5" },
+  textarea: { he: "טקסט ארוך", en: "Long Text" },
 };
 
 interface SortableFieldItemProps {
@@ -202,7 +207,26 @@ function SortableFieldItem({
   );
 }
 
-export function RegistrationFieldBuilder({ fields, onChange, isHebrew }: RegistrationFieldBuilderProps) {
+const DEFAULT_REGISTRATION_DEFAULT_FIELDS = [
+  { he: "שם מלא", en: "Full Name", type: "text" as RegistrationFieldType },
+  { he: "אימייל", en: "Email", type: "email" as RegistrationFieldType },
+  { he: "טלפון", en: "Phone", type: "phone" as RegistrationFieldType },
+];
+
+export function RegistrationFieldBuilder({
+  fields,
+  onChange,
+  isHebrew,
+  title,
+  defaultFields,
+  defaultFieldsHint,
+}: RegistrationFieldBuilderProps) {
+  const resolvedTitle = title || { he: "שדות טופס הרשמה", en: "Registration Form Fields" };
+  const resolvedDefaultFields = defaultFields ?? DEFAULT_REGISTRATION_DEFAULT_FIELDS;
+  const resolvedHint = defaultFieldsHint || {
+    he: "שם מלא, אימייל וטלפון הם שדות ברירת מחדל. הוסיפו שדות נוספים לפי הצורך.",
+    en: "Full name, email, and phone are default fields. Add custom fields as needed.",
+  };
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const sensors = useSensors(
@@ -244,7 +268,7 @@ export function RegistrationFieldBuilder({ fields, onChange, isHebrew }: Registr
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <Label className="text-sm font-semibold text-navy">
-          {isHebrew ? "שדות טופס הרשמה" : "Registration Form Fields"}
+          {isHebrew ? resolvedTitle.he : resolvedTitle.en}
         </Label>
         <span className="text-xs text-ink-muted">
           {isHebrew ? `${fields.length} שדות` : `${fields.length} fields`}
@@ -252,18 +276,12 @@ export function RegistrationFieldBuilder({ fields, onChange, isHebrew }: Registr
       </div>
 
       <p className="text-xs text-ink-muted">
-        {isHebrew
-          ? "שם מלא, אימייל וטלפון הם שדות ברירת מחדל. הוסיפו שדות נוספים לפי הצורך."
-          : "Full name, email, and phone are default fields. Add custom fields as needed."}
+        {isHebrew ? resolvedHint.he : resolvedHint.en}
       </p>
 
       {/* Default fields preview */}
       <div className="space-y-1.5">
-        {[
-          { he: "שם מלא", en: "Full Name", type: "text" },
-          { he: "אימייל", en: "Email", type: "email" },
-          { he: "טלפון", en: "Phone", type: "phone" },
-        ].map((df) => (
+        {resolvedDefaultFields.map((df) => (
           <div
             key={df.en}
             className="flex items-center gap-3 px-3 py-2 rounded-lg bg-navy/3 border border-branch/5 text-sm"

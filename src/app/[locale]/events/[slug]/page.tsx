@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Link } from "@/i18n/navigation";
 import { RegistrationForm } from "@/components/events/registration-form";
+import { FeedbackForm } from "@/components/events/feedback-form";
+import { DEFAULT_FEEDBACK_FIELDS } from "@/lib/constants/default-feedback-fields";
 import { loc } from "@/lib/utils/loc";
 import { Calendar, MapPin, Users, Clock, ArrowRight, Flag } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -278,11 +280,16 @@ export default async function EventDetailPage({ params }: Props) {
                   paymentLink={typedEvent.payment_link || null}
                 />
               ) : (
-                <div className="bg-white rounded-2xl border border-branch/5 p-6 text-center">
-                  <p className="text-ink-muted">
-                    {isHebrew ? "האירוע הזה כבר הסתיים" : "This event has already taken place"}
-                  </p>
-                </div>
+                <FeedbackForm
+                  eventId={typedEvent.id}
+                  eventTitle={title}
+                  fields={
+                    (typedEvent.feedback_fields && typedEvent.feedback_fields.length > 0
+                      ? typedEvent.feedback_fields
+                      : DEFAULT_FEEDBACK_FIELDS) as RegistrationField[]
+                  }
+                  isHebrew={isHebrew}
+                />
               )}
             </div>
           </div>
