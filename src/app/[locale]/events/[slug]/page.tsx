@@ -289,6 +289,7 @@ export default async function EventDetailPage({ params }: Props) {
                       : DEFAULT_FEEDBACK_FIELDS) as RegistrationField[]
                   }
                   isHebrew={isHebrew}
+                  intro={isHebrew ? typedEvent.feedback_intro_he : typedEvent.feedback_intro_en}
                 />
               )}
             </div>

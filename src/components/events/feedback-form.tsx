@@ -15,9 +15,10 @@ interface FeedbackFormProps {
   fields: RegistrationField[];
   isHebrew: boolean;
   startOpen?: boolean;
+  intro?: string | null;
 }
 
-export function FeedbackForm({ eventId, eventTitle, fields, isHebrew, startOpen = false }: FeedbackFormProps) {
+export function FeedbackForm({ eventId, eventTitle, fields, isHebrew, startOpen = false, intro }: FeedbackFormProps) {
   const [open, setOpen] = useState(startOpen);
   const [respondentName, setRespondentName] = useState("");
   const [responses, setResponses] = useState<Record<string, string>>({});
@@ -111,11 +112,17 @@ export function FeedbackForm({ eventId, eventTitle, fields, isHebrew, startOpen 
         <CardTitle className={isHebrew ? "font-['Secular_One']" : "font-[family-name:var(--font-playfair)]"}>
           {isHebrew ? `משוב: ${eventTitle}` : `Feedback: ${eventTitle}`}
         </CardTitle>
-        <p className="text-sm text-ink-muted mt-1">
-          {isHebrew
-            ? "תודה שהשתתפת. נשמח לקבל את המשוב שלך."
-            : "Thanks for attending. We'd love to hear from you."}
-        </p>
+        {intro && intro.trim() ? (
+          <p className="text-sm text-ink-light mt-2 whitespace-pre-line leading-relaxed">
+            {intro}
+          </p>
+        ) : (
+          <p className="text-sm text-ink-muted mt-1">
+            {isHebrew
+              ? "תודה שהשתתפת. נשמח לקבל את המשוב שלך."
+              : "Thanks for attending. We'd love to hear from you."}
+          </p>
+        )}
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">

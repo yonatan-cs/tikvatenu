@@ -29,6 +29,8 @@ export interface Event {
   max_participants: number | null;
   registration_fields: RegistrationField[];
   feedback_fields: RegistrationField[];
+  feedback_intro_he: string | null;
+  feedback_intro_en: string | null;
   is_published: boolean;
   summary_he: string | null;
   summary_en: string | null;

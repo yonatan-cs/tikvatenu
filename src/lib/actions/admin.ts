@@ -69,6 +69,8 @@ export async function saveEvent(data: {
   maxParticipants: string;
   registrationFields: RegistrationField[];
   feedbackFields: RegistrationField[];
+  feedbackIntroHe: string;
+  feedbackIntroEn: string;
   isPublished: boolean;
   eventType: "future" | "past";
   summaryHe: string;
@@ -101,6 +103,8 @@ export async function saveEvent(data: {
     max_participants: !isPast && data.maxParticipants ? parseInt(data.maxParticipants) : null,
     registration_fields: !isPast ? data.registrationFields : [],
     feedback_fields: data.feedbackFields || [],
+    feedback_intro_he: data.feedbackIntroHe?.trim() || null,
+    feedback_intro_en: data.feedbackIntroEn?.trim() || null,
     is_published: data.isPublished,
     summary_he: isPast ? data.summaryHe || null : null,
     summary_en: isPast ? data.summaryEn || null : null,

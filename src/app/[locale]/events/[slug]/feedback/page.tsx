@@ -42,14 +42,14 @@ export default async function FeedbackPage({ params }: Props) {
   const supabase = await createClient();
   const { data: event } = await supabase
     .from("events")
-    .select("id, slug, title_he, title_en, event_date, feedback_fields, is_published")
+    .select("id, slug, title_he, title_en, event_date, feedback_fields, feedback_intro_he, feedback_intro_en, is_published")
     .eq("slug", slug)
     .eq("is_published", true)
     .single();
 
   if (!event) notFound();
 
-  const typedEvent = event as Pick<Event, "id" | "slug" | "title_he" | "title_en" | "event_date" | "feedback_fields" | "is_published">;
+  const typedEvent = event as Pick<Event, "id" | "slug" | "title_he" | "title_en" | "event_date" | "feedback_fields" | "feedback_intro_he" | "feedback_intro_en" | "is_published">;
   const title = loc(typedEvent.title_he, typedEvent.title_en, isHebrew);
   const isPast = new Date(typedEvent.event_date) < new Date();
 
@@ -90,6 +90,7 @@ export default async function FeedbackPage({ params }: Props) {
             }
             isHebrew={isHebrew}
             startOpen
+            intro={isHebrew ? typedEvent.feedback_intro_he : typedEvent.feedback_intro_en}
           />
         )}
       </div>

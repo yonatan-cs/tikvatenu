@@ -67,6 +67,8 @@ export function EventForm({ event, existingGalleryImages = [], existingAlbumId, 
       ? event.feedback_fields
       : DEFAULT_FEEDBACK_FIELDS
   );
+  const [feedbackIntroHe, setFeedbackIntroHe] = useState(event?.feedback_intro_he || "");
+  const [feedbackIntroEn, setFeedbackIntroEn] = useState(event?.feedback_intro_en || "");
   // Gallery images for past events
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>(existingGalleryImages);
   const [uploading, setUploading] = useState(false);
@@ -139,6 +141,8 @@ export function EventForm({ event, existingGalleryImages = [], existingAlbumId, 
         maxParticipants,
         registrationFields,
         feedbackFields,
+        feedbackIntroHe,
+        feedbackIntroEn,
         isPublished: publish ? true : (event?.is_published || false),
         eventType,
         summaryHe: "",
@@ -191,6 +195,8 @@ export function EventForm({ event, existingGalleryImages = [], existingAlbumId, 
         maxParticipants,
         registrationFields,
         feedbackFields,
+        feedbackIntroHe,
+        feedbackIntroEn,
         isPublished: false,
         eventType,
         summaryHe: "",
@@ -547,7 +553,33 @@ export function EventForm({ event, existingGalleryImages = [], existingAlbumId, 
               : "Feedback form is shown to participants after the event ends. Customize questions per event."}
           </p>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-5">
+          <div>
+            <Label className="mb-1.5">
+              {isHebrew ? "טקסט פתיחה (אופציונלי) — עברית" : "Intro text (optional) — Hebrew"}
+            </Label>
+            <Textarea
+              value={feedbackIntroHe}
+              onChange={(e) => setFeedbackIntroHe(e.target.value)}
+              dir="rtl"
+              rows={5}
+              placeholder={isHebrew
+                ? "טקסט שיופיע מעל השאלות. ריק = טקסט ברירת מחדל."
+                : "Text shown above questions. Empty = default."}
+            />
+          </div>
+          <div>
+            <Label className="mb-1.5">
+              {isHebrew ? "טקסט פתיחה (אופציונלי) — אנגלית" : "Intro text (optional) — English"}
+            </Label>
+            <Textarea
+              value={feedbackIntroEn}
+              onChange={(e) => setFeedbackIntroEn(e.target.value)}
+              dir="ltr"
+              rows={5}
+              placeholder="Text shown above questions. Empty = default."
+            />
+          </div>
           <RegistrationFieldBuilder
             fields={feedbackFields}
             onChange={setFeedbackFields}
