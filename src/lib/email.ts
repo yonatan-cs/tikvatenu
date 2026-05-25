@@ -292,9 +292,6 @@ export async function sendFeedbackEmail({
           </table>
         </div>
 
-        <p style="color: #7a7a7a; font-size: 13px; margin: 28px 0 0; text-align: center;">
-          תקוותנו - צעירים למען עתיד ישראל
-        </p>
       </div>
     </div>
   `;
