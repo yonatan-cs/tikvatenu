@@ -280,12 +280,12 @@ export async function sendFeedbackEmail({
             <tr>
               <td style="padding: 0 6px;">
                 <a href="${COMMUNITY_LINKS.whatsappGroup}" style="display: inline-block; background: #25D366; color: white; padding: 11px 24px; border-radius: 10px; text-decoration: none; font-size: 14px; font-weight: 600; white-space: nowrap;">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" style="vertical-align: -4px; margin-left: 6px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg><span style="vertical-align: middle;">וואצאפ</span>
+                  <img src="https://img.icons8.com/ios-filled/50/ffffff/whatsapp--v1.png" width="16" height="16" alt="" style="vertical-align: -3px; margin-left: 6px; border: 0;"/><span style="vertical-align: middle;">וואצאפ</span>
                 </a>
               </td>
               <td style="padding: 0 6px;">
                 <a href="${COMMUNITY_LINKS.instagram}" style="display: inline-block; background: linear-gradient(135deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%); color: white; padding: 11px 24px; border-radius: 10px; text-decoration: none; font-size: 14px; font-weight: 600; white-space: nowrap;">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" style="vertical-align: -4px; margin-left: 6px;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg><span style="vertical-align: middle;">אינסטגרם</span>
+                  <img src="https://img.icons8.com/ios/50/ffffff/instagram-new--v1.png" width="16" height="16" alt="" style="vertical-align: -3px; margin-left: 6px; border: 0;"/><span style="vertical-align: middle;">אינסטגרם</span>
                 </a>
               </td>
             </tr>
