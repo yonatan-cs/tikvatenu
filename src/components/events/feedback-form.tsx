@@ -72,7 +72,7 @@ export function FeedbackForm({ eventId, eventTitle, fields, isHebrew, startOpen 
           </h3>
           <p className="text-sm text-ink-muted mb-8">
             {isHebrew
-              ? "המשוב שלכם.ן יעזור לנו לגדול ולהשתפר."
+              ? "המשוב שלך עוזר לנו לגדול ולהשתפר."
               : "Your feedback helps us grow and improve."}
           </p>
 
