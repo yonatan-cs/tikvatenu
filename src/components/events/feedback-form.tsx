@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle2, Loader2, MessageSquare } from "lucide-react";
+import { CheckCircle2, Loader2, MessageSquare, MessageCircle, Instagram } from "lucide-react";
 import { DynamicFields } from "./dynamic-fields";
+import { COMMUNITY_LINKS } from "@/lib/constants/community";
 import type { RegistrationField } from "@/lib/types/database";
 
 interface FeedbackFormProps {
@@ -69,11 +70,42 @@ export function FeedbackForm({ eventId, eventTitle, fields, isHebrew, startOpen 
           <h3 className={`text-xl font-bold text-navy mb-2 ${isHebrew ? "font-['Secular_One']" : "font-[family-name:var(--font-playfair)]"}`}>
             {isHebrew ? "תודה על המשוב!" : "Thank you for your feedback!"}
           </h3>
-          <p className="text-sm text-ink-muted">
+          <p className="text-sm text-ink-muted mb-8">
             {isHebrew
               ? "המשוב שלכם.ן יעזור לנו לגדול ולהשתפר."
               : "Your feedback helps us grow and improve."}
           </p>
+
+          <div className="pt-6 border-t border-branch/10">
+            <h4 className={`text-base font-bold text-navy mb-2 ${isHebrew ? "font-['Secular_One']" : "font-[family-name:var(--font-playfair)]"}`}>
+              {isHebrew ? "הישארו מעודכנים!" : "Stay updated!"}
+            </h4>
+            <p className="text-sm text-ink-light mb-5 leading-relaxed">
+              {isHebrew
+                ? "הצטרפו לקבוצת ה-WhatsApp שלנו לעדכונים על אירועים, ועקבו אחרינו באינסטגרם 💞🤩"
+                : "Join our WhatsApp group for event updates and follow us on Instagram 💞🤩"}
+            </p>
+            <div className="flex items-center justify-center gap-2.5 flex-wrap">
+              <a
+                href={COMMUNITY_LINKS.whatsappGroup}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#25D366] text-white font-semibold text-sm shadow-md shadow-[#25D366]/15 hover:opacity-90 hover:-translate-y-0.5 transition-all"
+              >
+                <MessageCircle className="w-4 h-4" />
+                {isHebrew ? "קבוצת WhatsApp" : "WhatsApp Group"}
+              </a>
+              <a
+                href={COMMUNITY_LINKS.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] text-white font-semibold text-sm shadow-md shadow-[#fd1d1d]/15 hover:opacity-90 hover:-translate-y-0.5 transition-all"
+              >
+                <Instagram className="w-4 h-4" />
+                {isHebrew ? "אינסטגרם" : "Instagram"}
+              </a>
+            </div>
+          </div>
         </CardContent>
       </Card>
     );

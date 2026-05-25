@@ -234,7 +234,7 @@ export async function sendFeedbackEmail({
 
   const subject = `נשמח לשמוע ממך - ${eventTitle}`;
   const introBlock = customIntro && customIntro.trim()
-    ? `<div style="background: white; border: 1px solid #e8e4de; border-radius: 12px; padding: 16px; margin: 0 0 20px; color: #4a4a4a; line-height: 1.7; white-space: pre-line;">${escapeHtml(customIntro)}</div>`
+    ? `<p style="color: #4a4a4a; line-height: 1.7; margin: 0 0 16px; white-space: pre-line;">${escapeHtml(customIntro)}</p>`
     : "";
 
   const html = `
@@ -269,29 +269,30 @@ export async function sendFeedbackEmail({
           <a href="${feedbackUrl}" style="color: #c97b5b;">${feedbackUrl}</a>
         </p>
 
-        <div style="margin: 32px 0 0; padding: 20px; background: white; border: 1px solid #e8e4de; border-radius: 12px;">
-          <p style="color: #1e3a5f; font-weight: 600; margin: 0 0 8px; font-size: 14px;">
-            רוצים להישאר מעודכנים?
+        <div style="margin: 36px 0 0; padding: 24px 0 0; border-top: 1px solid #e8e4de;">
+          <h3 style="color: #1e3a5f; font-weight: 600; margin: 0 0 10px; font-size: 17px; text-align: center;">
+            הישארו מעודכנים!
+          </h3>
+          <p style="color: #4a4a4a; font-size: 14px; line-height: 1.7; margin: 0 0 20px; text-align: center;">
+            הצטרפו לקבוצת ה-WhatsApp שלנו לעדכונים על אירועים מתוכננים וכל מה שקורה,<br>ועקבו אחרינו באינסטגרם 💞🤩
           </p>
-          <p style="color: #4a4a4a; font-size: 13px; line-height: 1.6; margin: 0 0 12px;">
-            קבוצת WhatsApp של תקוותנו - שם אנחנו מודיעים על אירועים מתוכננים וכל מה שקורה 💞🤩
-          </p>
-          <p style="margin: 0 0 12px;">
-            <a href="${COMMUNITY_LINKS.whatsappGroup}" style="display: inline-block; background: #25D366; color: white; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 600;">
-              הצטרפו לקבוצה
-            </a>
-          </p>
-          <p style="color: #4a4a4a; font-size: 13px; margin: 0 0 8px;">
-            ועקבו אחרינו באינסטגרם:
-          </p>
-          <p style="margin: 0;">
-            <a href="${COMMUNITY_LINKS.instagram}" style="color: #c97b5b; font-size: 13px; text-decoration: none;">
-              @tikvateno
-            </a>
-          </p>
+          <table role="presentation" cellpadding="0" cellspacing="0" style="margin: 0 auto;">
+            <tr>
+              <td style="padding: 0 6px;">
+                <a href="${COMMUNITY_LINKS.whatsappGroup}" style="display: inline-block; background: #25D366; color: white; padding: 11px 20px; border-radius: 10px; text-decoration: none; font-size: 14px; font-weight: 600;">
+                  <span style="vertical-align: middle;">קבוצת WhatsApp</span>
+                </a>
+              </td>
+              <td style="padding: 0 6px;">
+                <a href="${COMMUNITY_LINKS.instagram}" style="display: inline-block; background: linear-gradient(135deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%); color: white; padding: 11px 20px; border-radius: 10px; text-decoration: none; font-size: 14px; font-weight: 600;">
+                  <span style="vertical-align: middle;">אינסטגרם</span>
+                </a>
+              </td>
+            </tr>
+          </table>
         </div>
 
-        <p style="color: #7a7a7a; font-size: 13px; margin: 24px 0 0; text-align: center;">
+        <p style="color: #7a7a7a; font-size: 13px; margin: 28px 0 0; text-align: center;">
           תקוותנו - צעירים למען עתיד ישראל
         </p>
       </div>
