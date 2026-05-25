@@ -234,7 +234,7 @@ export async function sendFeedbackEmail({
 
   const subject = `נשמח לשמוע ממך - ${eventTitle}`;
   const introBlock = customIntro && customIntro.trim()
-    ? `<p style="color: #4a4a4a; line-height: 1.7; margin: 0 0 16px; white-space: pre-line;">${escapeHtml(customIntro)}</p>`
+    ? `<div style="background: white; border: 1px solid #e8e4de; border-radius: 12px; padding: 16px 20px; margin: 0 0 20px; color: #4a4a4a; line-height: 1.7; white-space: pre-line;">${escapeHtml(customIntro)}</div>`
     : "";
 
   const html = `
@@ -279,12 +279,12 @@ export async function sendFeedbackEmail({
           <table role="presentation" cellpadding="0" cellspacing="0" style="margin: 0 auto;">
             <tr>
               <td style="padding: 0 6px;">
-                <a href="${COMMUNITY_LINKS.whatsappGroup}" style="display: inline-block; background: #25D366; color: white; padding: 11px 20px; border-radius: 10px; text-decoration: none; font-size: 14px; font-weight: 600;">
-                  <span style="vertical-align: middle;">קבוצת WhatsApp</span>
+                <a href="${COMMUNITY_LINKS.whatsappGroup}" style="display: inline-block; background: #25D366; color: white; padding: 11px 24px; border-radius: 10px; text-decoration: none; font-size: 14px; font-weight: 600; white-space: nowrap;">
+                  <span style="vertical-align: middle;">וואצאפ</span>
                 </a>
               </td>
               <td style="padding: 0 6px;">
-                <a href="${COMMUNITY_LINKS.instagram}" style="display: inline-block; background: linear-gradient(135deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%); color: white; padding: 11px 20px; border-radius: 10px; text-decoration: none; font-size: 14px; font-weight: 600;">
+                <a href="${COMMUNITY_LINKS.instagram}" style="display: inline-block; background: linear-gradient(135deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%); color: white; padding: 11px 24px; border-radius: 10px; text-decoration: none; font-size: 14px; font-weight: 600; white-space: nowrap;">
                   <span style="vertical-align: middle;">אינסטגרם</span>
                 </a>
               </td>

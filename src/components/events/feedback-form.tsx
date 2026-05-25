@@ -93,7 +93,7 @@ export function FeedbackForm({ eventId, eventTitle, fields, isHebrew, startOpen 
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#25D366] text-white font-semibold text-sm shadow-md shadow-[#25D366]/15 hover:opacity-90 hover:-translate-y-0.5 transition-all"
               >
                 <MessageCircle className="w-4 h-4" />
-                {isHebrew ? "קבוצת WhatsApp" : "WhatsApp Group"}
+                {isHebrew ? "וואצאפ" : "WhatsApp"}
               </a>
               <a
                 href={COMMUNITY_LINKS.instagram}
