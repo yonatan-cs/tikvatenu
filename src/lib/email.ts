@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import { COMMUNITY_LINKS } from "@/lib/constants/community";
 
 const resend = process.env.RESEND_API_KEY && process.env.RESEND_API_KEY !== "re_placeholder"
   ? new Resend(process.env.RESEND_API_KEY)
@@ -267,6 +268,28 @@ export async function sendFeedbackEmail({
           או העתיקו את הקישור: <br>
           <a href="${feedbackUrl}" style="color: #c97b5b;">${feedbackUrl}</a>
         </p>
+
+        <div style="margin: 32px 0 0; padding: 20px; background: white; border: 1px solid #e8e4de; border-radius: 12px;">
+          <p style="color: #1e3a5f; font-weight: 600; margin: 0 0 8px; font-size: 14px;">
+            רוצים להישאר מעודכנים?
+          </p>
+          <p style="color: #4a4a4a; font-size: 13px; line-height: 1.6; margin: 0 0 12px;">
+            קבוצת WhatsApp של תקוותנו - שם אנחנו מודיעים על אירועים מתוכננים וכל מה שקורה 💞🤩
+          </p>
+          <p style="margin: 0 0 12px;">
+            <a href="${COMMUNITY_LINKS.whatsappGroup}" style="display: inline-block; background: #25D366; color: white; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 600;">
+              הצטרפו לקבוצה
+            </a>
+          </p>
+          <p style="color: #4a4a4a; font-size: 13px; margin: 0 0 8px;">
+            ועקבו אחרינו באינסטגרם:
+          </p>
+          <p style="margin: 0;">
+            <a href="${COMMUNITY_LINKS.instagram}" style="color: #c97b5b; font-size: 13px; text-decoration: none;">
+              @tikvateno
+            </a>
+          </p>
+        </div>
 
         <p style="color: #7a7a7a; font-size: 13px; margin: 24px 0 0; text-align: center;">
           תקוותנו - צעירים למען עתיד ישראל

@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { useRouter } from "@/i18n/navigation";
 import { normalizeIsraeliPhone, formatE164 } from "@/lib/utils/phone";
 import { markFeedbackWaSent } from "@/lib/actions/admin";
+import { COMMUNITY_FOOTER_HE } from "@/lib/constants/community";
 import type { EventRegistration } from "@/lib/types/database";
 
 interface WhatsAppKitProps {
@@ -35,7 +36,8 @@ function buildMessage(name: string, eventTitle: string, customIntro: string | nu
 תודה שהשתתפת ב-${eventTitle}!
 
 ${intro}נשמח לקבל את המשוב שלך:
-${url}`;
+${url}
+${COMMUNITY_FOOTER_HE}`;
 }
 
 export function WhatsAppKit({

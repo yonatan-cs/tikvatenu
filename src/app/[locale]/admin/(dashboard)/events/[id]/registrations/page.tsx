@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Users, Download } from "lucide-react";
 import { RegistrationsTable } from "@/components/admin/registrations-table";
 import { EventAdminTabs } from "@/components/admin/event-admin-tabs";
+import { AddRegistrationDialog } from "@/components/admin/add-registration-dialog";
 import type { Event, EventRegistration, RegistrationField } from "@/lib/types/database";
 
 type Props = {
@@ -59,6 +60,7 @@ export default async function RegistrationsPage({ params }: Props) {
             {isHebrew ? "נרשמים" : "Registrations"}: {isHebrew ? typedEvent.title_he : typedEvent.title_en}
           </h1>
         </div>
+        <AddRegistrationDialog eventId={typedEvent.id} isHebrew={isHebrew} />
       </div>
 
       <EventAdminTabs eventId={typedEvent.id} isHebrew={isHebrew} />

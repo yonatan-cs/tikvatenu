@@ -224,6 +224,44 @@ export async function markFeedbackWaSent(registrationIds: string[]): Promise<
   return { ok: true, count: registrationIds.length };
 }
 
+// --- addManualRegistration ---
+
+export async function addManualRegistration(data: {
+  eventId: string;
+  fullName: string;
+  phone: string;
+  email: string;
+}): Promise<{ ok: true; id: string } | { ok: false; error: string }> {
+  const auth = await verifyAdmin();
+  if (auth.error) return { ok: false, error: auth.error };
+
+  const fullName = data.fullName.trim();
+  if (!fullName) return { ok: false, error: "שם נדרש" };
+
+  const phone = data.phone.trim() || null;
+  const emailRaw = data.email.trim();
+  const email = emailRaw || `manual-${Date.now()}-${Math.random().toString(36).slice(2, 8)}@noemail.tikvatenu.local`;
+
+  const adminSupabase = createAdminClient();
+  const { data: row, error } = await adminSupabase
+    .from("event_registrations")
+    .insert({
+      event_id: data.eventId,
+      full_name: fullName,
+      phone,
+      email,
+      custom_fields: {},
+      status: "confirmed",
+      // synthetic email gets marked as already-sent so cron won't try
+      feedback_email_sent_at: emailRaw ? null : new Date().toISOString(),
+    })
+    .select("id")
+    .single();
+
+  if (error || !row) return { ok: false, error: error?.message || "Failed to insert" };
+  return { ok: true, id: row.id };
+}
+
 // --- saveArticle ---
 
 export async function saveArticle(data: {
