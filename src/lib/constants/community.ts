@@ -3,4 +3,4 @@ export const COMMUNITY_LINKS = {
   instagram: "https://www.instagram.com/tikvateno",
 } as const;
 
-export const COMMUNITY_FOOTER_HE = `\nרוצים להישאר מעודכנים? \nקבוצת WhatsApp של תקוותנו (אירועים והודעות 💞):\n${COMMUNITY_LINKS.whatsappGroup}\n\nעקבו באינסטגרם:\n${COMMUNITY_LINKS.instagram}`;
+export const COMMUNITY_FOOTER_HE = `\nהישארו מעודכנים!\nקבוצת הוואצאפ של תקוותנו (אירועים והודעות 💞):\n${COMMUNITY_LINKS.whatsappGroup}\n\nעקבו באינסטגרם:\n${COMMUNITY_LINKS.instagram}`;

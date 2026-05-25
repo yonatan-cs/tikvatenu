@@ -99,7 +99,7 @@ export function WhatsAppKit({
           <div className="flex items-center gap-2">
             <MessageCircle className="w-5 h-5 text-green" />
             <CardTitle className={isHebrew ? "font-['Secular_One']" : ""}>
-              {isHebrew ? "שליחה ב-WhatsApp" : "Send via WhatsApp"}
+              {isHebrew ? "שליחה בוואצאפ" : "Send via WhatsApp"}
             </CardTitle>
           </div>
           {expanded ? <ChevronUp className="w-5 h-5 text-ink-muted" /> : <ChevronDown className="w-5 h-5 text-ink-muted" />}
@@ -120,7 +120,7 @@ export function WhatsAppKit({
               </p>
               <p className="text-xs text-ink-muted mb-3">
                 {isHebrew
-                  ? "לחיצה על 'פתח' פותחת את WhatsApp שלכם עם ההודעה ממולאת. לחצו שלח בטלפון/בדפדפן."
+                  ? "לחיצה על 'פתח' פותחת את הוואצאפ שלכם עם ההודעה ממולאת. לחצו שלח בטלפון/בדפדפן."
                   : "Opens your WhatsApp with the message pre-filled. Press send manually."}
               </p>
               <div className="rounded-lg border border-branch/10 overflow-hidden">

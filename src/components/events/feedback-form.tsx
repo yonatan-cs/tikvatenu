@@ -82,7 +82,7 @@ export function FeedbackForm({ eventId, eventTitle, fields, isHebrew, startOpen 
             </h4>
             <p className="text-sm text-ink-light mb-5 leading-relaxed">
               {isHebrew
-                ? "הצטרפו לקבוצת ה-WhatsApp שלנו לעדכונים על אירועים, ועקבו אחרינו באינסטגרם 💞🤩"
+                ? "הצטרפו לקבוצת הוואצאפ שלנו לעדכונים על אירועים, ועקבו אחרינו באינסטגרם 💞🤩"
                 : "Join our WhatsApp group for event updates and follow us on Instagram 💞🤩"}
             </p>
             <div className="flex items-center justify-center gap-2.5 flex-wrap">
