@@ -262,6 +262,68 @@ export async function addManualRegistration(data: {
   return { ok: true, id: row.id };
 }
 
+// --- updateRegistration ---
+
+const SYNTHETIC_EMAIL_SUFFIX = "@noemail.tikvatenu.local";
+
+export async function updateRegistration(data: {
+  id: string;
+  fullName: string;
+  phone: string;
+  email: string;
+}): Promise<{ ok: true } | { ok: false; error: string }> {
+  const auth = await verifyAdmin();
+  if (auth.error) return { ok: false, error: auth.error };
+
+  const fullName = data.fullName.trim();
+  if (!fullName) return { ok: false, error: "שם נדרש" };
+
+  const phone = data.phone.trim() || null;
+  const emailRaw = data.email.trim();
+
+  const adminSupabase = createAdminClient();
+
+  const { data: existing, error: fetchError } = await adminSupabase
+    .from("event_registrations")
+    .select("id, email, feedback_email_sent_at")
+    .eq("id", data.id)
+    .single();
+
+  if (fetchError || !existing) {
+    return { ok: false, error: fetchError?.message || "Registration not found" };
+  }
+
+  const hadSyntheticEmail = existing.email.endsWith(SYNTHETIC_EMAIL_SUFFIX);
+  const email = emailRaw
+    ? emailRaw
+    : hadSyntheticEmail
+      ? existing.email
+      : `manual-${Date.now()}-${Math.random().toString(36).slice(2, 8)}${SYNTHETIC_EMAIL_SUFFIX}`;
+
+  const becameRealEmail = hadSyntheticEmail && emailRaw.length > 0;
+  const becameSynthetic = !emailRaw && !hadSyntheticEmail;
+
+  const update: Record<string, unknown> = {
+    full_name: fullName,
+    phone,
+    email,
+  };
+
+  if (becameRealEmail) {
+    update.feedback_email_sent_at = null;
+  } else if (becameSynthetic) {
+    update.feedback_email_sent_at = existing.feedback_email_sent_at ?? new Date().toISOString();
+  }
+
+  const { error } = await adminSupabase
+    .from("event_registrations")
+    .update(update)
+    .eq("id", data.id);
+
+  if (error) return { ok: false, error: error.message };
+  return { ok: true };
+}
+
 // --- saveArticle ---
 
 export async function saveArticle(data: {

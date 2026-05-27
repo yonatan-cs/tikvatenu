@@ -8,7 +8,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Download, Search, List, BarChart2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { ResponseCharts } from "./response-charts";
+import { EditRegistrationDialog } from "./edit-registration-dialog";
 import type { EventRegistration, RegistrationField } from "@/lib/types/database";
+
+const SYNTHETIC_EMAIL_SUFFIX = "@noemail.tikvatenu.local";
+
+function displayEmail(email: string): string {
+  return email.endsWith(SYNTHETIC_EMAIL_SUFFIX) ? "—" : email;
+}
 
 interface RegistrationsTableProps {
   registrations: EventRegistration[];
@@ -50,12 +57,26 @@ export function RegistrationsTable({
   const filtered = registrations.filter((r) => {
     if (!searchQuery) return true;
     const q = searchQuery.toLowerCase();
+    const emailForSearch = r.email.endsWith(SYNTHETIC_EMAIL_SUFFIX) ? "" : r.email;
     return (
       r.full_name.toLowerCase().includes(q) ||
-      r.email.toLowerCase().includes(q) ||
+      emailForSearch.toLowerCase().includes(q) ||
       (r.phone && r.phone.includes(q))
     );
   });
+
+  function applyEdit(
+    regId: string,
+    next: { fullName: string; phone: string | null; email: string }
+  ) {
+    setRegistrations((prev) =>
+      prev.map((r) =>
+        r.id === regId
+          ? { ...r, full_name: next.fullName, phone: next.phone, email: next.email }
+          : r
+      )
+    );
+  }
 
   async function updateStatus(regId: string, newStatus: EventRegistration["status"]) {
     const supabase = createClient();
@@ -81,7 +102,7 @@ export function RegistrationsTable({
 
     const rows = registrations.map((r) => [
       r.full_name,
-      r.email,
+      r.email.endsWith(SYNTHETIC_EMAIL_SUFFIX) ? "" : r.email,
       r.phone || "",
       statusConfig[r.status][isHebrew ? "labelHe" : "labelEn"],
       new Date(r.created_at).toLocaleDateString(isHebrew ? "he-IL" : "en-US"),
@@ -188,13 +209,14 @@ export function RegistrationsTable({
                 <th className="text-start px-4 py-3 font-medium text-ink-muted">
                   {isHebrew ? "תאריך" : "Date"}
                 </th>
+                <th className="px-4 py-3"></th>
               </tr>
             </thead>
             <tbody>
               {filtered.map((reg) => (
                 <tr key={reg.id} className="border-b border-branch/3 hover:bg-cream/30 transition-colors">
                   <td className="px-4 py-3 font-medium text-navy">{reg.full_name}</td>
-                  <td className="px-4 py-3 text-ink-light" dir="ltr">{reg.email}</td>
+                  <td className="px-4 py-3 text-ink-light" dir="ltr">{displayEmail(reg.email)}</td>
                   <td className="px-4 py-3 text-ink-light" dir="ltr">{reg.phone || "—"}</td>
                   {customFields.map((f) => (
                     <td key={f.id} className="px-4 py-3 text-ink-light">
@@ -225,6 +247,13 @@ export function RegistrationsTable({
                       hour: "2-digit",
                       minute: "2-digit",
                     })}
+                  </td>
+                  <td className="px-4 py-3 text-end">
+                    <EditRegistrationDialog
+                      registration={reg}
+                      isHebrew={isHebrew}
+                      onUpdated={(next) => applyEdit(reg.id, next)}
+                    />
                   </td>
                 </tr>
               ))}
