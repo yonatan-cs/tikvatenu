@@ -175,6 +175,23 @@ export function FeedbackForm({ eventId, eventTitle, fields, isHebrew, startOpen 
             isHebrew={isHebrew}
           />
 
+          <div className="flex items-start gap-3">
+            <input
+              id="feedback-privacy"
+              name="privacy_accepted"
+              type="checkbox"
+              required
+              className="mt-0.5 h-4 w-4 rounded border-branch/30 text-terracotta focus:ring-terracotta accent-terracotta cursor-pointer"
+            />
+            <label htmlFor="feedback-privacy" className="text-xs text-ink-muted leading-relaxed cursor-pointer">
+              {isHebrew ? (
+                <>אני מאשר/ת את <a href="/he/privacy" target="_blank" rel="noopener noreferrer" className="underline text-navy hover:text-terracotta transition-colors">מדיניות הפרטיות</a> ו<a href="/he/terms" target="_blank" rel="noopener noreferrer" className="underline text-navy hover:text-terracotta transition-colors">תקנון האתר</a></>
+              ) : (
+                <>I agree to the <a href="/en/privacy" target="_blank" rel="noopener noreferrer" className="underline text-navy hover:text-terracotta transition-colors">Privacy Policy</a> and <a href="/en/terms" target="_blank" rel="noopener noreferrer" className="underline text-navy hover:text-terracotta transition-colors">Terms of Service</a></>
+              )}
+            </label>
+          </div>
+
           {error && (
             <div className="bg-error/5 border border-error/20 rounded-lg p-3 text-sm text-error">
               {error}

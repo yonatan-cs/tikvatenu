@@ -93,6 +93,12 @@ export function Footer({ instagramUrl }: FooterProps) {
                 <Link href="/privacy" className="text-xs text-parchment/35 hover:text-parchment/60 transition-colors duration-200">
                   {isHebrew ? "מדיניות פרטיות" : "Privacy Policy"}
                 </Link>
+                <Link href="/cookies" className="text-xs text-parchment/35 hover:text-parchment/60 transition-colors duration-200">
+                  {isHebrew ? "מדיניות עוגיות" : "Cookie Policy"}
+                </Link>
+                <Link href="/refunds" className="text-xs text-parchment/35 hover:text-parchment/60 transition-colors duration-200">
+                  {isHebrew ? "תשלומים והחזרים" : "Payments & Refunds"}
+                </Link>
               </div>
             </nav>
           </div>
