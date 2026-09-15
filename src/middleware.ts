@@ -38,7 +38,7 @@ function buildCsp(nonce: string): string {
   ].join("; ");
 }
 
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   // Per-request nonce for CSP. Forwarded to RSC via x-nonce so Next can
   // attach it to its inline streaming scripts.
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
